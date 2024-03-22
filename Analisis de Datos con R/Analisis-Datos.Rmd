@@ -1,0 +1,26 @@
+---
+title: "Analisis Datos"
+date: "21/03/24"
+output: html_notebook
+---
+## Leer datos de un archivo de texto
+
+Para leer archivos CSV en R, puedes usar `read.csv()`, que importa datos de un archivo CSV y crea un marco de datos (data frame). La sintaxis para `read.csv()` es la siguiente (del archivo de ayuda R):
+
+```r
+myCSV <- read.csv(file, header = TRUE, sep = ",", quote = "\"", dec = ".", fill = TRUE, comment.char = "", ...)
+```
+
+- `file`: El nombre del archivo. Se debe especificar la ruta completa del archivo (usa `getwd()` para verificar la ruta). Cada línea de un archivo se traduce como cada fila de un marco de datos. El archivo (`file`) también puede ser una URL completa.
+- `header`: Una variable lógica (`TRUE` o `FALSE`) que indica si la primera fila del archivo contiene los nombres de las variables. Este indicador se establece en `TRUE` si la primera línea contiene los nombres de las variables. Por defecto, se establece en `FALSE`.
+- `sep`: El separador es por defecto una coma. No hay necesidad de establecer esta bandera.
+- `fill`: Si el archivo tiene una longitud desigual de filas, puedes establecer este parámetro en `TRUE` para que los campos en blanco se agreguen implícitamente.
+- `dec`: El carácter utilizado en el archivo para puntos decimales.
+
+Puedes leer este archivo CSV en R, como se muestra en el siguiente ejemplo:
+
+```{r}
+myCSV<-read.csv ("Datasets/c31.csv", header=TRUE)
+str (myCSV)
+```
+
