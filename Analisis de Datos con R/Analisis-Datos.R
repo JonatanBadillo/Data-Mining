@@ -34,8 +34,16 @@ if (x>10) (
   print (x)
 )else(
   print ("x is less than 10")
+) 
+
+
+# For
+x<-c ("Juan", "Beni", "Jorge", "David")
+x
+for (i in 2:3) (
+  ## Imprime solo 2 elementos
+  print (x[i])
 )  
-  
   
   
   
