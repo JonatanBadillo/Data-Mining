@@ -98,8 +98,14 @@ str(cars)
 
 lap <- lapply(cars,mean)
 lap
+str(lap)
 
+# sapply()
+# El resultado de sapply() puede ser un vector o una matriz, mientras que el resultado de lapply() es una lista.
 
+sap <- sapply(cars, mean)
+sap
+str(sap)
 
 
 
