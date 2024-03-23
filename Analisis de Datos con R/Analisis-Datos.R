@@ -18,7 +18,8 @@ myE1<-loadWorkbook("Datasets/c311Lot1.xls")
 mydata<-readWorksheet(myE1,sheet="Lot",header=TRUE)
 str(mydata)
 
-## Uso de estructuras de control en R
+## USO DE ESTRUCTURAS DE CONTROL EN R
+
 # if y else: Prueba una condición
 # while: Ejecuta un ciclo cuando una condición es verdadera
 # for: Repite un número fijo de veces
@@ -60,4 +61,42 @@ while (count<10) {
   print(count)
   count=count+1
 }
+
+## FUNCIONES DE CICLO
+# apply(): Evalúa una función en una sección de un arreglo y devuelve los resultados en un arreglo.
+# lapply(): Recorre una lista y evalúa cada elemento o aplica la función a cada elemento.
+# sapply(): Una aplicación fácil de usar de lapply() que devuelve un vector, matriz o arreglo.
+# tapply(): Usualmente se usa sobre un subconjunto de un conjunto de datos
+
+# Se utilizan para 
+# Calcular la media, la suma o cualquier otra manipulación en una fila o columna.
+# Transformar o realizar subconjuntos.
   
+
+# apply()
+# apply(), puedes realizar operaciones en cada fila o columna de una matriz o marco de datos o lista sin tener que escribir ciclos.
+
+# function (X, MARGIN, FUN, ..., simplify = TRUE) 
+
+# La función apply() toma lo siguiente:
+  # X: Un arreglo
+  # MARGIN: Un vector entero para indicar una fila o columna
+  # FUN: El nombre de la función que estás aplicando
+
+head (cars)
+apply (cars, 2, mean)
+apply(cars,2,quantile)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
