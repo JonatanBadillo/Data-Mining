@@ -70,4 +70,25 @@ str(hflights_dt[Dest == 'BNA',list(DepTime,ArrTime)])
 # aunque el uso de c () se usa más tradicionalmente
 hflights_dt[Dest == 'BNA',c('DepTime','ArrTime'),with=FALSE]
 
+# ------------------------------------------------------------------------------
+# Agregación
+
+# La forma más sencilla de resumir datos es llamar a la función aggregate desde el paquete
+# de estadísticas (stats), que hace exactamente lo que estamos buscando: dividir los datos en
+# subconjuntos por una variable de agrupación y luego calcular las estadísticas de resumen
+# para ellos por separado.
+
+aggregate(hflights$Diverted, by = list(hflights$DayOfWeek),FUN=mean)
+
+# De manera alternativa:
+with(hflights,aggregate(Diverted,by = list(DayOfWeek), FUN=mean))
+
+# o...(notacion formula)
+aggregate(Diverted ~ DayOfWeek, data=hflights,FUN = mean)
+
+
+
+
+
+
             
