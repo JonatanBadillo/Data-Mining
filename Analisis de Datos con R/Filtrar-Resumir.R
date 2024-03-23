@@ -87,6 +87,20 @@ with(hflights,aggregate(Diverted,by = list(DayOfWeek), FUN=mean))
 aggregate(Diverted ~ DayOfWeek, data=hflights,FUN = mean)
 
 
+# ------------------------------------------------------------------------------
+# Agregación más rápida con comandos base R
+# llamar a la función tapply o by, que puedes aplicar una función R sobre una matriz irregular.
+tapply(hflights$Diverted, hflights$DayOfWeek, mean)
+#           1           2           3           4           5           6           7 
+# 0.002997672 0.002559323 0.003226211 0.003065727 0.002687865 0.002823121 0.002589057 
+
+# tapply devuelve un objeto arreglo en lugar de marcos de datos
+# convenientes; por otro lado, se ejecuta mucho más rápido que las llamadas agregadas
+# mencionadas anteriormente. Por lo tanto, podría ser razonable usar tapply para los cálculos
+# y luego convertir los resultados a data.frame con los nombres de columna apropiados.
+
+
+
 
 
 
