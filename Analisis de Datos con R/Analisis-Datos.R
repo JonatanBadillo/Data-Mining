@@ -107,6 +107,22 @@ sap <- sapply(cars, mean)
 sap
 str(sap)
 
+# tapply()
+# Se usa sobre subconjuntos de un vector. La función tapply() es similar a otras funciones apply(), excepto que se aplica sobre un subconjunto de un conjunto de datos:
+
+# function (X, INDEX, FUN = NULL, ..., default = NA, simplify = TRUE) 
+  # X: Un vector
+  # INDEX: Un factor o una lista de factores (o se convierten en factores)
+  # FUN: Una función para aplicar
+    # ... contiene otros argumentos para pasar a FUN
+    # simplify, TRUE o FALSe para simplificar el resultado
+
+# Supongamos que necesitas averiguar el consumo promedio de gasolina (mpg) de cada cilindro.
+tapply(mtcars$mpg, mtcars$cyl, mean)
+# Averiguar la potencia promedio (hp) para la transmisión automática y manual,
+tapply(mtcars$hp,mtcars$am,mean)
+
+
 
 
 
