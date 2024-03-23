@@ -18,6 +18,8 @@ myE1<-loadWorkbook("Datasets/c311Lot1.xls")
 mydata<-readWorksheet(myE1,sheet="Lot",header=TRUE)
 str(mydata)
 
+
+# ------------------------------------------------------------------------------
 ## USO DE ESTRUCTURAS DE CONTROL EN R
 
 # if y else: Prueba una condición
@@ -61,7 +63,7 @@ while (count<10) {
   print(count)
   count=count+1
 }
-
+# ------------------------------------------------------------------------------
 ## FUNCIONES DE CICLO
 # apply(): Evalúa una función en una sección de un arreglo y devuelve los resultados en un arreglo.
 # lapply(): Recorre una lista y evalúa cada elemento o aplica la función a cada elemento.
@@ -72,7 +74,7 @@ while (count<10) {
 # Calcular la media, la suma o cualquier otra manipulación en una fila o columna.
 # Transformar o realizar subconjuntos.
   
-
+# ------------------------------------------------------------------------------
 # apply()
 # apply(), puedes realizar operaciones en cada fila o columna de una matriz o marco de datos o lista sin tener que escribir ciclos.
 
@@ -87,6 +89,8 @@ head (cars)
 apply (cars, 2, mean)
 apply(cars,2,quantile)
 
+
+# ------------------------------------------------------------------------------
 # lapply()
 # La función lapply() genera los resultados como una list.lapply() y se puede aplicar a una lista, marco de datos o vector. 
 # La salida siempre es una lista que tiene el mismo número de elementos que el objeto que se pasó a lapply():
@@ -100,6 +104,7 @@ lap <- lapply(cars,mean)
 lap
 str(lap)
 
+# ------------------------------------------------------------------------------
 # sapply()
 # El resultado de sapply() puede ser un vector o una matriz, mientras que el resultado de lapply() es una lista.
 
@@ -107,6 +112,7 @@ sap <- sapply(cars, mean)
 sap
 str(sap)
 
+# ------------------------------------------------------------------------------
 # tapply()
 # Se usa sobre subconjuntos de un vector. La función tapply() es similar a otras funciones apply(), excepto que se aplica sobre un subconjunto de un conjunto de datos:
 
@@ -122,7 +128,7 @@ tapply(mtcars$mpg, mtcars$cyl, mean)
 # Averiguar la potencia promedio (hp) para la transmisión automática y manual,
 tapply(mtcars$hp,mtcars$am,mean)
 
-
+# ------------------------------------------------------------------------------
 # Cut()
 # Es posible que debas dividir las variables continuas para colocarlas en diferentes contenedores.
 Orange
@@ -136,9 +142,17 @@ seq(100,2000,by=300)
 c2<-cut(Orange$age,seq(100,2000,by=300))
 table(c2)
 
+# ------------------------------------------------------------------------------
+# Split()
+# Dividir el conjunto de datos en grupos.
 
+# function (x, f, drop = FALSE, ...) 
 
+# En el siguiente ejemplo, el conjunto de datos de Orange se divide en función de la edad.
+# La diferencia es que el conjunto de datos se agrupa según la edad. Hay 7 grupos de edad y el conjunto de datos se divide en 7 grupos:
 
+c3<-split(Orange,Orange$age)
+c3
 
 
 
