@@ -87,6 +87,23 @@ head (cars)
 apply (cars, 2, mean)
 apply(cars,2,quantile)
 
+# lapply()
+# La función lapply() genera los resultados como una list.lapply() y se puede aplicar a una lista, marco de datos o vector. 
+# La salida siempre es una lista que tiene el mismo número de elementos que el objeto que se pasó a lapply():
+
+# function (X, FUN, ...)
+  # X: Conjunto de datos
+  # FUN: Función
+str(cars)
+
+lap <- lapply(cars,mean)
+lap
+
+
+
+
+
+
 
 
 
