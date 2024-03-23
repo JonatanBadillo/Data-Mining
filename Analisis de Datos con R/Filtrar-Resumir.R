@@ -99,7 +99,12 @@ tapply(hflights$Diverted, hflights$DayOfWeek, mean)
 # mencionadas anteriormente. Por lo tanto, podría ser razonable usar tapply para los cálculos
 # y luego convertir los resultados a data.frame con los nombres de columna apropiados.
 
+# ------------------------------------------------------------------------------
+# Funciones convenientes de ayuda
+library(plyr)
+ddply(hflights, .(DayOfWeek),function(x) mean(x$Diverted))
 
+ddply(hflights, .(DayOfWeek),summarise, Diverted=mean(Diverted))
 
 
 
