@@ -115,6 +115,36 @@ setkey(hflights_dt, 'DayOfWeek')
 hflights_dt[,mean(Diverted),by = DayOfWeek]
 
 
+# ------------------------------------------------------------------------------
+# Ejecución de benchmarks
+DPLYR_ALL <- function() {
+  hflights_DayOfWeek <- group_by(hflights, DayOfWeek)
+  dplyr::summarise(hflights_DayOfWeek, mean(Diverted))
+}
+# creemos un nuevo objeto data.table para la evaluación comparativa:
+hflights_dt_nokey <- data.table(hflights)
+# verificamos que no tenga claves
+key(hflights_dt_nokey)
+
+library(microbenchmark)
+res <- microbenchmark(AGGR1(), AGGR2(), AGGR3(), TAPPLY(), PLYR1(),
+                      + PLYR2(), DPLYR(), DPLYR_ALL(), DT(), DT_KEY(), DT_ALL())
+print(res,digits=3)
+
+
+# ------------------------------------------------------------------------------
+# Sumando el número de casos en subgrupos
+# llamar a la función de longitud (length) para devolver el número de elementos en la columna Diverted:
+ddply(hflights, .(DayOfWeek),summarise , n=length(Diverted))
+# verificar el número de filas en los (sub) conjuntos de datos.
+ddply(hflights, .(DayOfWeek),nrow)
+
+table(hflights$DayOfWeek)
+
+count(hflights, 'DayOfWeek')
+
+
+
 
 
 
