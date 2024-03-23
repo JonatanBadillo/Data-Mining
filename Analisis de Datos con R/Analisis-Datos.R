@@ -154,9 +154,19 @@ table(c2)
 c3<-split(Orange,Orange$age)
 c3
 
+# ------------------------------------------------------------------------------
+# ESCRIBIR FUNCIONES EN R
+myFunc <- function(){
+  print("Mi primera Funcion")
+}
+myFunc()
 
-
-
+myFunc2 <- function(num){
+  for (i in seq_len(num)) {
+    cat("My function:",i,"\n")
+  }
+}
+myFunc2(5)
 
 
 
