@@ -44,6 +44,12 @@ for (i in 2:3) (
   ## Imprime solo 2 elementos
   print (x[i])
 )  
-  
-  
+
+
+# seq_along
+# Genera un no. entero basado en la longitud del objeto
+x
+for (i in seq_along(x)) (
+  print (x[i])
+)   
   
