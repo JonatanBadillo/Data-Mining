@@ -123,9 +123,18 @@ tapply(mtcars$mpg, mtcars$cyl, mean)
 tapply(mtcars$hp,mtcars$am,mean)
 
 
+# Cut()
+# Es posible que debas dividir las variables continuas para colocarlas en diferentes contenedores.
+Orange
 
-
-
+# A continuación, crea cuatro grupos según la edad de los árboles. 
+# El primer parámetro es el conjunto de datos y la edad, y el segundo parámetro es el número de grupos que se desea crear.
+c1<-cut(Orange$age,breaks=4)
+table(c1)
+# Usando el comando seq(), puedes especificar los intervalos:
+seq(100,2000,by=300)
+c2<-cut(Orange$age,seq(100,2000,by=300))
+table(c2)
 
 
 
