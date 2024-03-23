@@ -52,4 +52,12 @@ x
 for (i in seq_along(x)) (
   print (x[i])
 )   
+
+
+# While
+count<-0
+while (count<10) {
+  print(count)
+  count=count+1
+}
   
