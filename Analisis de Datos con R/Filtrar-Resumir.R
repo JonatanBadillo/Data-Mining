@@ -106,6 +106,25 @@ ddply(hflights, .(DayOfWeek),function(x) mean(x$Diverted))
 
 ddply(hflights, .(DayOfWeek),summarise, Diverted=mean(Diverted))
 
+# ------------------------------------------------------------------------------
+# Agregado con data.table
+hflights_dt[,mean(Diverted),by = DayOfWeek]
+
+# ordenamos data.table primero por DayOfWeek:
+setkey(hflights_dt, 'DayOfWeek')
+hflights_dt[,mean(Diverted),by = DayOfWeek]
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
