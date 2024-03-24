@@ -17,3 +17,7 @@ data<-table(mtcars$gear,mtcars$carb)
 data
 
 barplot(data, xlab="x-axis", ylab="y-axis", main="bar chart 1", col=c("grey", "blue", "yellow"))
+
+
+# Un gráfico de barras agrupadas
+barplot(data, xlab="x-axis", ylab="y-axis", main="bar chart 1", col=c("grey", "blue", "yellow"),beside=TRUE)
