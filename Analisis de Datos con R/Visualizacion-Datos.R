@@ -37,3 +37,9 @@ lines(density(data1), col="red")
 x <- c(1, 2, 3, 4, 5, 6, 8, 9)
 y <- c(3, 5, 4, 6, 9, 8, 2, 1)
 plot(x, y, type="l", xlab="x-axis", ylab="y-axis", main="linegraph", col="blue")
+
+# Grafico de lineas multiple
+x.1 <- c(2, 3, 4, 6, 7, 8, 9, 10)
+y.1 <- c(6, 3, 5, 1, 5, 3, 4, 8)
+plot(x, y, type="l", xlab="x-axis", ylab="y-axis", main="linegraph", col="blue")
+lines(x.1, y.1, type="o", col="green")# type = "o" te dará un gráfico de líneas con un punto
