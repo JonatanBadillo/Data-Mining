@@ -52,3 +52,16 @@ pie(x, labels, main="Pie Chart")
 # Para trazar un gráfico circular 3D, debes instalar la biblioteca plotrix
 library(plotrix)
 pie3D(x, labels=labels, explode=0.1, main="Pie Chart")
+
+# Diagrama de dispersión
+x <- c(1, 2, 3, 4, 5, 6, 8, 9)
+y <- c(3, 5, 4, 6, 9, 8, 2, 1)
+plot(x, y, xlab="x-axis", ylab="y-axis", main="scatterplot")
+
+
+
+
+
+
+
+
