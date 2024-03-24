@@ -58,10 +58,24 @@ x <- c(1, 2, 3, 4, 5, 6, 8, 9)
 y <- c(3, 5, 4, 6, 9, 8, 2, 1)
 plot(x, y, xlab="x-axis", ylab="y-axis", main="scatterplot")
 
+# Grafica de Caja
+set.seed(12)
+var1 <- rnorm(100, mean=3, sd=3)
+var2 <- rnorm(100, mean=2, sd=2)
+var3 <- rnorm(100, mean=1, sd=3)
+data <- data.frame(var1, var2, var3)
+boxplot(data, main="boxplot", notch=FALSE, varwidth=TRUE,col=c("green", "purple", "blue"))
 
-
-
-
+# Matriz de gráficos de dispersión
+# se usa para encontrar la correlación entre una variable y otras variables.
+set.seed(12)
+var1 <- rnorm(100, mean=3, sd=3)
+var2 <- rnorm(100, mean=2, sd=2)
+var3 <- rnorm(100, mean=1, sd=3)
+var4 <- rnorm(100, mean=2, sd=3)
+var5 <- rnorm(100, mean=2, sd=3)
+data <- data.frame(var1, var2, var3, var4, var5)
+pairs(~var1+var2+var3+var4+var5, data=data, main="scatterplotmatrix")
 
 
 
