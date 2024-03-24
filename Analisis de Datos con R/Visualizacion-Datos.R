@@ -43,3 +43,12 @@ x.1 <- c(2, 3, 4, 6, 7, 8, 9, 10)
 y.1 <- c(6, 3, 5, 1, 5, 3, 4, 8)
 plot(x, y, type="l", xlab="x-axis", ylab="y-axis", main="linegraph", col="blue")
 lines(x.1, y.1, type="o", col="green")# type = "o" te dará un gráfico de líneas con un punto
+
+# Grafico circular
+x <- c(10, 30, 60, 10, 50)
+labels <- c("one", "two", "three", "four", "five")
+pie(x, labels, main="Pie Chart")
+
+# Para trazar un gráfico circular 3D, debes instalar la biblioteca plotrix
+library(plotrix)
+pie3D(x, labels=labels, explode=0.1, main="Pie Chart")
