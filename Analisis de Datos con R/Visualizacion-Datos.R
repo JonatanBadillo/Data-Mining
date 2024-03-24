@@ -27,3 +27,8 @@ barplot(data, xlab="x-axis", ylab="y-axis", main="bar chart 1", col=c("grey", "b
 set.seed(123)
 data1 <- rnorm(100, mean=5, sd=3)
 hist(data1, main="histogram", xlab="x-axis", col="green",border="blue", breaks=10)
+
+
+# Graficar un histograma con una línea de densidad
+hist(data1, main="histogram", xlab="x-axis", col="green", border="blue", breaks=10,freq=FALSE)
+lines(density(data1), col="red")
