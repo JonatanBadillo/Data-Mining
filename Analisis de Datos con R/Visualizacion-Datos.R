@@ -32,3 +32,8 @@ hist(data1, main="histogram", xlab="x-axis", col="green",border="blue", breaks=1
 # Graficar un histograma con una línea de densidad
 hist(data1, main="histogram", xlab="x-axis", col="green", border="blue", breaks=10,freq=FALSE)
 lines(density(data1), col="red")
+
+# Gráfico de líneas y gráfico circular
+x <- c(1, 2, 3, 4, 5, 6, 8, 9)
+y <- c(3, 5, 4, 6, 9, 8, 2, 1)
+plot(x, y, type="l", xlab="x-axis", ylab="y-axis", main="linegraph", col="blue")
