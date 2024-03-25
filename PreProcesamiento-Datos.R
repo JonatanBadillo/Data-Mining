@@ -95,6 +95,54 @@ test_set
 
 # A partir de la salida, queda claro que dos observaciones fueron al conjunto de prueba.
 
+# ------------------------------------------------------------------------------
+# Paso 5: Escalado de características
+
+# Es un caso común en la mayoría de los conjuntos de datos, las características también
+# conocidas como entradas no están en la misma escala. Muchos modelos de aprendizaje
+# automático se basan en la distancia euclidiana.
+
+# Sucede que, las entidades con unidades grandes dominan a las de unidades pequeñas a la
+# hora de calcular la distancia euclidiana y será como si esas entidades con unidades pequeñas
+# no existieran.
+
+# Para asegurarnos de que esto no ocurra, necesitamos codificar nuestras funciones para que
+# todas estén en el rango entre -3 y 3.
+
+# Hay varias formas que podemos usar para escalar nuestras funciones. 
+# La más utilizada es la técnica de estandarización y normalización.
+
+# La técnica de normalización se usa cuando los datos se distribuyen normalmente, mientras
+# que la estandarización funciona tanto con datos distribuidos normalmente como con datos
+# que no se distribuyen normalmente.
+
+# ESTANDARIZACION
+# estandarizacion = (x-mean(x))/ (desviacion_std(x))
+
+# NORMALIZACION
+# normalizacion = (x-min(x))/(max(x)-min(x))
+
+# Ahora, vamos a escalar tanto el conjunto de entrenamiento como el conjunto de prueba de
+# nuestro conjunto de datos por separado.
+
+
+# Estandariza las columnas "Age" y "Salary". 
+# La función scale() estándariza las variables numéricas restando la media y dividiendo por la desviación estándar. 
+# Entonces, esta línea de código calcula la media y la desviación estándar de las columnas seleccionadas y luego estandariza los valores en esas columnas.
+training_set[, 2:3] = scale(training_set[, 2:3])
+
+# ver los resultados donde los valores ahora están estandarizados 
+# (tienen una media de cero y una desviación estándar de uno
+training_set
+
+# También estandariza las columnas "Age" y "Salary".
+test_set[, 2:3] = scale(test_set[, 2:3])
+
+# valores estandarizados (con una media de cero y una desviación estándar de uno).
+test_set
+
+
+
 
 
 
