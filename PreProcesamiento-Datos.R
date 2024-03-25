@@ -58,4 +58,48 @@ as.factor(Dataset$Purchased)
 View(Dataset)
 
 
+# ------------------------------------------------------------------------------
+# Paso 4: Dividir el conjunto de datos en el conjunto de entrenamiento y prueba
+
+# En el aprendizaje automático, dividimos los datos en dos partes:
+  # • Conjunto de entrenamiento: la parte de los datos en la que implementamos nuestro
+      # modelo de aprendizaje automático.
+  # • Conjunto de prueba: la parte de los datos en la que evaluamos el rendimiento de
+      # nuestro modelo de aprendizaje automático.
+
+# Si dejamos que aprenda demasiado sobre los datos, puede tener un desempeño deficiente
+# cuando se prueba en un nuevo conjunto de datos con una correlación diferente.
+
+# Por lo tanto, siempre que estemos construyendo un modelo de aprendizaje automático, la
+# idea es implementarlo en el conjunto de entrenamiento y evaluarlo en el conjunto de prueba.
+# Esperamos que el rendimiento en el conjunto de entrenamiento y el conjunto de prueba sea
+# diferente y, si este es el caso, el modelo puede adaptarse a nuevos conjuntos de datos.
+
+
+# Usando nuestro conjunto de datos, dividámoslo en conjuntos de entrenamiento y prueba.
+library(caTools)
+# Establece una semilla para los números aleatorios
+set.seed(123)
+# Utiliza la función sample.split() para dividir los datos. 
+# Esta función toma dos argumentos principales: el vector (o columna) que se va a dividir,
+# y la proporción en la que se dividirá el conjunto de datos (80% en este caso). 
+# La función devuelve un vector que indica si cada fila del conjunto de datos pertenece al entrenamiento (TRUE) o al conjunto de prueba (FALSE).
+split = sample.split(Dataset$Purchased,SplitRatio = 0.8)
+# Crea el conjunto de entrenamiento seleccionando las filas del conjunto de datos original donde el vector split es TRUE. 
+training_set = subset(Dataset,split == TRUE)
+# Crea el conjunto de prueba seleccionando las filas del conjunto de datos original donde el vector split es FALSE.
+test_set = subset(Dataset,split == FALSE)
+
+training_set
+test_set
+
+# A partir de la salida, queda claro que dos observaciones fueron al conjunto de prueba.
+
+
+
+
+
+
+
+
 
