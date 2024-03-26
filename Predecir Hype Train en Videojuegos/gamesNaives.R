@@ -57,7 +57,7 @@ games$metascore2 <- cut(games$metascore,
                         # breaks especifica los puntos de corte que son 0, 60, 75, 85 y 100.
                         breaks = c(0,60,75,85,100),
                         # indica que el valor más bajo (0) estará incluido en el intervalo más bajo.
-                        include.lowest = T,
+                        include.lowest = TRUE,
                         # proporciona etiquetas para los intervalos.
                         labels = c("Aaaargh","meh","Ok","OMG Hype"))
 
@@ -85,10 +85,76 @@ knitr::kable(table(games$metascore2))
 # carga la biblioteca naivebayes
 suppressPackageStartupMessages(library(naivebayes))
 
-# Aquí se está construyendo el modelo de clasificación ingenua de Bayes.
+
+
+
+# Aquí se está construyendo el modelo de clasificación de Bayes.
+
 # es la función que se utiliza para entrenar un modelo de clasificación ingenua de Bayes.
-# especifica el modelo que se utilizará para predecir la variable "developer" basándose en las variables predictoras "platform", "genre", "metascore2" y "rating".
+# especifica el modelo que se utilizará para predecir la variable "developer"
+# basándose en las variables predictoras "platform", "genre", "metascore2" y "rating".
 nb.model <- naive_bayes(developer ~ platform + genre + metascore2 + rating,data = games, laplace = 1)
 
 
 
+
+# -----------------------------------------------------------------------------------
+# Predecir nuevos datos
+
+# Ahora, para predecir nuevos datos, vamos a necesitar un marco de datos con valores para las
+# funciones de predicción. Por ejemplo, si queremos ver qué desarrollador es más probable que
+# produzca un juego de rol publicitado con calificación M para PC, obtendremos el siguiente
+# marco de datos new.data.
+
+new.data <- data.frame(platform = "PC",
+                       genre = "Role-Playing",
+                       metascore2 = "OMG Hype",
+                       rating = "M")
+
+
+# Ahora podemos usar este marco de datos en la función predict(). Esta función (al igual que
+# para los modelos lineales) toma el modelo, en nuestro caso el clasificador de Bayes, y los
+# nuevos datos.
+
+predict(nb.model, new.data)
+
+
+# También podemos obtener las
+# probabilidades cuando proporcionamos el argumento type = "prob". Esto devuelve
+# probabilidades para todos los desarrolladores que están en el conjunto de datos. Solo
+# queremos ver los 3 primeros.
+
+# Utiliza el modelo nb.model para predecir las probabilidades de pertenencia a cada clase para los datos nuevos new.data. 
+# El argumento type = "prob" indica que queremos obtener probabilidades en lugar de predicciones de clase directas.
+pred <- t(predict(nb.model, new.data, type = "prob"))
+# Esta función crea un gráfico de puntos donde cada punto representa una clase y su posición en el eje x se determina por su probabilidad. 
+dotchart(pred[order(pred[,1], decreasing = T),][1:10])
+
+
+
+
+
+# ¿Quién es más probable que haga un buen juego de deportes?
+new.data <- data.frame(genre = "Sports",metascore2 = "Ok")
+pred <- t(predict(nb.model, new.data, type = "prob"))
+dotchart(pred[order(pred[,1], decreasing = T),][1:10])
+
+
+
+# ¿Y uno realmente muy bueno?
+
+new.data <- data.frame(genre = "Sports",metascore2 = "OMG Hype")
+pred <- t(predict(nb.model, new.data, type = "prob"))
+dotchart(pred[order(pred[,1], decreasing = T),][1:10])
+
+# Es interesante ver cómo es muy probable que EA Sports, Konami y Visual Concepts hagan
+# un juego de deportes. Sin embargo, es más probable que EA Sports haga uno con un
+# metascore dentro del OK.bin y Visual Concepts tienen más probabilidades de hacer uno en
+# OMG Hype! bin.Konami ocupa el segundo lugar en ambas predicciones.
+
+
+# Supongamos que queremos un buen juego de estrategia con clasificación M para PC...
+
+new.data <- data.frame(platform="PC",genre="Strategy",metascore2="OMG Hype",rating="M")
+pred <- t(predict(nb.model, new.data, type = "prob"))
+dotchart(pred[order(pred[,1], decreasing = T),][1:10])
