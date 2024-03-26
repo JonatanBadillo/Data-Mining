@@ -48,6 +48,10 @@ length(unique(games$developer))
 # Metascore 76 - 85 obtiene la etiqueta "OK".
 # Metascore 86 y superior obtiene la etiqueta "OMG Hype!".
 
+
+# divide los valores de la variable "metascore" en categorías discretas 
+# y luego muestra la frecuencia de cada categoría en una tabla legible.
+
 # cut() es una función en R que se utiliza para dividir los valores de una variable continua en intervalos discretos.
 games$metascore2 <- cut(games$metascore,
                         # breaks especifica los puntos de corte que son 0, 60, 75, 85 y 100.
@@ -59,5 +63,32 @@ games$metascore2 <- cut(games$metascore,
 
 # función utilizada para generar una tabla en formato markdown o HTML para su visualización.
 knitr::kable(table(games$metascore2))
+
+# -----------------------------------------------------------------------------------
+# Creando el modelo
+
+# Estamos usando la función naive_bayes() del paquete {naivebayes} para entrenar el modelo
+# en todos los datos. Ten en cuenta que estamos configurando el parámetro de Laplace en 1.
+# Hacemos esto porque hay combinaciones vacías de características en los datos. Por ejemplo,
+# From Software nunca hizo un juego de deportes (y también, EA Sports nunca hizo un juego"OMG Hype!"). 
+
+# Entonces, esta parte de los cálculos de probabilidad es 0, lo que lleva a que el término
+# completo sea 0 después de multiplicar. La corrección de Laplace cuida que exista al menos
+# una probabilidad mínima (en este caso, es un caso que se está sumando), también para
+# combinaciones vacías. Y quién sabe, tal vez From Software decida hacer un juego de
+# deportes como “Dark Souls Golf 2022” o algo así.
+
+
+# este código entrena un modelo de clasificación ingenua de Bayes utilizando las variables "platform", "genre", "metascore2" y "rating" 
+# para predecir la variable "developer" en el conjunto de datos "games".
+
+# carga la biblioteca naivebayes
+suppressPackageStartupMessages(library(naivebayes))
+
+# Aquí se está construyendo el modelo de clasificación ingenua de Bayes.
+# es la función que se utiliza para entrenar un modelo de clasificación ingenua de Bayes.
+# especifica el modelo que se utilizará para predecir la variable "developer" basándose en las variables predictoras "platform", "genre", "metascore2" y "rating".
+nb.model <- naive_bayes(developer ~ platform + genre + metascore2 + rating,data = games, laplace = 1)
+
 
 
