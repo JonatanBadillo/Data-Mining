@@ -50,7 +50,7 @@ votesTib
 # aplicar la función, y el segundo argumento es la función que queremos aplicar.
 
 
-# Elegimos usar una función anónima (usando el símbolo ~ como abreviatura de function(.).
+# Elegimos usar una función anónima (usando el símbolo ~ como abreviatura de function(.)
   
                                 
 # Nuestra función pasa cada vector a sum(is.na(.)) para contar el número de valores faltantes
@@ -66,4 +66,49 @@ map_dbl(votesTib, ~sum(is.na(.)))
 
 # ¡Cada columna en nuestro tibble tiene valores perdidos excepto la variable Class!
 
+
+# Afortunadamente, el algoritmo naïve Bayes puede manejar los datos faltantes de dos
+# maneras:
+
+  # • Omitiendo las variables con valores faltantes para un caso particular, pero aún usando
+  # ese caso para entrenar el modelo
+  # • Al omitir ese caso por completo del conjunto de entrenamiento
+
+# La implementación naïve Bayes que usa mlr es mantener casos y
+# descartar variables. Por lo general, esto funciona bien si la proporción de valores faltantes a
+# valores completos para la mayoría de los casos es bastante pequeña. Sin embargo, si tienes
+# una pequeña cantidad de variables y una gran proporción de valores faltantes, es posible que
+# desees omitir los casos (y, en términos más generales, consideres si tu conjunto de datos es
+# suficiente para el entrenamiento).
+
+# --------------------------------------------------------------------------------
+# Plotear (graficar) los datos
+
+# Grafiquemos nuestros datos para obtener una mejor comprensión de las relaciones entre el
+# partido político y los votos.
+
+# Debido a que estamos
+# trazando variables categóricas entre sí, configuramos el argumento de posición de la función
+# geom_bar() para "rellenar", lo que crea barras apiladas para las respuestas y, n y NA que
+# suman 1.
+
+
+
+
+# Convierte el tibble votesTib de un formato "ancho" a un formato "largo", donde "Variable" 
+# representa las columnas originales que se están apilando, "Value" representa los valores correspondientes a esas columnas, 
+# y "-Class" indica que todas las columnas excepto "Class" se están apilando.
+votesUntidy <- gather(votesTib, "Variable", "Value", -Class)
+
+# Crea un objeto ggplot utilizando los datos en el tibble votesUntidy. 
+# Establece "Class" en el eje x y utiliza los valores de "Value" para el relleno de las barras.
+ggplot(votesUntidy, aes(Class, fill = Value)) +
+  # Divide el gráfico en múltiples paneles basados en los niveles de la variable "Variable". 
+  facet_wrap(~ Variable, scales = "free_y") +
+  # Agrega una capa de barras al gráfico, con la opción position = "fill" que apila las barras en cada grupo y las escala para que sumen 1.
+  geom_bar(position = "fill") +
+  # Aplica un tema predefinido a la trama para hacerla en blanco y negro.
+  theme_bw()
+
+# Podemos ver que hay algunas diferencias de opinión muy claras entre demócratas y republicanos!
 
