@@ -61,4 +61,11 @@ barplot(data.for.plot$MeanCATMEDV * 100, names.arg = data.for.plot$CHAS,
           + xlab = "CHAS", ylab = "% of CAT.MEDV")
 
 
+## histograma de MEDV
+hist(housing.df$MEDV, xlab = "MEDV")
+
+## boxplot de MEDV para diferentes valores de CHAS
+boxplot(housing.df$MEDV ~ housing.df$CHAS, xlab = "CHAS", ylab = "MEDV")
+
+
 
