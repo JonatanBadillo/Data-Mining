@@ -156,3 +156,21 @@ kFold <- makeResampleDesc(method = "RepCV", folds = 10, reps = 50, stratify = TR
 bayesCV <- resample(learner = bayes, task = votesTask,resampling = kFold,measures = list(mmce, acc, fpr, fnr))
 bayesCV$aggr
 
+
+# Nuestro modelo predice correctamente el 90 % de los casos del conjunto de pruebas en
+# nuestra validación cruzada. ¡No esta mal! 
+
+
+
+
+
+# Ahora usemos nuestro modelo para predecir el partido político de un nuevo político, en función de sus votos.
+
+politician <- tibble(V1 = "n", V2 = "n", V3 = "y", V4 = "n", V5 = "n",V6 = "y", V7 = "y", V8 = "y", V9 = "y", V10 = "y",
+                       V11 = "n", V12 = "y", V13 = "n", V14 = "n",
+                       V15 = "y", V16 = "n")
+politicianPred <- predict(bayesModel, newdata = politician)
+getPredictionResponse(politicianPred)
+
+
+# Nuestro modelo predice que el nuevo político es demócrata.
