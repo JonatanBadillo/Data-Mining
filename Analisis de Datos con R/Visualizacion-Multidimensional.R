@@ -67,5 +67,13 @@ hist(housing.df$MEDV, xlab = "MEDV")
 ## boxplot de MEDV para diferentes valores de CHAS
 boxplot(housing.df$MEDV ~ housing.df$CHAS, xlab = "CHAS", ylab = "MEDV")
 
+## side-by-side boxplots
+# use par() to split the plots into panels.
+par(mfcol = c(1, 4))
+boxplot(housing.df$NOX ~ housing.df$CAT..MEDV, xlab = "CAT.MEDV", ylab = "NOX")
+boxplot(housing.df$LSTAT ~ housing.df$CAT..MEDV, xlab = "CAT.MEDV", ylab = "LSTAT")
+boxplot(housing.df$PTRATIO ~ housing.df$CAT..MEDV, xlab = "CAT.MEDV", ylab ="PTRATIO")
+boxplot(housing.df$INDUS ~ housing.df$CAT..MEDV, xlab = "CAT.MEDV", ylab = "INDUS")
+
 
 
