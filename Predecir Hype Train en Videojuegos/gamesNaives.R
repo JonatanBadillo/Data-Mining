@@ -40,3 +40,24 @@ games <- games[games$rating != "",]
 nrow(games)
 length(unique(games$developer))
 
+# El clasificador Naïve Bayes necesita datos categóricos. Queremos incluir el metascore en el
+# análisis, así que lo agruparemos:
+
+# Metascore 0 - 60 obtiene la etiqueta "¡Aaargh!".
+# Metascore 61 - 75 obtiene la etiqueta "meh".
+# Metascore 76 - 85 obtiene la etiqueta "OK".
+# Metascore 86 y superior obtiene la etiqueta "OMG Hype!".
+
+# cut() es una función en R que se utiliza para dividir los valores de una variable continua en intervalos discretos.
+games$metascore2 <- cut(games$metascore,
+                        # breaks especifica los puntos de corte que son 0, 60, 75, 85 y 100.
+                        breaks = c(0,60,75,85,100),
+                        # indica que el valor más bajo (0) estará incluido en el intervalo más bajo.
+                        include.lowest = T,
+                        # proporciona etiquetas para los intervalos.
+                        labels = c("Aaaargh","meh","Ok","OMG Hype"))
+
+# función utilizada para generar una tabla en formato markdown o HTML para su visualización.
+knitr::kable(table(games$metascore2))
+
+
