@@ -40,6 +40,30 @@ votesTib <- as_tibble(HouseVotes84)
 votesTib
 
 
+# Parece que tenemos algunos valores faltantes (NA) en nuestro tibble. Resumamos el número
+# de valores faltantes en cada variable usando la función map_dbl(). Recordemos que
+# map_dbl() itera una función sobre cada elemento de un vector/lista (o, en este caso, cada
+# columna de un tibble), aplica una función a ese elemento y devuelve un vector que contiene
+# la salida de la función.
 
+# El primer argumento de la función map_dbl() es el nombre de los datos a los que vamos a
+# aplicar la función, y el segundo argumento es la función que queremos aplicar.
+
+
+# Elegimos usar una función anónima (usando el símbolo ~ como abreviatura de function(.).
+  
+                                
+# Nuestra función pasa cada vector a sum(is.na(.)) para contar el número de valores faltantes
+# en ese vector. Esta función se aplica a cada columna del tibble y devuelve el número de
+# valores faltantes para cada uno.
+
+
+
+# Cuenta cuántos valores faltantes (NA) hay en cada columna de un tibble llamado "votesTib" 
+# y devuelve el resultado como un vector numérico donde cada elemento corresponde al número de valores faltantes en 
+# una columna específica. 
+map_dbl(votesTib, ~sum(is.na(.)))
+
+# ¡Cada columna en nuestro tibble tiene valores perdidos excepto la variable Class!
 
 
