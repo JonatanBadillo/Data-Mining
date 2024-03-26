@@ -15,7 +15,7 @@ library(readr)
 housing.df <- read_csv("Datasets/BostonHousing.csv")
 head(housing.df, 9)
 
-# ------------------------------------------------------------------------------
+
 # Ejemplo 2: Número de pasajeros en trenes Amtrak
 
 # Aquí nos centramos en pronosticar el número de usuarios futuros
@@ -51,15 +51,16 @@ plot(housing.df$MEDV ~ housing.df$LSTAT, xlab = "MDEV", ylab = "LSTAT")
 # calcula media MEDV por CHAS = (0, 1)
 data.for.plot <- aggregate(housing.df$MEDV, by = list(housing.df$CHAS), FUN = mean)
 names(data.for.plot) <- c("CHAS", "MeanMEDV")
-barplot(data.for.plot$MeanMEDV, names.arg = data.for.plot$CHAS, + xlab = "CHAS", ylab = "Avg. MEDV")
+barplot(data.for.plot$MeanMEDV, names.arg = data.for.plot$CHAS, xlab = "CHAS", ylab = "Avg. MEDV")
 
 
 ## barchart de CHAS vs. % CAT.MEDV
 data.for.plot <- aggregate(housing.df$CAT..MEDV, by = list(housing.df$CHAS), FUN = mean)
 names(data.for.plot) <- c("CHAS", "MeanCATMEDV")
 barplot(data.for.plot$MeanCATMEDV * 100, names.arg = data.for.plot$CHAS,
-          + xlab = "CHAS", ylab = "% of CAT.MEDV")
+          xlab = "CHAS", ylab = "% of CAT.MEDV")
 
+# ------------------------------------------------------------------------------
 
 ## histograma de MEDV
 hist(housing.df$MEDV, xlab = "MEDV")
@@ -67,6 +68,7 @@ hist(housing.df$MEDV, xlab = "MEDV")
 ## boxplot de MEDV para diferentes valores de CHAS
 boxplot(housing.df$MEDV ~ housing.df$CHAS, xlab = "CHAS", ylab = "MEDV")
 
+# ------------------------------------------------------------------------------
 ## side-by-side boxplots
 # use par() to split the plots into panels.
 par(mfcol = c(1, 4))
@@ -75,5 +77,28 @@ boxplot(housing.df$LSTAT ~ housing.df$CAT..MEDV, xlab = "CAT.MEDV", ylab = "LSTA
 boxplot(housing.df$PTRATIO ~ housing.df$CAT..MEDV, xlab = "CAT.MEDV", ylab ="PTRATIO")
 boxplot(housing.df$INDUS ~ housing.df$CAT..MEDV, xlab = "CAT.MEDV", ylab = "INDUS")
 
+# ------------------------------------------------------------------------------
+# Mapas de calor (heatmaps): Visualización de correlaciones y valores perdidos
+# los mapas de calor son especialmente útiles para dos propósitos: visualizar tablas de correlación y visualizar valores
+# faltantes en los datos.
 
+install.packages("ggplot2")
+## mapa de calor simple de correlaciones (sin valores)
+heatmap(cor(housing.df), Rowv = NA, Colv = NA)
+## heatmap con valores
+install.packages("gplots")
+library(gplots)
+heatmap.2(cor(housing.df), Rowv = FALSE, Colv = FALSE, dendrogram = "none",
+            cellnote = round(cor(housing.df),2),
+            notecol = "black", key = FALSE, trace = 'none', margins = c(10,10))
+
+
+
+# plot alternativo con ggplot
+install.packages("reshape")
+library(ggplot2)
+library(reshape)
+cor.mat <- round(cor(housing.df),2) # rounded correlation matrix
+melted.cor.mat <- melt(cor.mat)
+ggplot(melted.cor.mat, aes(x = X1, y = X2, fill = value)) +geom_tile() +geom_text(aes(x = X1, y = X2, label = value))
 
