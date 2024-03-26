@@ -112,3 +112,47 @@ ggplot(votesUntidy, aes(Class, fill = Value)) +
 
 # Podemos ver que hay algunas diferencias de opinión muy claras entre demócratas y republicanos!
 
+
+# --------------------------------------------------------------------------------
+# Entrenando al modelo
+
+# Ahora creamos nuestra tarea y aprendiz, y construyamos nuestro modelo. Establecemos la
+# variable Class como el objetivo de clasificación de la función makeClassifTask(), y el
+# algoritmo que proporcionamos a la función makeLearner() es "classif.naiveBayes".
+
+
+
+# Este código crea un modelo de clasificación Naive Bayes utilizando el paquete mlr, 
+# lo entrena con los datos votesTib y lo almacena en la variable bayesModel 
+# para su posterior uso en la predicción de nuevas observaciones.
+
+
+# crea un objeto de tarea de clasificación utilizando la función makeClassifTask() del paquete mlr. 
+# Esta función toma el conjunto de datos votesTib y especifica la variable objetivo como "Class". 
+# Esto prepara los datos para el proceso de entrenamiento del modelo.
+votesTask <- makeClassifTask(data = votesTib, target = "Class")
+
+# Aquí se crea un modelo de aprendizaje (learner) utilizando la función makeLearner() del paquete mlr. 
+# Se especifica "classif.naiveBayes" como el tipo de modelo, 
+# lo que indica que queremos entrenar un modelo de clasificación ingenua de Bayes.
+bayes <- makeLearner("classif.naiveBayes")
+
+# Esta línea entrena el modelo de clasificación Naive Bayes utilizando la función train() del paquete mlr.
+# Se pasa el modelo de aprendizaje bayes y la tarea de clasificación votesTask como argumentos.
+# Esta función ajusta el modelo a los datos de entrenamiento y devuelve un modelo entrenado, 
+# que se almacena en la variable bayesModel.
+bayesModel <- train(bayes, votesTask)
+
+
+# El entrenamiento del modelo se completa sin errores porque Naive Bayes puede manejar los datos que faltan.
+
+# A continuación, utilizaremos una validación cruzada de 10-fold repetida 50 veces para
+# evaluar el rendimiento de nuestro procedimiento de creación de modelos. Nuevamente,
+# debido a que este es un problema de clasificación de dos clases, tenemos acceso a la tasa de
+# falsos positivos y la tasa de falsos negativos, por lo que también los solicitamos en el
+# argumento de medidas de la función resample().
+
+kFold <- makeResampleDesc(method = "RepCV", folds = 10, reps = 50, stratify = TRUE)
+bayesCV <- resample(learner = bayes, task = votesTask,resampling = kFold,measures = list(mmce, acc, fpr, fnr))
+bayesCV$aggr
+
