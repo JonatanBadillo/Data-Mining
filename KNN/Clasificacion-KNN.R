@@ -32,5 +32,16 @@ summary(h)
 # La división se puede encontrar de la siguiente manera:
 table(h$Creditability)
 # En esta tabla, 0 representa las instancias de mala acreditabilidad (instancias que han
-# incumplido) y 1 representa las instancias de buena acreditabilidad (aquellas que no han
-                                                                    incumplido).
+# incumplido) y 1 representa las instancias de buena acreditabilidad (aquellas que no han incumplido).
+
+
+
+# Dividir datos en conjuntos de entrenamiento y prueba en una proporción de 2:1
+sg0 <- which(h$Creditability==0)
+sg1 <- which(h$Creditability==1) # OR sg1 <- !sg0
+sg0tr <- sample(sg0,length(sg0)*2/3)
+sg1tr <- sample(sg1,length(sg1)*2/3)
+sg0ts <- sg0[!sg0 %in% sg0tr]
+sg1ts <- sg1[!sg1 %in% sg1tr]
+cat("Training+",length(sg0tr),'\n',"Training",length(sg1tr),"\n",
+      "Testing+",length(sg0ts),"\n","Testing-",length(sg1ts))
