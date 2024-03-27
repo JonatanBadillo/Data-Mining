@@ -25,3 +25,12 @@ library(class)
 file <-"german_credit.csv"
 h<-read.csv(file)
 head(h,4)
+
+summary(h)
+
+
+# La división se puede encontrar de la siguiente manera:
+table(h$Creditability)
+# En esta tabla, 0 representa las instancias de mala acreditabilidad (instancias que han
+# incumplido) y 1 representa las instancias de buena acreditabilidad (aquellas que no han
+                                                                    incumplido).
