@@ -20,3 +20,8 @@
 
 # Un ejemplo de clasificación k-NN
 
+# Leer el archivo y mostrar el resumen (se utilizó R versión 4.0.4)
+library(class)
+file <-"german_credit.csv"
+h<-read.csv(file)
+head(h,4)
