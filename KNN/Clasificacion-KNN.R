@@ -39,9 +39,25 @@ table(h$Creditability)
 # Dividir datos en conjuntos de entrenamiento y prueba en una proporción de 2:1
 sg0 <- which(h$Creditability==0)
 sg1 <- which(h$Creditability==1) # OR sg1 <- !sg0
-sg0tr <- sample(sg0,length(sg0)*2/3)
+# Selecciona aproximadamente el 66.67% de las muestras de la clase negativa (sg0) para el conjunto de entrenamiento 
+sg0tr <- sample(sg0,length(sg0)*2/3) 
+# Selecciona aproximadamente el 66.67% de las muestras de la clase positiva (sg1)
 sg1tr <- sample(sg1,length(sg1)*2/3)
+# Selecciona las muestras de la clase negativa que no están en el conjunto de entrenamiento (sg0tr)
 sg0ts <- sg0[!sg0 %in% sg0tr]
+# Selecciona las muestras de la clase positiva que no están en el conjunto de entrenamiento (sg1tr)
 sg1ts <- sg1[!sg1 %in% sg1tr]
+
+# se imprime la longitud de cada conjunto de entrenamiento y prueba para ambas clases (positiva y negativa).
 cat("Training+",length(sg0tr),'\n',"Training",length(sg1tr),"\n",
       "Testing+",length(sg0ts),"\n","Testing-",length(sg1ts))
+
+
+# Combinar los registros seleccionados para los conjuntos de datos de Entrenamiento y Prueba
+htr <- rbind(h[sg0tr,],h[sg1tr,])
+hts <- rbind(h[sg0ts,],h[sg1ts,])
+table(htr$Creditability)
+
+
+table(hts$Creditability)
+
