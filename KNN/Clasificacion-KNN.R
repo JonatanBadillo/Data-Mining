@@ -74,4 +74,57 @@ hts <- hts[,-1]
 # columna
 normalize <- function(x) return( (x-min(x))/(max(x)-min(x)))
 
+# Vamos a crear un frame de datos
+d <- data.frame("col1"=c(1,3,7), "col2"=c(2,6,4))
+print(d,row.names=F)
 
+
+# Para normalizar las dos columnas, necesitamos usar lapply (list apply), de la siguiente
+# manera.
+dn <- lapply(d,normalize)
+dn <- as.data.frame(dn)
+print(dn,row.names=F)
+
+# También podemos usar lapply para redondear los valores de la columna a 2 decimales
+dn <- as.data.frame(lapply(dn,round,2))
+print(dn,row.names=F)
+
+# Ahora normaliza las columnas de htr y hts
+htr <- as.data.frame(lapply(htr,normalize))
+hts <- as.data.frame(lapply(hts,normalize))
+
+summary(htr[,c(2,5,13)])
+summary(hts[,c(2,5,13)])
+
+# Funciones para evaluar la eficiencia k-NN
+
+# splitFile: para dividir datos en conjuntos de entrenamiento y prueba en una proporción dada
+
+# Dividir el archivo de datos en conjuntos de datos de entrenamiento y prueba
+splitFile <- function(dataSet, trProp,classCol) {
+  v <- dataSet[,classCol]
+  sg0 <- which(v==0)
+  sg1 <- which(v==1)
+  sg0tr <- sample(sg0,length(sg0)*trProp)
+  sg1tr <- sample(sg1,length(sg1)*trProp)
+  sg0ts <- sg0[!sg0 %in% sg0tr]
+  sg1ts <- sg1[!sg1 %in% sg1tr]
+  htr <- rbind(dataSet[sg0tr,],dataSet[sg1tr,])
+  hts <- rbind(dataSet[sg0ts,],dataSet[sg1ts,])
+  trLabels <- htr[,classCol]
+  tsLabels <- hts[,classCol]
+  htr <- htr[,-which(names(htr) == classCol)]
+  hts <- hts[,-which(names(hts) == classCol)]
+  return(list(tr=htr,ts=hts,trL=trLabels,tsL=tsLabels))
+}
+
+
+# Dividir el conjunto de datos usando splitFile
+a <- splitFile(h,.6,'Creditability')
+trData <- a[[1]]
+tsData <- a[[2]]
+trL <- a[[3]]
+tsL <- a[[4]]
+table(trL)
+
+table(tsL)
