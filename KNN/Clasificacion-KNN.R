@@ -61,3 +61,17 @@ table(htr$Creditability)
 
 table(hts$Creditability)
 
+# Eliminar etiquetas
+# Se han creado los conjuntos de datos htr y hts. Ahora almacenamos las etiquetas de datos de
+# Entrenamiento y Prueba en dos vectores, trLabels y tsLabels y luego eliminamos la columna
+# Creditability de los conjuntos de datos htr y hts.
+trLabels <- htr$Creditability
+tsLabels <- hts$Creditability
+htr <- htr[,-1]
+hts <- hts[,-1]
+
+# Crea una función para normalizar Ahora creamos una función para normalizar cualquier
+# columna
+normalize <- function(x) return( (x-min(x))/(max(x)-min(x)))
+
+
