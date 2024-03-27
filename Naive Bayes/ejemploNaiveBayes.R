@@ -37,4 +37,24 @@ train.df <- delays.df[train.index, selected.var]
 valid.df <- delays.df[-train.index, selected.var]
 
 
+# se ejecuta Naive Bayes
+delays.nb <- naiveBayes(Flight.Status ~ ., data = train.df)
+delays.nb
+
+
+# use prop.table() with margin = 1 to convert a count table to a proportion table,
+# where each row sums up to 1 (use margin = 2 for column sums).
+prop.table(table(train.df$Flight.Status, train.df$DEST), margin = 1)
+
+
+# Predice las probabilidades
+pred.prob <- predict(delays.nb, newdata = valid.df, type = "raw")
+# Predice la membresia de las clases
+pred.class <- predict(delays.nb, newdata = valid.df)
+df <- data.frame(actual = valid.df$Flight.Status, predicted = pred.class, pred.prob)
+df[valid.df$CARRIER == "DL" & valid.df$DAY_WEEK == 7 & valid.df$CRS_DEP_TIME == 10 & valid.df$DEST == "LGA" & valid.df$ORIGIN == "DCA",]
+
+
+
+
 
