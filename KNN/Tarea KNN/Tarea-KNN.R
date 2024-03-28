@@ -7,3 +7,16 @@
 # caso contrario. Considera el objetivo de predecir el valor mediano (MEDV) de un tramo,
 # dada la información en las primeras 12 columnas. Divide los datos en conjuntos de
 # entrenamiento (60%) y validación (40%).
+
+# -------------------------------------------------------------------------------
+# A)
+# Realiza una predicción k-NN con los 12 predictores (ignora la columna CAT.MEDV),
+# probando valores de k de 1 a 5. Asegúrate de normalizar los datos y
+# elije la función knn() del paquete class en lugar del paquete FNN. Para asegurarte de
+# que R está usando el paquete class (cuando ambos paquetes están cargados), usa
+# ¿Cuál es la mejor k? Qué significa eso?
+
+# Cargamos el Dataset
+library(readr)
+BostonHousing <- read_csv("BostonHousing.csv")
+View(BostonHousing)
