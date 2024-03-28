@@ -35,10 +35,19 @@ school.testLabel <- school.testLabel$prog
 
 
 # Ahora construir el modelo KNN
-# con K=3
+# con K=9
 library(class)
 
 
-prog_pred <- knn(train = school.training, test = school.test, cl = school.trainLabel, k=3)
+prog_pred <- knn(train = school.training, test = school.test, cl = school.trainLabel, k=9)
 
 summary(prog_pred)
+# academic  general vocation 
+#  42       10       18
+
+# Evaluar modelo con tabulacion cruzada
+library(gmodels)
+CrossTable(x=prog_pred, y=school.testLabel, prop.chisq = FALSE)
+
+# De 70 predicciones, la precision fue de 43 correctas:
+# es decir 43/70 = 0.61 de precision
