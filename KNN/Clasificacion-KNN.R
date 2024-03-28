@@ -172,3 +172,16 @@ bestK <- function(trData, trLabels, tsData, tsLabels) {
 err <- bestK(trData, trLabels, tsData, tsLabels)
 plot(err$k,err$trER,type='o',ylim=c(0,.5),xlab="k",ylab="Error rate",col="blue")
 lines(err$k,err$tsER,type='o',col="red")
+
+
+
+
+# Vuelve a ejecutar k-NN con k=5
+tsPred <- knn(trData, tsData, trLabels, k=5)
+table(tsLabels,tsPred)
+
+#paste("The accuracy of prediction is", length(which(tsLabels==tsPred)==TRUE)/length(tsLabels))
+accu1 <- length(which(tsLabels==tsPred)==TRUE)/length(tsLabels)
+sens1 <- length(which((tsLabels==tsPred) & (tsLabels==0))) / length(which(tsLabels==0))
+spec1 <- length(which((tsLabels==tsPred) & (tsLabels==1))) / length(which(tsLabels==1))
+cat("Accuracy=",round(accu1,2),'\n',"Sensitivity=",round(sens1,2),'\n',"Specificity=",round(spec1,2))
