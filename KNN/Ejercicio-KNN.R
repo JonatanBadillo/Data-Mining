@@ -108,7 +108,7 @@ summary(Iris_pred)
 
 # Para esto, usaremos: tabulación cruzada.
 
-install.packages("gmodels")
+# install.packages("gmodels")
 library(gmodels)
 CrossTable(x=Iris_pred, y=iris.testLabels, prop.chisq = FALSE)
 
