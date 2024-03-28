@@ -51,4 +51,11 @@ boston.trainLabel <- BostonHousing_normalized[bth==1,13]
 boston.testLabel <- BostonHousing_normalized[bth==2,13]
 
 
+# Ahora construir el modelo KNN
+# con K=3
+library(class)
 
+
+medv_pred <- knn(train = boston.training, test = boston.test, cl = boston.trainLabel, k=3)
+
+summary(medv_pred)
