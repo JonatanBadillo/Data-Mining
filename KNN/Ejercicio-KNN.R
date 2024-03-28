@@ -115,3 +115,6 @@ CrossTable(x=Iris_pred, y=iris.testLabels, prop.chisq = FALSE)
 # En esta tabla, podemos ver cómo nuestras predicciones (iris_pred) coincidieron con la verdad
 # (iris.testLabels). Parece haber solo un caso en el que nos equivocamos: predecir "versicolor"
 # para algo que era "virginica".
+
+# Con esta tabla, puedes calcular fácilmente la precisión. De 40 predicciones, nos equivocamos
+# una vez. Entonces eso nos da 39/40 = 97.5% de precisión.
