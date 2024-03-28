@@ -21,16 +21,14 @@ library(readr)
 BostonHousing <- read_csv("BostonHousing.csv")
 View(BostonHousing)
 
-# Excluir la columna CAT.MEDV
-BostonHousing <- BostonHousing[, -which(names(BostonHousing) == "CAT.MEDV")]
 
 # Crear una función para normalizar 
-normalize <- function(x) return( (x-min(x))/(max(x)-min(x)))
+normalize <- function(x) return( round((x-min(x))/(max(x)-min(x)), 2))
 
 # Aplicar la función de normalización a todas las columnas del conjunto de datos
 BostonHousing_normalized <- as.data.frame(lapply(BostonHousing, normalize))
 
-
+set.seed (1234)
 # Dividimos en conjunto de prueba y entrenamiento
 # Entrenamiento 67%
 # Prueba 33%
@@ -59,3 +57,10 @@ library(class)
 medv_pred <- knn(train = boston.training, test = boston.test, cl = boston.trainLabel, k=3)
 
 summary(medv_pred)
+
+
+# Evaluar modelo con tabulacion cruzada
+library(gmodels)
+CrossTable(x=medv_pred, y=boston.testLabel, prop.chisq = FALSE)
+
+
