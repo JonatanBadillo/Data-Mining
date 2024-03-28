@@ -128,3 +128,23 @@ tsL <- a[[4]]
 table(trL)
 
 table(tsL)
+
+
+# Realiza una clasificación k-NN
+a <- splitFile(h,.6,'Creditability')
+trData <- a[[1]]
+tsData <- a[[2]]
+trLabels <- a[[3]]
+tsLabels <- a[[4]]
+tsPred <- knn(trData, tsData, trLabels, k=3)
+
+#CrossTable(tsLabels, tsPred)
+table(tsLabels,tsPred)
+
+
+
+accu0 <- length(which(tsLabels==tsPred)==TRUE)/length(tsLabels)
+sens0 <- length(which((tsLabels==tsPred) & (tsLabels==0))) / length(which(tsLabels==0))
+spec0 <- length(which((tsLabels==tsPred) & (tsLabels==1))) / length(which(tsLabels==1))
+
+cat("Accuracy=",round(accu0,2),'\n',"Sensitivity=",round(sens0,2),'\n',"Specificity=",round(spec0,2))
