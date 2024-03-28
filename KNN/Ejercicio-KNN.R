@@ -75,3 +75,43 @@ ind <- sample (2,
 iris.training <- iris [ind == 1, 1: 4]
 iris.test <- iris [ind == 2, 1: 4]
 
+
+# "Species", que es la etiqueta de la clase, es nuestra variable
+# objetivo y los atributos restantes son atributos predictores. Por lo tanto, necesitamos
+# almacenar la etiqueta de la clase en vectores de factores y dividirlos entre los conjuntos de
+# entrenamiento y prueba, lo que se puede hacer siguiendo los siguientes pasos:
+iris.trainLabels <- iris[ind==1,5]
+iris.testLabels <- iris[ind==2,5]
+
+
+# Listos para usar el K-NN
+
+# La función knn() usa la distancia euclidiana para encontrar las
+# similitudes entre las instancias de entrenamiento k y su instancia de prueba. El valor de k
+# debe ser proporcionado por el usuario, que es usted en este caso.
+install.packages("class")
+library(class)
+                  # indica que el modelo se entrenará utilizando el conjunto de datos iris.training.
+Iris_pred <- knn(train = iris.training, 
+                 # indica que el conjunto de datos que se va a utilizar para realizar las predicciones es iris.test
+                 test = iris.test, 
+                 # contiene las etiquetas de clase correspondientes a las observaciones en el conjunto de datos de entrenamiento.
+                 cl = iris.trainLabels, 
+                 #  Este argumento especifica el número de vecinos más cercanos que se utilizarán para hacer las predicciones.
+                 k=3)
+
+Iris_pred
+summary(Iris_pred)
+
+# Dado que hemos construido un modelo y hemos predicho las etiquetas de clase para nuestros
+# atributos de prueba, evaluemos qué tan precisas son esas predicciones.
+
+# Para esto, usaremos: tabulación cruzada.
+
+install.packages("gmodels")
+library(gmodels)
+CrossTable(x=Iris_pred, y=iris.testLabels, prop.chisq = FALSE)
+
+# En esta tabla, podemos ver cómo nuestras predicciones (iris_pred) coincidieron con la verdad
+# (iris.testLabels). Parece haber solo un caso en el que nos equivocamos: predecir "versicolor"
+# para algo que era "virginica".
