@@ -20,6 +20,25 @@ sch <- sample(2,nrow(hsbdemo),replace = T,prob = c(0.67,0.33))
 school.training <- hsbdemo[sch==1,6:9]
 school.test <- hsbdemo[sch==2,6:9]
 
+# Convertir las variables a matrices de datos simples
+school.training <- as.matrix(school.training)
+school.test <- as.matrix(school.test)
+
 # Especificamos cual es nuestra clase, en este caso queremos saber el programa(es nuestra variable objetivo) 
 school.trainLabel <- hsbdemo[sch==1,5]
 school.testLabel <- hsbdemo[sch==2,5]
+
+# Convertir las etiquetas de clase de listas a vectores
+school.trainLabel <- school.trainLabel$prog
+school.testLabel <- school.testLabel$prog
+
+
+
+# Ahora construir el modelo KNN
+# con K=3
+library(class)
+
+
+prog_pred <- knn(train = school.training, test = school.test, cl = school.trainLabel, k=3)
+
+summary(prog_pred)
