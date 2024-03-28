@@ -148,3 +148,27 @@ sens0 <- length(which((tsLabels==tsPred) & (tsLabels==0))) / length(which(tsLabe
 spec0 <- length(which((tsLabels==tsPred) & (tsLabels==1))) / length(which(tsLabels==1))
 
 cat("Accuracy=",round(accu0,2),'\n',"Sensitivity=",round(sens0,2),'\n',"Specificity=",round(spec0,2))
+
+# Elegir el mejor valor de k
+# Función para generar tasas de error de entrenamiento y prueba para varios k
+bestK <- function(trData, trLabels, tsData, tsLabels) {
+  ctr <- c(); cts <- c()
+  for (k in 1:20) {
+    knnTr <- knn(trData, trData, trLabels, k)
+    knnTs <- knn(trData, tsData, trLabels, k)
+    trTable <- prop.table(table(knnTr, trLabels))
+    tsTable <- prop.table(table(knnTs, tsLabels))
+    erTr <- trTable[1,2] + trTable[2,1]
+    erTs <- tsTable[1,2] + tsTable[2,1]
+    ctr <- c(ctr,erTr)
+    cts <- c(cts,erTs)
+  }
+  #acc <- data.frame(k=1/c(1:100), trER=ctr, tsER=cts)
+  err <- data.frame(k=1:20, trER=ctr, tsER=cts)
+  return(err)
+}
+# Invoca la función bestK para crear un conjunto de datos y graficar índices de error de prueba
+# y entrenamiento para varios valores de k
+err <- bestK(trData, trLabels, tsData, tsLabels)
+plot(err$k,err$trER,type='o',ylim=c(0,.5),xlab="k",ylab="Error rate",col="blue")
+lines(err$k,err$tsER,type='o',col="red")
