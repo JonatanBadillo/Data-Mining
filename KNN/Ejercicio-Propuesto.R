@@ -19,3 +19,7 @@ sch <- sample(2,nrow(hsbdemo),replace = T,prob = c(0.67,0.33))
 # puntajes de lectura, escritura, matemáticas y ciencias de los estudiantes de secundaria.
 school.training <- hsbdemo[sch==1,6:9]
 school.test <- hsbdemo[sch==2,6:9]
+
+# Especificamos cual es nuestra clase, en este caso queremos saber el programa(es nuestra variable objetivo) 
+school.trainLabel <- hsbdemo[sch==1,5]
+school.testLabel <- hsbdemo[sch==2,5]
