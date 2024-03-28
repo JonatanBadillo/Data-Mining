@@ -20,3 +20,12 @@
 library(readr)
 BostonHousing <- read_csv("BostonHousing.csv")
 View(BostonHousing)
+
+# Excluir la columna CAT.MEDV
+BostonHousing <- BostonHousing[, -which(names(BostonHousing) == "CAT.MEDV")]
+
+# Crear una función para normalizar 
+normalize <- function(x) return( (x-min(x))/(max(x)-min(x)))
+
+# Aplicar la función de normalización a todas las columnas del conjunto de datos
+BostonHousing_normalized <- as.data.frame(lapply(BostonHousing, normalize))
