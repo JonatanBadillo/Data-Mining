@@ -68,3 +68,10 @@ ind <- sample (2,
 # El vector ind que se genera tendrá la misma longitud que el número de filas en el conjunto de datos iris. 
 # Cada elemento de este vector tendrá un valor de 1 o 2, determinado aleatoriamente según las probabilidades especificadas.
 
+
+# Luego podemos usar la muestra que está almacenada en la variable "ind" para definir nuestros
+# conjuntos de entrenamiento y prueba, tomando solo las primeras cuatro columnas o atributos
+# de los datos.
+iris.training <- iris [ind == 1, 1: 4]
+iris.test <- iris [ind == 2, 1: 4]
+
