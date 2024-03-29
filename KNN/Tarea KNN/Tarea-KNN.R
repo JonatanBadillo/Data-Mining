@@ -93,6 +93,10 @@ combined_data <- rbind(BostonHousing_relevant, nuevo_dato)
 # Normalizamos:
 combined_data_normalized <- as.data.frame(lapply(combined_data, normalize))
 
+
+# Extrae la última fila, que serán los datos del nuevo dato normalizado
+nuevo_dato_normalizado <- tail(combined_data_normalized, 1)
+
 # Realizar la predicción utilizando tu modelo k-NN
 medv_pred_nuevos_datos <- knn(train = boston.training, test = nuevo_dato_normalized , cl = boston.trainLabel, k = 5)
 
