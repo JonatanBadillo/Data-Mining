@@ -78,16 +78,20 @@ nuevo_dato <- data.frame(
   RAD = 4,
   TAX = 307,
   PTRATIO = 21,
-  LSTAT = 10
+  LSTAT = 10,
 )
 
-# Normalizar el nuevo dato usando los mismos valores de normalización que usaste en los datos de entrenamiento
-nuevo_dato_normalized <- (nuevo_dato - min(boston.training)) / (max(boston.training) - min(boston.training))
-
-# Convertir los nuevos datos a una matriz
-nuevo_dato_normalized  <- as.matrix(nuevo_dato_normalized )
+# Para normalizar los nuevos datos, se agregaran al Dataset original, donde posteriormente
+# se normalizaran los datos y se extraera esa ultima fila que serian estos nuevos datos normalizados
 
 
+# Seleccionar solo las columnas relevantes de BostonHousing para combinar con el nuevo dato
+BostonHousing_relevant <- BostonHousing[, -c(13, 14)] 
+# Combina el nuevo dato con el conjunto de datos BostonHousing seleccionando solo las columnas relevantes
+combined_data <- rbind(BostonHousing_relevant, nuevo_dato)
+
+# Normalizamos:
+combined_data_normalized <- as.data.frame(lapply(combined_data, normalize))
 
 # Realizar la predicción utilizando tu modelo k-NN
 medv_pred_nuevos_datos <- knn(train = boston.training, test = nuevo_dato_normalized , cl = boston.trainLabel, k = 5)
