@@ -83,7 +83,7 @@ nuevo_dato <- data.frame(
 
 # Para normalizar los nuevos datos, se agregaran al Dataset original, donde posteriormente
 # se normalizaran los datos y se extraera esa ultima fila que serian estos nuevos datos normalizados
-
+set.seed(123)
 
 # Seleccionar solo las columnas relevantes de BostonHousing para combinar con el nuevo dato
 BostonHousing_relevant <- BostonHousing[, -c(13, 14)] 
@@ -97,14 +97,17 @@ combined_data_normalized <- as.data.frame(lapply(combined_data, normalize))
 # Extrae la última fila, que serán los datos del nuevo dato normalizado
 nuevo_dato_normalizado <- tail(combined_data_normalized, 1)
 
+# Convierte los datos normalizados del nuevo dato a una matriz
+nuevo_dato_matrix <- as.matrix(nuevo_dato_normalizado)
+
 # Realizar la predicción utilizando tu modelo k-NN
-medv_pred_nuevos_datos <- knn(train = boston.training, test = nuevo_dato_normalized , cl = boston.trainLabel, k = 5)
+medv_pred_nuevos_datos <- knn(train = boston.training, test = nuevo_dato_matrix , cl = boston.trainLabel, k = 5)
 
 # Imprimir o utilizar la predicción según sea necesario
 print(medv_pred_nuevos_datos)
 summary(medv_pred_nuevos_datos)
 
-## MEDV PREDECIDO = 0.2
+## MEDV PREDECIDO = 0.29
 
 
 
