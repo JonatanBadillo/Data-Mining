@@ -19,8 +19,6 @@
 # Cargamos el Dataset
 library(readr)
 BostonHousing <- read_csv("BostonHousing.csv")
-View(BostonHousing)
-
 
 # Crear una función para normalizar 
 normalize <- function(x) return( round((x-min(x))/(max(x)-min(x)), 2))
@@ -54,13 +52,52 @@ boston.testLabel <- BostonHousing_normalized[bth==2,13]
 library(class)
 
 
-medv_pred <- knn(train = boston.training, test = boston.test, cl = boston.trainLabel, k=3)
+medv_pred <- knn(train = boston.training, test = boston.test, cl = boston.trainLabel, k=5)
 
+print(medv_pred)
 summary(medv_pred)
 
 
 # Evaluar modelo con tabulacion cruzada
 library(gmodels)
 CrossTable(x=medv_pred, y=boston.testLabel, prop.chisq = FALSE)
+
+# -------------------------------------------------------------------------------
+# B)
+# Predecir el MEDV para un tramo con la siguiente información, utilizando la mejor k:
+# Crear un dataframe con las características proporcionadas
+nuevo_dato <- data.frame(
+  CRIM = 0.2,
+  ZN = 0,
+  INDUS = 7,
+  CHAS = 0,
+  NOX = 0.538,
+  RM = 6,
+  AGE = 62,
+  DIS = 4.7,
+  RAD = 4,
+  TAX = 307,
+  PTRATIO = 21,
+  LSTAT = 10
+)
+
+# Normalizar el nuevo dato usando los mismos valores de normalización que usaste en los datos de entrenamiento
+nuevo_dato_normalized <- (nuevo_dato - min(boston.training)) / (max(boston.training) - min(boston.training))
+
+# Convertir los nuevos datos a una matriz
+nuevo_dato_normalized  <- as.matrix(nuevo_dato_normalized )
+
+
+
+# Realizar la predicción utilizando tu modelo k-NN
+medv_pred_nuevos_datos <- knn(train = boston.training, test = nuevo_dato_normalized , cl = boston.trainLabel, k = 5)
+
+# Imprimir o utilizar la predicción según sea necesario
+print(medv_pred_nuevos_datos)
+summary(medv_pred_nuevos_datos)
+
+## MEDV PREDECIDO = 0.2
+
+
 
 
