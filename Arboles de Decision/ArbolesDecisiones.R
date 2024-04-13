@@ -65,6 +65,25 @@ treeParamSpace <- makeParamSet(
   makeNumericParam("cp", lower = 0.01, upper = 0.1),
   makeIntegerParam("maxdepth", lower = 3, upper = 10))
 
+# podemos definir cómo vamos a buscar el espacio de hiperparámetros
+# que definimos en el listado anterior. Debido a que el espacio de hiperparámetros es
+# bastante grande, utilizaremos una búsqueda aleatoria
+
+# Usaremos 200 iteraciones.
+# Vamos a utilizar una validación cruzada ordinaria de 5 veces.
+
+
+# Crea un objeto de control de búsqueda de hiperparámetros utilizando una estrategia de búsqueda aleatoria.
+# makeTuneControlRandom() es una función que crea un controlador para la búsqueda de hiperparámetros aleatorios.
+# El argumento maxit = 200 especifica el número máximo de iteraciones que la búsqueda aleatoria .
+randSearch <- makeTuneControlRandom(maxit = 200)
+
+# Crea un objeto de descripción de re-muestreo para la validación cruzada.
+# makeResampleDesc() es una función que crea una descripción de la estrategia de re-muestreo.
+# El primer argumento "CV" indica que se utilizará la validación cruzada para evaluar el rendimiento del modelo.
+# El argumento iters = 5 especifica el número de iteraciones (o "folds") que se utilizarán en la validación cruzada.
+cvForTuning <- makeResampleDesc("CV", iters = 5)
+
 
 
 
