@@ -85,6 +85,22 @@ randSearch <- makeTuneControlRandom(maxit = 200)
 cvForTuning <- makeResampleDesc("CV", iters = 5)
 
 
+# ¡realicemos nuestro ajuste de hiperparámetros!
+library(parallel) # está ya instalado, es parte de la base de R
+library(parallelMap)
+parallelStartSocket(cpus = detectCores())
+
+
+# Entrenamiento del modelo
+
+tunedTreePars <- tuneParams(tree, task = zooTask,
+                              resampling = cvForTuning,
+                              par.set = treeParamSpace,
+                              control = randSearch)
+
+parallelStop()
+
+tunedTreePars
 
 
 
