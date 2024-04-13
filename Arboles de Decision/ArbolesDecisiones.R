@@ -104,7 +104,32 @@ parallelStop() # detiene cualquier proceso de computación en paralelo que pueda
 tunedTreePars# Este objeto contendrá información sobre los mejores hiperparámetros encontrados durante la búsqueda
 
 # completa el proceso de ajuste del modelo de árbol de decisión utilizando los hiperparámetros optimizados obtenidos durante la sintonización. 
-tunedTree <- setHyperPars(tree, par.vals = tunedTreePars$x)
+tunedTree <- setHyperPars(
+  tree, # modelo de árbol de decisión que se creó previamente.
+  par.vals = tunedTreePars$x)# specifica los valores óptimos de los hiperparámetros obtenidos durante la sintonización. tunedTreePars$x contiene los valores óptimos encontrados para los hiperparámetros del modelo.
+
 tunedTreeModel <- train(tunedTree, zooTask)
+
+
+# Respresentacion grafica
+install.packages("rpart.plot")
+library(rpart.plot)
+treeModelData <- getLearnerModel(tunedTreeModel)
+rpart.plot(treeModelData, roundint = FALSE,
+             box.palette = "BuBn",
+             type = 5)
+
+# Validacion cruzada
+
+outer <- makeResampleDesc("CV", iters = 5)
+treeWrapper <- makeTuneWrapper("classif.rpart", resampling = cvForTuning,
+                                par.set = treeParamSpace,
+                                control = randSearch)
+parallelStartSocket(cpus = detectCores())
+
+cvWithTuning <- resample(treeWrapper, zooTask, resampling = outer)
+
+cvWithTuning
+
 
 
