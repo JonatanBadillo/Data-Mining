@@ -47,5 +47,25 @@ tree <- makeLearner("classif.rpart")
 
 
 
+# A continuación, debemos realizar un ajuste de hiperparámetros.
+
+# para obtener el conjunto de hiperparámetros predeterminado asociado al modelo de árbol de decisión (tree)
+getParamSet(tree)
+
+# Ahora, definamos el espacio de hiperparámetros en el que queremos buscar. Vamos a
+# ajustar los valores de minsplit (un número entero), minbucket (un número entero), cp (un
+# numérico) y maxdepth (un número entero).
+
+# NOTA: Recuerda que usamos makeIntegerParam() y makeNumericParam() para definir los
+# espacios de búsqueda para hiperparámetros enteros y numéricos, respectivamente.
+
+treeParamSpace <- makeParamSet(
+  makeIntegerParam("minsplit", lower = 5, upper = 20),
+  makeIntegerParam("minbucket", lower = 3, upper = 10),
+  makeNumericParam("cp", lower = 0.01, upper = 0.1),
+  makeIntegerParam("maxdepth", lower = 3, upper = 10))
+
+
+
 
 
