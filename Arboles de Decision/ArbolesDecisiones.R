@@ -30,3 +30,22 @@ zooTib
 # existente.
 
 zooTib <- mutate_if(zooTib, is.logical, as.factor)
+
+
+
+# Entrenaremos un modelo utilizando, la combinación óptima de hiperparámetros.
+
+# Definamos nuestra tarea y nuestro aprendizaje, y construyamos un modelo 
+# Esta vez, proporcionamos "classif.rpart" como argumento para
+# makeLearner() para especificar que vamos a utilizar rpart.
+
+# se crea un objeto de tarea de clasificación (zooTask) a partir de los datos zooTib.
+zooTask <- makeClassifTask(data = zooTib, target = "type")# # Se especifica que la variable objetivo que se utilizará para el aprendizaje supervisado es la columna llamada "type" en zooTib.
+# Para crear un modelo de aprendizaje automático de clasificación basado en árboles de decisión.
+# El argumento "classif.rpart" indica que se utilizará el algoritmo de árboles de decisión implementado en el paquete rpart.
+tree <- makeLearner("classif.rpart")
+
+
+
+
+
