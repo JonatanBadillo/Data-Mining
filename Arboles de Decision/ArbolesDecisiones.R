@@ -92,15 +92,19 @@ parallelStartSocket(cpus = detectCores())
 
 
 # Entrenamiento del modelo
+# Se encarga de ajustar (o "sintonizar") los hiperparámetros del modelo de árbol de decisión
+tunedTreePars <- tuneParams(tree, # modelo de árbol de decisión que se creó previamente.
+                            task = zooTask, #  especifica la tarea de clasificación que se utilizará para ajustar los hiperparámetros. zooTask contiene los datos y la variable objetivo.
+                            resampling = cvForTuning, # indica la estrategia de re-muestreo que se utilizará para evaluar el rendimiento del modelo durante la sintonización de hiperparámetros.
+                            par.set = treeParamSpace,# especifica el espacio de búsqueda de hiperparámetros que se utilizará para la búsqueda.
+                            control = randSearch) # indica el control de búsqueda que se utilizará durante la sintonización. randSearch contiene la configuración para la búsqueda aleatoria de hiperparámetros.
 
-tunedTreePars <- tuneParams(tree, task = zooTask,
-                              resampling = cvForTuning,
-                              par.set = treeParamSpace,
-                              control = randSearch)
+parallelStop() # detiene cualquier proceso de computación en paralelo que pueda haber sido iniciado previamente.
 
-parallelStop()
+tunedTreePars# Este objeto contendrá información sobre los mejores hiperparámetros encontrados durante la búsqueda
 
-tunedTreePars
-
+# completa el proceso de ajuste del modelo de árbol de decisión utilizando los hiperparámetros optimizados obtenidos durante la sintonización. 
+tunedTree <- setHyperPars(tree, par.vals = tunedTreePars$x)
+tunedTreeModel <- train(tunedTree, zooTask)
 
 
