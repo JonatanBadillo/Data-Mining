@@ -15,3 +15,18 @@ library(tidyverse)
 data(Zoo, package = "mlbench")
 zooTib <- as_tibble(Zoo)
 zooTib
+
+# Convertiremos en factores con la función mutate_if() de dplyr
+# Al convertir las variables lógicas en factores,se están tratando como variables categóricas. 
+# R entenderá que estas variables tienen un conjunto finito de categorías o niveles, en lugar de interpretarlas como valores lógicos (TRUE o FALSE).
+
+# Esta función toma los datos como primer argumento .
+
+# El segundo argumento es nuestro criterio para seleccionar columnas, por
+# lo que aquí hemos usado is.logic para considerar solo las columnas lógicas.
+
+# El argumento final es qué hacer con esas columnas, así que usamos as.factor para
+# convertir las columnas lógicas en factores. Esto dejará intacto el tipo de factor
+# existente.
+
+zooTib <- mutate_if(zooTib, is.logical, as.factor)
