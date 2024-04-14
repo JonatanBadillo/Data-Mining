@@ -46,3 +46,31 @@ ggplot(diabetesTib, aes(sspg, insulin, col = class)) +
 ggplot(diabetesTib, aes(sspg, glucose, col = class)) +
    geom_point() +
    theme_bw()
+
+# Usando mlr para entrenar tu primer modelo k-NN
+
+# La construcción de un modelo de aprendizaje automático con el
+# paquete mlr tiene tres etapas principales:
+
+  # 1. Definir la tarea. La tarea consiste en los datos y lo que queremos hacer con ellos. En
+# este caso, los datos son diabetesTib y queremos clasificar los datos con la variable de
+#clase como variable objetivo.
+
+  # 2. Definir al aprendiz. El aprendiz es simplemente el nombre del algoritmo que
+# planeamos usar, junto con cualquier argumento adicional que acepte el algoritmo.
+
+  # 3. Entrenar el modelo. Esta etapa es lo que parece: pasas la tarea al aprendiz y el
+# aprendiz genera un modelo que puede usar para hacer predicciones futuras.
+
+
+
+
+# Queremos construir un modelo de clasificación, por lo que usamos la función
+# makeClassifTask() para definir una tarea de clasificación.
+
+# Suministramos el nombre de nuestro tibble como argumento de datos y el nombre del factor
+# que contiene las etiquetas de clase como argumento de destino:
+diabetesTask <- makeClassifTask(data = diabetesTib, target = "class")
+diabetesTask
+
+
