@@ -205,3 +205,21 @@ holdoutCV$aggr
 
 
 
+# Cálculo de una matriz de confusión
+# Para tener una mejor idea de qué grupos se clasifican correctamente y cuáles se clasifican
+# incorrectamente, podemos construir una matriz de confusión. Una matriz de confusión es
+# simplemente una representación tabular de la clase verdadera y predicha de cada caso en el
+# conjunto de prueba.
+
+# Con mlr, podemos calcular la matriz de confusión utilizando la función computeConfusion-
+# Matrix(). El primer argumento es el componente $pred de nuestro objeto holdoutCV, que
+
+# contiene las clases verdadera y predicha del conjunto de prueba. El argumento opcional
+# relativo le pide a la función que muestre la proporción de cada clase en las etiquetas de clase
+# verdadera y predicha:
+
+calculateConfusionMatrix(holdoutCV$pred, relative = TRUE)
+# La matriz de confusión absoluta es más fácil de interpretar. Las filas muestran las etiquetas
+# de clase verdaderas y las columnas muestran las etiquetas predichas.
+
+
