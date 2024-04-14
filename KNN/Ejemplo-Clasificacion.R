@@ -178,6 +178,29 @@ holdout <- makeResampleDesc(method = "Holdout", split = 2/3,
 # mantener la proporción de cada clase de paciente en cada conjunto.
 
 
+# Rendimiento del holdout CV
+# Ahora que hemos definido cómo vamos a validar de forma cruzada a nuestro aprendiz,
+# podemos ejecutar el CV usando la función resample(). Suministramos el aprendiz y la tarea
+# que creamos, y el método de remuestreo que definimos hace un momento, a la función
+# resample(). También le pedimos que nos dé medidas de MMCE y precisión:
+holdoutCV <- resample(learner = knn, task = diabetesTask,
+                          resampling = holdout, measures = list(mmce, acc))
+
+# La función resample() imprime las medidas de rendimiento cuando la ejecutas, pero puede
+# acceder a ellas extrayendo el componente $aggr del objeto de remuestreo:
+holdoutCV$aggr
+
+# Notarás dos cosas:
+  # • La precisión del modelo según lo estimado por la validación cruzada de retención es
+  # menor que cuando evaluamos su desempeño en los datos que usamos para entrenar
+  # el modelo completo. Esto, ejemplifica el punto anterior de que los modelos
+  # funcionarán mejor con los datos que los entrenaron que con los datos invisibles.
+
+  # • De hecho,
+  # ejecuta la función resample() una y otra vez, ¡y obtendrás un resultado muy diferente
+  # cada vez! El motivo de esta variación es que los datos se dividen aleatoriamente en
+  # conjuntos de prueba y de entrenamiento. A veces, la división es tal que el modelo
+  # funciona bien en el conjunto de prueba; a veces la división es tal que funciona mal.
 
 
 
