@@ -254,3 +254,11 @@ kFoldCV$aggr
 # función resample() varias veces y compara la precisión promedio después de cada ejecución.
 # La estimación es mucho más estable que cuando repetimos el holdout CV.
 
+
+
+
+
+# Cálculo de una matriz de confusión
+# Ahora, construyamos la matriz de confusión basada en el k-fold CV repetido:
+calculateConfusionMatrix(kFoldCV$pred, relative = TRUE)
+
