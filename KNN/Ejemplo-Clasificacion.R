@@ -223,3 +223,34 @@ calculateConfusionMatrix(holdoutCV$pred, relative = TRUE)
 # de clase verdaderas y las columnas muestran las etiquetas predichas.
 
 
+
+
+# Validación cruzada de k-fold
+# En k-fold CV, dividimos aleatoriamente los datos en fragmentos de aproximadamente el
+# mismo tamaño llamados pliegues (folds). Luego, reservamos uno de los pliegues como
+# conjunto de prueba y usamos los datos restantes como conjunto de entrenamiento (al igual
+# que en holdout). Pasamos el conjunto de prueba a través del modelo y hacemos un registro
+# de las métricas de rendimiento relevantes.
+
+# Realizando k-fold CV
+# Realizamos k-fold CV de la misma manera que holdout. Esta vez, cuando hacemos nuestra
+# descripción de remuestreo, le decimos que vamos a utilizar una validación cruzada de k-fold
+# repetida ("RepCV"), y le decimos en cuántos pliegues queremos dividir los datos. El número
+# predeterminado de pliegues es 10, que suele ser una buena opción, pero quiero mostrarte
+# cómo puedes controlar explícitamente las divisiones. A continuación, le decimos a la función
+# que queremos repetir el 10-fold CV 50 veces con el argumento reps. ¡Esto nos da 500
+#medidas de rendimiento para promediar! Nuevamente, pedimos que las clases se estratifiquen
+# entre los pliegues:
+kFold <- makeResampleDesc(method = "RepCV", folds = 10, reps = 50,
+                              stratify = TRUE)
+kFoldCV <- resample(learner = knn, task = diabetesTask,
+                      resampling = kFold, measures = list(mmce, acc))
+# Ahora extraigamos las medidas de rendimiento promedio:
+kFoldCV$aggr
+
+
+# El modelo clasificó correctamente el 89.21% de los casos en promedio, ¡mucho menos que
+# cuando predijimos los datos que usamos para entrenar el modelo! Vuelve a ejecutar la
+# función resample() varias veces y compara la precisión promedio después de cada ejecución.
+# La estimación es mucho más estable que cuando repetimos el holdout CV.
+
