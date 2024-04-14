@@ -74,3 +74,34 @@ diabetesTask <- makeClassifTask(data = diabetesTib, target = "class")
 diabetesTask
 
 
+# Decirle a mlr qué algoritmo usar: definir al aprendiz
+# A continuación, definamos a nuestro aprendiz. Los componentes necesarios para definir a un
+# aprendiz son los siguientes:
+#   • La clase de algoritmo que estamos usando:
+  #  o "classif." para clasificación
+  #  o "regr." para regresión
+  #  o "cluster." para agrupar
+  #  o "surv." y "multilabel.". para predecir la supervivencia y la clasificación de
+  #  etiquetas múltiples
+
+# • El algoritmo que estamos usando
+# • Cualquier opción adicional que deseemos usar para controlar el algoritmo
+
+
+# Como verás, los componentes primero y segundo se combinan en un argumento de un solo
+# carácter para definir qué algoritmo se usará (por ejemplo, "classif.knn").
+
+
+
+
+# Usamos la función makeLearner() para definir un aprendiz. El primer argumento de la
+# función makeLearner() es el algoritmo que vamos a usar para entrenar nuestro modelo.
+
+# En este caso, queremos usar el algoritmo k-NN, por lo que proporcionamos "classif.knn"
+# como argumento.
+# El argumento par.vals representa valores de parámetros, lo que nos permite especificar el
+# número de k vecinos más cercanos que queremos que use el algoritmo. 
+
+# Por ahora,estableceremos esto en 2
+knn <- makeLearner("classif.knn", par.vals = list("k" = 2))
+
