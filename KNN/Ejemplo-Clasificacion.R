@@ -54,7 +54,7 @@ ggplot(diabetesTib, aes(sspg, glucose, col = class)) +
 
   # 1. Definir la tarea. La tarea consiste en los datos y lo que queremos hacer con ellos. En
 # este caso, los datos son diabetesTib y queremos clasificar los datos con la variable de
-#clase como variable objetivo.
+# clase como variable objetivo.
 
   # 2. Definir al aprendiz. El aprendiz es simplemente el nombre del algoritmo que
 # planeamos usar, junto con cualquier argumento adicional que acepte el algoritmo.
@@ -62,6 +62,8 @@ ggplot(diabetesTib, aes(sspg, glucose, col = class)) +
   # 3. Entrenar el modelo. Esta etapa es lo que parece: pasas la tarea al aprendiz y el
 # aprendiz genera un modelo que puede usar para hacer predicciones futuras.
 
+# ------------------------------------------------------------------------------
+# CREANDO TAREA
 
 
 
@@ -72,6 +74,10 @@ ggplot(diabetesTib, aes(sspg, glucose, col = class)) +
 # que contiene las etiquetas de clase como argumento de destino:
 diabetesTask <- makeClassifTask(data = diabetesTib, target = "class")
 diabetesTask
+
+# ------------------------------------------------------------------------------
+# CREANDO APRENDIZ
+
 
 
 # Decirle a mlr qué algoritmo usar: definir al aprendiz
@@ -93,7 +99,6 @@ diabetesTask
 
 
 
-
 # Usamos la función makeLearner() para definir un aprendiz. El primer argumento de la
 # función makeLearner() es el algoritmo que vamos a usar para entrenar nuestro modelo.
 
@@ -104,4 +109,14 @@ diabetesTask
 
 # Por ahora,estableceremos esto en 2
 knn <- makeLearner("classif.knn", par.vals = list("k" = 2))
+
+# ------------------------------------------------------------------------------
+# Poniendo todo junto: Entrenando el modelo
+
+# Esto se logra con la función train(), que toma al aprendiz como primer argumento y la tarea
+# como segundo argumento:
+knnModel <- train(knn, diabetesTask)
+
+
+
 
