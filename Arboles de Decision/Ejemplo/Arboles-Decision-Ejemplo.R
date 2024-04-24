@@ -7,6 +7,7 @@
 # daños a su vehículo, alegando que el otro conductor tuvo la culpa.
 # • Supón que queremos predecir cuáles de los reclamos de una compañía de
 # seguros son fraudulentos utilizando un árbol de decisiones.
+
 # • Para empezar, necesitamos crear un conjunto de formación de reclamaciones
 # fraudulentas conocidas.
 train <- data.frame(
@@ -60,6 +61,29 @@ library(rattle)
 library(rpart.color)
 library(RColorBrewer)
 fancyRpartPlot(mytree, caption = NULL)
+
+
+# • El árbol de decisiones identificó correctamente que si una reclamación implicaba
+# una colisión por alcance, lo más probable es que la reclamación fuera
+# fraudulenta.
+
+
+# • De forma predeterminada, rpart utiliza gini impureza para seleccionar divisiones
+# al realizar la clasificación.
+# • En su lugar, puedes utilizar la ganancia de información especificándola en el
+# parámetro parms.
+mytree <- rpart(
+  Fraud ~ RearEnd,
+  data = train,
+  method = "class",
+  parms = list(split = 'information'),
+  minsplit = 2,
+  minbucket = 1
+  )
+mytree
+
+
+
 
 
 
