@@ -30,3 +30,27 @@ mytree <- rpart(
   method = "class"
   )
 mytree
+
+# Observa que la salida muestra solo un nodo raíz. Esto se debe a que rpart tiene
+# algunos parámetros predeterminados que impidieron que nuestro árbol creciera.
+
+
+# • Es decir, minsplit y minbucket. minsplit es “el número mínimo de observaciones que
+# deben existir en un nodo para que se intente una división” y minbucket es “el número
+# mínimo de observaciones en cualquier nodo terminal”.
+# • Ve lo que sucede cuando anulamos estos parámetros.
+mytree <- rpart(
+  Fraud ~ RearEnd,
+  data = train,
+  method = "class",
+  minsplit = 2,
+  minbucket = 1
+  )
+plot(mytree)
+
+
+
+
+
+
+
