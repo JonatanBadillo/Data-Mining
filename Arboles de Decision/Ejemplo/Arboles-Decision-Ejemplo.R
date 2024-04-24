@@ -48,6 +48,18 @@ mytree <- rpart(
   )
 plot(mytree)
 
+# • Ahora nuestro árbol tiene un nodo raíz, una división y dos hojas 
+
+
+# • Observa que rpart codificó nuestra variable booleana como un número entero
+# (false = 0, true = 1).
+# • Podemos trazar mytree cargando el paquete rattle (y algunos paquetes de ayuda)
+# y usando la función fancyRpartPlot().
+
+library(rattle)
+library(rpart.color)
+library(RColorBrewer)
+fancyRpartPlot(mytree, caption = NULL)
 
 
 
