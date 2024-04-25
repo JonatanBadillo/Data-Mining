@@ -253,6 +253,40 @@ fancyRpartPlot(mytree, caption= NULL)
 # porque tienden a estar sobre ajustados, por lo que la poda se usa para reducir su complejidad manteniendo 
 # solo las divisiones más importantes. 
 
+train <- data.frame( 
+  ClaimID = 1:10, 
+  RearEnd = c(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE), 
+  Whiplash = c(TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, TRUE), 
+  Activity = factor( 
+    x = c("active", "very active", "very active", "inactive", "very inactive", "inactive", "very inactive", "active", "active", "very active"), 
+    levels = c("very inactive", "inactive", "active", "very active"), 
+    ordered=TRUE 
+    ), 
+  Fraud = c(FALSE, TRUE, TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, TRUE)
+  ) 
+
+train
+
+
+mytree<- rpart(
+  Fraud~ RearEnd + Whiplash +Activity,
+  data = train,
+  method= "class",
+  minsplit=2,
+  minbucket=1,
+  cp=-1
+)
+fancyRpartPlot(mytree,caption=NULL)
+
+
+
+
+# Puedes ver la importancia de cada variable en el modelo haciendo referencia al atributo variable.importance del objeto rpart resultante. 
+# De la documentación de rpart, “Una medida general de importancia variable es la suma de la bondad de las medidas divididas para cada división para la que fue la variable principal ...” 
+mytree$variable.importance 
+
+
+
 
 
 
