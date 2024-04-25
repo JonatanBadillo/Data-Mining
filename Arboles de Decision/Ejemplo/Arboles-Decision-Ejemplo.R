@@ -197,5 +197,62 @@ fancyRpartPlot(mytree, caption = NULL)
 # • Lo que se acaba de describir se conoce como una métrica de valoración y queda
 # a discreción de la compañía de seguros decidir al respecto.
 
+# Supón que la compañía de seguros contrata a un investigador para evaluar el nivel de actividad 
+# de los reclamantes. Los niveles de actividad pueden ser muy activos, activos, inactivos o muy inactivos. 
+train <- data.frame( 
+  ClaimID = c(1,2,3,4,5), 
+  Activity = factor( 
+    x = c("active", "very active", "very active", "inactive", "very inactive"), 
+    levels = c("very inactive", "inactive", "active", "very active") 
+    ), 
+  Fraud = c(FALSE, TRUE, TRUE, FALSE, TRUE) 
+  ) 
+train 
+
+mytree<- rpart( 
+  Fraud~ Activity, 
+  data= train, 
+  method="class", 
+  minsplit=2, 
+  minbucket=1 
+  ) 
+fancyRpartPlot(mytree, caption= NULL) 
+
+# En el primer conjunto de datos, no especificamos que Activity fuera un factor ordenado, 
+# por lo que rpart probó todas las formas posibles de dividir los niveles del vector Activity. 
+
+
+train <- data.frame( 
+  ClaimID = 1:5, 
+  Activity = factor( 
+    x = c("active", "very active", "very active", "inactive", "very inactive"), 
+    levels = c("very inactive", "inactive", "active", "very active"), 
+    ordered = TRUE 
+    ), 
+  Fraud = c(FALSE, TRUE, TRUE, FALSE, TRUE) 
+  ) 
+train
+
+mytree<- rpart( 
+  Fraud~ Activity, 
+  data= train, 
+  method="class", 
+  minsplit=2, 
+  minbucket=1 
+) 
+fancyRpartPlot(mytree, caption= NULL) 
+
+
+# En el segundo conjunto de datos, la Activity se especificó como un factor ordenado, 
+# por lo que rpart solo probó divisiones que separaban el conjunto ordenado de niveles de Actividad. 
+
+
+
+# • Por lo general, es una buena idea podar un árbol de decisiones. 
+# • Los árboles completamente desarrollados no funcionan bien con los datos que no están en el conjunto de entrenamiento 
+# porque tienden a estar sobre ajustados, por lo que la poda se usa para reducir su complejidad manteniendo 
+# solo las divisiones más importantes. 
+
+
 
 
