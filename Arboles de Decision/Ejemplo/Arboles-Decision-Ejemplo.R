@@ -84,6 +84,49 @@ mytree
 
 
 
+# Supongamos ahora que nuestro equipo de entrenamiento tiene este aspecto ...
+train <- data.frame(
+  ClaimID = c(1,2,3),
+  RearEnd = c(TRUE, FALSE, TRUE),
+  Fraud = c(TRUE, FALSE, FALSE)
+  )
+train
+
+# Si tratamos de construir un árbol de decisiones sobre estos datos ...
+mytree <- rpart(
+  Fraud ~ RearEnd,
+  data = train,
+  method = "class",
+  minsplit = 2,
+  minbucket = 1
+  )
+
+mytree
+
+
+# • Una vez más nos quedamos con solo un nodo raíz. Internamente, rpart realiza un
+# seguimiento de algo llamado complejidad de un árbol.
+# • La medida de complejidad es una combinación del tamaño de un árbol y la
+# capacidad del árbol para separar las clases de la variable objetivo.
+# • Si la siguiente mejor división en el crecimiento de un árbol no reduce la
+# complejidad general del árbol en una cierta cantidad, rpart terminará el proceso
+# de crecimiento.
+# • Esta cantidad se especifica mediante el parámetro de complejidad, cp, en la
+# llamada a rpart().
+# • Establecer cp en una cantidad negativa asegura que el árbol crezca
+# completamente.
+
+mytree <- rpart(
+  Fraud ~ RearEnd,
+  data = train,
+  method = "class",
+  minsplit = 2, 
+  minbucket = 1, 
+  cp = -1
+  )
+fancyRpartPlot(mytree, caption=NULL)
+                                                                                                                                                        
+
 
 
 
