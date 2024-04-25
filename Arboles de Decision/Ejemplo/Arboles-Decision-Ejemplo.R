@@ -286,6 +286,30 @@ fancyRpartPlot(mytree,caption=NULL)
 mytree$variable.importance 
 
 
+# Entonces, queremos el árbol más pequeño con xerror menor que 0.65298. 
+# Este es el árbol con cp = 0.2, por lo que querremos podar nuestro árbol con un cp ligeramente mayor que 0.2. 
+mytree <- prune(mytree, cp = 0.21) 
+fancyRpartPlot(mytree) 
+
+# Por lo tanto, podemos usar nuestro árbol de decisiones para predecir reclamos 
+# fraudulentos en un conjunto de datos invisible usando la función predict(). 
+test <- data.frame( 
+  ClaimID = 1:10, 
+  RearEnd = c(FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, FALSE), Whiplash = c(FALSE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, TRUE), Activity = factor( 
+    x = c("inactive", "very active", "very active", "inactive", "very inactive", "inactive", "very inactive", "active", "active", "very active"), 
+    levels = c("very inactive", "inactive", "active", "very active"), 
+    ordered = TRUE 
+    ) 
+  ) 
+test 
+
+
+test$FraudClass <- predict(mytree, newdata = test, type = "class") 
+test$FraudProb <- predict(mytree, newdata = test, type = "prob") 
+test 
+
+
+
 
 
 
