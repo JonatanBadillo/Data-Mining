@@ -151,6 +151,51 @@ fancyRpartPlot(mytree, caption = NULL)
 # i como una j. (La matriz de pérdidas debe tener ceros en la diagonal). Por
 # ejemplo, considera los siguientes datos de entrenamiento.
 
+train <- data.frame(
+  ClaimID = 1:7,
+  RearEnd = c(TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE),
+  Whiplash = c(TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE),
+  Fraud = c(TRUE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE)
+  )
+train
+
+# Ahora hagamos crecer nuestro árbol de decisiones, restringiéndolo a una división
+# estableciendo el argumento maxdepth en 1.
+
+mytree <- rpart(
+  Fraud ~ RearEnd + Whiplash,
+  data = train,
+  method = "class",
+  maxdepth = 1,
+  minsplit = 2,
+  minbucket = 1
+  )
+fancyRpartPlot(mytree, caption = NULL)
+
+# Si la compañía de seguros quiere identificar un alto porcentaje de reclamos
+# fraudulentos sin preocuparse demasiado por investigar reclamos no fraudulentos,
+# puedes establecer la matriz de pérdidas para penalizar los reclamos etiquetados
+# incorrectamente como fraudulentos tres veces menos que los reclamos
+# etiquetados incorrectamente como no fraudulentos.
+
+lossmatrix <- matrix(c(0,1,3,0), byrow = TRUE, nrow = 2)
+lossmatrix
+
+mytree <- rpart(
+  Fraud ~ RearEnd + Whiplash,
+  data = train,
+  method = "class",
+  maxdepth = 1,
+  minsplit = 2,
+  minbucket = 1,
+  parms = list(loss = lossmatrix)
+  )
+fancyRpartPlot(mytree, caption = NULL)
+
+# Ahora nuestro modelo sugiere que Whiplash es la mejor variable para identificar
+# reclamaciones fraudulentas.
+# • Lo que se acaba de describir se conoce como una métrica de valoración y queda
+# a discreción de la compañía de seguros decidir al respecto.
 
 
 
