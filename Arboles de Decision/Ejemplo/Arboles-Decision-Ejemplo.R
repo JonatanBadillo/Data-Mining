@@ -127,8 +127,29 @@ mytree <- rpart(
 fancyRpartPlot(mytree, caption=NULL)
                                                                                                                                                         
 
+# Esto no siempre es una buena idea, ya que normalmente producirá árboles sobreajustados, pero los árboles se pueden podar como se explica más adelante en este ejemplo. 
+# • También puedes ponderar cada observación para la construcción del árbol especificando 
+# el argumento ponderaciones en rpart(). 
+mytree <- rpart( 
+  Fraud ~ RearEnd, 
+  data = train, 
+  method = "class", 
+  minsplit = 2, 
+  minbucket = 1, 
+  weights = c(0.4, 0.4, 0.2) 
+  ) 
+fancyRpartPlot(mytree, caption = NULL)
 
 
+# Si la compañía de seguros quiere investigar agresivamente las reclamaciones (es decir, investigar muchas
+# reclamaciones), puede entrenar su árbol de decisiones de una manera que
+# penalice las reclamaciones fraudulentas etiquetadas incorrectamente más de lo
+# que penaliza las reclamaciones no fraudulentas etiquetadas incorrectamente.
+# • Para alterar el valor predeterminado, la penalización igual de las clases objetivo
+# mal etiquetadas establece el componente de pérdida del parámetro parms en una
+# matriz donde el elemento (i, j) es la penalización por clasificar erróneamente una
+# i como una j. (La matriz de pérdidas debe tener ceros en la diagonal). Por
+# ejemplo, considera los siguientes datos de entrenamiento.
 
 
 
