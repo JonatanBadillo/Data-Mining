@@ -47,7 +47,8 @@ model <- rpart(play ~ outlook + temperature + humidity + windy,
                data = train_data, 
                method = "class",
                minsplit = 2, # Número mínimo de observaciones requeridas para dividir un nodo
-               minbucket = 1) # Número mínimo de observaciones en un nodo hoja
+               minbucket = 1, # Número mínimo de observaciones en un nodo hoja
+               cp =-1 ) # cp en una cantidad negativa asegura que el árbol crezca completamente.
 
 library(rpart.plot)
 rpart.plot(model)
@@ -55,7 +56,12 @@ rpart.plot(model)
 
 # Realizar predicciones en el conjunto de prueba
 predictions <- predict(model, test_data, type = "class")
+predictions
 
 # Calcular la precisión del modelo
-accuracy <- mean(predictions == test_data$play)
+accuracy <- mean(predictions == test_data$play)# calcula la precisión del modelo comparando las predicciones con los valores reales y calculando el promedio de las coincidencias.
 print(paste("Precisión del modelo:", accuracy))
+
+
+
+
