@@ -105,3 +105,22 @@ permits <- permits %>% mutate(stories = ifelse(stories > 73, NA, stories))
 
 summary(select(permits, valuation, floorArea, numberUnits, stories))
 
+
+# Los algoritmos del árbol de decisiones hacen un gran trabajo al seleccionar qué características
+# son importantes para predecir el resultado final y cuáles no. Por lo tanto, la selección de
+# características como paso de preparación de datos no es necesaria. Sin embargo, para
+# simplificar nuestra ilustración, utilicemos únicamente las características permitType,
+# permitSubtype e iniciatingOffice como predictores del resultado final, que está representado
+# por la característica permitCategory. Usando el comando select() del paquete dplyr,
+# reducimos nuestro conjunto de datos a estas cuatro características:
+
+library(dplyr)
+# selecciona solo las columnas especificadas del marco de datos "permits" 
+# y asigna el resultado de esta operación de selección nuevamente a la variable "permits".
+permits <- permits %>%select(
+    permitType,
+    permitSubtype,
+    initiatingOffice,
+    permitCategory
+    )
+
