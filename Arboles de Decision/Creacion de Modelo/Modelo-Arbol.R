@@ -101,9 +101,7 @@ permits <- permits %>%mutate(valuation = ifelse(valuation < 1, NA, valuation)) %
 # de la característica stories. Una búsqueda rápida en línea revela que el edificio más alto de
 # Los Ángeles (el Wilshire Grand Center) tiene solo 73 pisos. Por lo tanto, tratamos cualquier
 # valor superior a 73 como datos faltantes estableciendo el valor en NA.
-permits <- permits %>%mutate(stories = ifelse(stories > 73, NA, stories))
+permits <- permits %>% mutate(stories = ifelse(stories > 73, NA, stories))
 
 summary(select(permits, valuation, floorArea, numberUnits, stories))
-  mutate(numberUnits = ifelse(numberUnits < 1, NA, numberUnits)) %>%
-  mutate(stories = ifelse(stories < 1, NA, stories))
 
