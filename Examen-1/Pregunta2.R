@@ -17,3 +17,23 @@
 flight_data <- read.csv("FlightDelays.csv")
 head(flight_data)  # Ver los primeros registros
 summary(flight_data)  # Resumen 
+str(flight_data)
+
+# Preprocesamiento de datos
+# Convertir variables a los formatos adecuados
+
+# Convertir la fecha al formato "DD-MM-YYYY"
+flight_data$FL_DATE <- as.Date(flight_data$FL_DATE, format = "%m/%d/%Y")
+# Luego, formatear la fecha al formato "DD-MM-YYYY"
+flight_data$FL_DATE <- format(flight_data$FL_DATE, "%d-%m-%Y")
+
+
+# convertir las variables CARRIER, DEST, ORIGIN, TAIL_NUM, y Flight.Status a factores utilizando la función as.factor(). 
+# Esto para tratar estas variables como categorías en análisis posteriores, en lugar de como variables continuas.
+flight_data$CARRIER <- as.factor(flight_data$CARRIER)
+flight_data$DEST <- as.factor(flight_data$DEST)
+flight_data$ORIGIN <- as.factor(flight_data$ORIGIN)
+flight_data$TAIL_NUM <- as.factor(flight_data$TAIL_NUM)
+flight_data$Flight.Status <- as.factor(flight_data$Flight.Status)
+
+

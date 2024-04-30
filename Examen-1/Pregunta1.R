@@ -66,10 +66,10 @@ print(paste("Precisión del modelo:", accuracy))
 # Probamos con datos nuevos
 predict(
   object = model,
-  newdata = data.frame(outlook = 'overcast',
-                       temperature = 72,
-                       humidity = 90,
-                       windy = TRUE),
+  newdata = data.frame(outlook = 'sunny',
+                       temperature = 85,
+                       humidity = 85,
+                       windy = FALSE),
   typle= 'class')
 
 
