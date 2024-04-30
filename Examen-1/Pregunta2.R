@@ -40,4 +40,5 @@ flight_data$Flight.Status <- as.factor(flight_data$Flight.Status)
 flight_data$DAY_WEEK <- factor(flight_data$DAY_WEEK, levels = 1:7,
                                labels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
 
-
+# Agrupar la hora de salida programada en ocho compartimentos
+flight_data$CRS_DEP_TIME <- cut(flight_data$CRS_DEP_TIME, breaks = 8)
