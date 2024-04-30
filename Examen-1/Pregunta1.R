@@ -35,3 +35,21 @@ test_data <- weather_data[-train_index, ]
 
 
 
+# Crear el modelo: 
+# utilizaremos un árbol de decisión como modelo de clasificación. 
+# Los árboles de decisión dividen el conjunto de datos en subconjuntos más pequeños en función de ciertas características, con el objetivo de clasificar correctamente los datos de entrada.
+
+
+
+# Crear el modelo de árbol de decisión
+library(rpart)
+model <- rpart(play ~ outlook + temperature + humidity + windy, 
+               data = train_data, 
+               method = "class",
+               minsplit = 2, # Número mínimo de observaciones requeridas para dividir un nodo
+               minbucket = 1) # Número mínimo de observaciones en un nodo hoja
+
+library(rpart.plot)
+rpart.plot(model)
+
+
