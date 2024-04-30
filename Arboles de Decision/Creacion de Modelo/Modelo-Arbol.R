@@ -124,3 +124,29 @@ permits <- permits %>%select(
     permitCategory
     )
 
+
+
+
+# División de datos
+# La siguiente etapa de nuestro proceso es dividir nuestros datos en conjuntos de prueba y
+# entrenamiento. Con la función sample(), dividimos nuestro conjunto de datos dividiendo el
+# 80 por ciento de los datos originales como datos de entrenamiento y el 20 por ciento restante
+# como datos de prueba.
+
+
+set.seed(1234)
+sample_set <- sample(nrow(permits), round(nrow(permits)*.80), replace = FALSE)
+
+#  Utiliza los índices generados en sample_set para seleccionar las filas correspondientes del marco de datos "permits"
+permits_train <- permits[sample_set, ]
+# Utiliza los índices complementarios de sample_set (es decir, las filas no seleccionadas para el conjunto de entrenamiento)
+permits_test <- permits[-sample_set, ]
+
+# Estas líneas de código calculan la proporción de cada categoría en la columna "permitCategory" 
+# para el conjunto de datos completo (permits) y el conjunto de datos de entrenamiento (permits_train). 
+# Luego, redondean estos valores a dos decimales.
+round(prop.table(table(select(permits, permitCategory))),2)
+round(prop.table(table(select(permits_train, permitCategory))),2)
+round(prop.table(table(select(permits_test, permitCategory))),2)
+
+
