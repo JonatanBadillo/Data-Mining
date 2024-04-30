@@ -36,4 +36,8 @@ flight_data$ORIGIN <- as.factor(flight_data$ORIGIN)
 flight_data$TAIL_NUM <- as.factor(flight_data$TAIL_NUM)
 flight_data$Flight.Status <- as.factor(flight_data$Flight.Status)
 
+# Transformar DAY_WEEK en una variable categórica
+flight_data$DAY_WEEK <- factor(flight_data$DAY_WEEK, levels = 1:7,
+                               labels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
+
 
