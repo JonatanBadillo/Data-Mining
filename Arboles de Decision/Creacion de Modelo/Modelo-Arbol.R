@@ -150,3 +150,19 @@ round(prop.table(table(select(permits_train, permitCategory))),2)
 round(prop.table(table(select(permits_test, permitCategory))),2)
 
 
+# Entrenamiento de un modelo
+# Ahora estamos listos para construir nuestro modelo. El algoritmo CART
+# se implementa en R como parte del paquete rpart. Este paquete proporciona una función
+# rpart() con un nombre similar, que usamos para entrenar nuestro modelo. Esta función toma
+# tres argumentos principales. La primera es la fórmula de predicción, que especificamos como
+# permitCategory  ̃. lo que significa que nuestro modelo debe usar todas las demás variables
+# del conjunto de datos como predictores de la variable permitCategory. El segundo argumento
+# es el método, que especificamos como clase. Esto significa que estamos construyendo un
+# árbol de clasificación. El argumento final es el conjunto de datos de entrenamiento que se
+# utilizará para construir el modelo.
+library(rpart)
+permits_mod <- rpart(
+  permitCategory ~ .,
+  method = "class",
+  data = permits_train
+  )
