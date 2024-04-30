@@ -46,3 +46,51 @@
 # no en función de las variables de predicción disponibles para nosotros?
 #   
 #   Primero importamos y previsualizamos nuestros datos.
+
+library(tidyverse)
+permits <- read_csv("permits.csv", col_types = "ffffffnnnnfffff")
+glimpse(permits)
+
+
+# Nuestro resultado también muestra que tenemos una serie de valores perdidos para algunas
+# de nuestras características (indicadas como NA). Obtengamos un resumen estadístico de
+# nuestro conjunto de datos para comprender mejor los problemas que podemos tener con los
+# datos faltantes, los valores atípicos y el ruido. Para hacer esto, usamos la función summary().
+summary(permits)
+
+
+# El resultado resumido muestra que nos faltan datos para la mayoría de nuestras
+# características. 
+
+# Este no es un problema para los algoritmos de árboles de decisión. Son
+# capaces de manejar muy bien los datos faltantes sin necesidad de imputación por nuestra
+# parte. Esto se debe a que, durante el proceso de partición recursivo, las divisiones se realizan
+# basándose únicamente en los valores observados de una variable. Si una observación tiene
+# un valor perdido para la variable que se está considerando, simplemente se ignora.
+# 
+# También observamos en el resultado de resumen que algunas de las características numéricas,
+# como valuation y floorArea, tienen una amplia gama de valores y posibles datos atípicos.
+# 
+# Con algunos de los enfoques de aprendizaje automático que hemos cubierto hasta ahora, estos
+# serían problemáticos y tendrían que solucionarse. Ese no es el caso de los árboles de decisión.
+# Son capaces de manejar de forma robusta valores atípicos y datos ruidosos.
+# 
+# Como puedes comenzar a ver, los árboles de decisiones requieren poco de nosotros en
+# términos de preparación de datos.
+# Sin embargo, nuestras estadísticas resumidas señalan algunas inconsistencias lógicas con
+# algunos de nuestros valores de características. Por ejemplo, vemos que el valor mínimo de
+# floorArea es –154,151.
+# Este no es un valor razonable para los pies cuadrados de un edificio. También vemos
+# problemas similares con los valores mínimos para las características de valuation,
+# numberUnits y stories.
+# 
+# Si bien estas inconsistencias no son un problema para el algoritmo del árbol de decisiones,
+# conducirán a reglas de decisión ilógicas si el árbol se usara para la toma de decisiones
+# comerciales. Para resolver estas inconsistencias, simplemente las tratamos como datos
+# faltantes estableciendo sus valores en NA.
+
+permits <- permits %>%mutate(valuation = ifelse(valuation < 1, NA, valuation)) %>%
+  mutate(floorArea = ifelse(floorArea < 1, NA, floorArea)) %>%
+  mutate(numberUnits = ifelse(numberUnits < 1, NA, numberUnits)) %>%
+  mutate(stories = ifelse(stories < 1, NA, stories))
+
