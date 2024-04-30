@@ -166,3 +166,38 @@ permits_mod <- rpart(
   method = "class",
   data = permits_train
   )
+
+# Evaluación del modelo
+# Ahora que hemos entrenado nuestro modelo de árbol de decisiones, visualicémoslo. Para
+# hacerlo, usamos la función rpart.plot() del paquete rpart.plot de nombre similar. 
+library(rpart.plot)
+rpart.plot(permits_mod)
+
+# Nuestro árbol en particular comienza con una división por permitType en el nodo raíz. Esto
+# nos dice que de las características que usamos en nuestro modelo, permitType es la más
+# predictiva de nuestro resultado final. Cuanto más nos alejamos del nodo raíz, menos
+# predictiva es una característica del resultado final.
+
+# Esto significa que después de permitType, initiatingOffice es la siguiente característica más
+# predictiva, seguida de permitSubtype.
+# Además del orden en que se encuentran las características, los colores y las etiquetas de los
+# nodos también son útiles para comprender nuestros datos. Recuerda que el nodo raíz de un
+# árbol representa el conjunto de datos original antes de la primera división y que cada uno de
+# los nodos subsiguientes (nodos de decisión y hoja) representa subparticiones del conjunto de
+# datos original después de cada división anterior.
+
+
+
+
+# Ahora, veamos cómo funciona nuestro modelo con este proceso en comparación con nuestra
+# prueba. De manera similar a lo que hicimos anteriormente, pasamos el modelo
+# (permits_mod) a la función predict() para clasificar los datos de prueba (permits_test),
+# estableciendo el argumento de tipo en clase. Después de esto, creamos una matriz de
+# confusión basada en nuestras predicciones y calculamos la precisión predictiva de nuestro
+# modelo.
+permits_pred <- predict(permits_mod, permits_test, type = "class")
+permits_pred_table <- table(permits_test$permitCategory, permits_pred)
+permits_pred_table
+
+sum(diag(permits_pred_table)) / nrow(permits_test)
+# Los resultados muestran que nuestro modelo tiene una precisión predictiva del 86.4 por ciento frente a los datos de la prueba.
