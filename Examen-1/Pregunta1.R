@@ -63,5 +63,15 @@ accuracy <- mean(predictions == test_data$play)# calcula la precisión del model
 print(paste("Precisión del modelo:", accuracy))
 
 
+# Probamos con datos nuevos
+predict(
+  object = model,
+  newdata = data.frame(outlook = 'overcast',
+                       temperature = 72,
+                       humidity = 90,
+                       windy = TRUE),
+  typle= 'class')
+
+
 
 
