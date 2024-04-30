@@ -53,3 +53,9 @@ library(rpart.plot)
 rpart.plot(model)
 
 
+# Realizar predicciones en el conjunto de prueba
+predictions <- predict(model, test_data, type = "class")
+
+# Calcular la precisión del modelo
+accuracy <- mean(predictions == test_data$play)
+print(paste("Precisión del modelo:", accuracy))
