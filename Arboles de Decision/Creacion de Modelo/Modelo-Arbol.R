@@ -89,8 +89,21 @@ summary(permits)
 # comerciales. Para resolver estas inconsistencias, simplemente las tratamos como datos
 # faltantes estableciendo sus valores en NA.
 
+
+# Esta línea usa el operador %>% (pipe) , que permite encadenar operaciones. Toma el marco de datos "permits", 
+# luego utiliza la función mutate() para crear una nueva columna 
+# La función ifelse() se utiliza para evaluar si cada valor en la columna "valuation" es menor que 1. Si es así, se reemplaza con NA
 permits <- permits %>%mutate(valuation = ifelse(valuation < 1, NA, valuation)) %>%
   mutate(floorArea = ifelse(floorArea < 1, NA, floorArea)) %>%
+  
+  
+#   Las estadísticas de resumen también muestran que tenemos un problema con el valor máximo
+# de la característica stories. Una búsqueda rápida en línea revela que el edificio más alto de
+# Los Ángeles (el Wilshire Grand Center) tiene solo 73 pisos. Por lo tanto, tratamos cualquier
+# valor superior a 73 como datos faltantes estableciendo el valor en NA.
+permits <- permits %>%mutate(stories = ifelse(stories > 73, NA, stories))
+
+summary(select(permits, valuation, floorArea, numberUnits, stories))
   mutate(numberUnits = ifelse(numberUnits < 1, NA, numberUnits)) %>%
   mutate(stories = ifelse(stories < 1, NA, stories))
 
