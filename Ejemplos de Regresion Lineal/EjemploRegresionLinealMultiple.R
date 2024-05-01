@@ -71,3 +71,37 @@ summary(FM.multreg)
 # regresión es un ajuste excelente para el gráfico de dispersión.
 
 
+
+
+# Visualización del diagrama de dispersión 3D y el plano de regresión
+
+# El paquete ggplot2, a pesar de todas sus maravillosas características, no proporciona una
+# forma de dibujar gráficos tridimensionales, como un diagrama de dispersión para una
+# variable dependiente y dos variables independientes. Sin embargo, no temas: R tiene otras
+# formas de hacer esto. En esta sección, se muestran dos de ellos.
+
+# El paquete scatterplot3d
+# Si deseas crear un gráfico de dispersión tridimensional ingenioso como el que se muestra en
+# la figura 2, una figura que se ve bien en una página impresa, la función scatterplot3d() es la
+# solución.
+# Primero, instala el paquete scatterplot3d. En la pestaña Paquetes, busca scatterplot3d y
+# selecciona su casilla de verificación.
+# 
+# Figura 1: Instalando el paquete scatterplot3d.
+# 
+# A continuación, escribe una declaración que cree el plot:
+library(scatterplot3d)
+with (FarMisht.frame,(splot <- scatterplot3d(Performance ~ Aptitude + Personality, type = "h", pch = 19)))
+# Si usas with, no tienes que repetir el nombre del marco de datos tres veces.
+# El primer argumento de scatterplot3d() es la fórmula para configurar el modelo lineal. El
+# segundo argumento agrega las líneas verticales del plano x-y a los puntos de datos. Esas líneas
+# verticales no son absolutamente necesarias, pero creo que ayudan al espectador a comprender
+# 
+# 
+# 
+# dónde están los puntos en el plot. El tercer argumento especifica cómo se ven los caracteres
+# del plot.
+
+
+
+
