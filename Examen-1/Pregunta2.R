@@ -42,3 +42,10 @@ flight_data$DAY_WEEK <- factor(flight_data$DAY_WEEK, levels = 1:7,
 
 # Agrupar la hora de salida programada en ocho compartimentos
 flight_data$CRS_DEP_TIME <- cut(flight_data$CRS_DEP_TIME, breaks = 8)
+
+
+# Dividir los datos en conjuntos de entrenamiento y prueba
+set.seed(123)  
+indices_entrenamiento <- sample(1:nrow(flight_data), 0.7 * nrow(flight_data))
+datos_entrenamiento <- flight_data[indices_entrenamiento, ]
+datos_prueba <- flight_data[-indices_entrenamiento, ]
