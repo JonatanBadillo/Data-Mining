@@ -49,3 +49,37 @@ set.seed(123)
 indices_entrenamiento <- sample(1:nrow(flight_data), 0.7 * nrow(flight_data))
 datos_entrenamiento <- flight_data[indices_entrenamiento, ]
 datos_prueba <- flight_data[-indices_entrenamiento, ]
+
+
+
+numero_columna <- which(names(datos_entrenamiento) == 'Flight.Status')
+
+
+
+# Ajustar un árbol de clasificación
+library(rpart)
+
+# Seleccionar las columnas predictoras relevantes
+columnas_predictoras <- c("CRS_DEP_TIME", "CARRIER", "DEST", "DISTANCE", "Weather", "DAY_WEEK", "TAIL_NUM")
+
+# Ajustar el árbol de clasificación
+# NOSE PORQUE NO ME AGARRA EL FLIGHT STATUS POR SU NOMBRE
+# modelo_arbol <- rpart(`Flight.Status` ~ . - DEP_TIME - FL_DATE - FL_NUM - ORIGIN, data = datos_entrenamiento[, columnas_predictoras], method = "class")
+
+
+modelo_arbol <- rpart(datos_entrenamiento[, numero_columna] ~ ., data = datos_entrenamiento[, columnas_predictoras], method = "class")
+
+
+
+library(rpart.plot)
+rpart.plot(modelo_arbol)
+
+
+# Predecir en el conjunto de validación
+predicciones <- predict(modelo_arbol, newdata = datos_prueba[, columnas_predictoras], type = "class")
+
+# Evaluar el rendimiento del modelo
+tabla_confusion <- table(predicciones, datos_prueba$Flight.Status)
+print(tabla_confusion)
+
+summary(datos_prueba)
