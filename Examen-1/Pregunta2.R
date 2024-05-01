@@ -85,7 +85,9 @@ print(tabla_confusion)
 summary(datos_prueba)
 
 # Calcular la precisión
-precision <- sum(diag(tabla_confusion)) / sum(tabla_confusion)
+# calcula la proporción de predicciones correctas entre todas las predicciones realizadas
+precision <- sum(diag(tabla_confusion)) / sum(tabla_confusion)#  Suma los valores en la diagonal de la matriz de confusión, lo que da el número total de predicciones correctas.
+                                                              # Suma todos los elementos de la matriz de confusión, lo que da el número total de predicciones hechas
 
 # Calcular la tasa de error
 error_rate <- 1 - precision
