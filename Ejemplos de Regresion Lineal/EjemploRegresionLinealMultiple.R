@@ -66,3 +66,24 @@ confint(FM.reg)
 # vector de valores de la variable independiente.
 predict(FM.reg,data.frame(Aptitude=c(85,62)))
 
+
+
+# Visualización del diagrama de dispersión y la línea de regresión
+
+# Con el paquete ggplot2, puedes visualizar un diagrama de dispersión y su línea de regresión
+# en tres declaraciones. La primera declaración, como siempre, indica la fuente de datos y
+
+# asigna los componentes de los datos a los componentes de la gráfica:
+library(ggplot2)
+ggplot(FarMisht.frame,aes(x=Aptitude,y=Performance))
+
+# La segunda declaración traza puntos en el gráfico.
+geom_point()
+
+# y el tercero especifica una función geom que agrega la línea de regresión (como lo indica el argumento método = lm):
+geom_point(method=lm)
+
+
+
+# Poniendo los tres juntos
+ggplot(FarMisht.frame,aes(x=Aptitude,y=Performance))+geom_point()+geom_smooth(method=lm)
