@@ -83,3 +83,22 @@ tabla_confusion <- table(predicciones, datos_prueba$Flight.Status)
 print(tabla_confusion)
 
 summary(datos_prueba)
+
+# Calcular la precisión
+precision <- sum(diag(tabla_confusion)) / sum(tabla_confusion)
+
+# Calcular la tasa de error
+error_rate <- 1 - precision
+
+# Calcular la sensibilidad
+sensibilidad <- tabla_confusion["delayed", "delayed"] / sum(tabla_confusion["delayed", ])
+
+# Calcular la especificidad
+especificidad <- tabla_confusion["ontime", "ontime"] / sum(tabla_confusion["ontime", ])
+
+# Imprimir las métricas
+print(precision)
+print(error_rate)
+print(sensibilidad)
+print(especificidad)
+
