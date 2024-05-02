@@ -326,3 +326,18 @@ plot(lmModel)
 test$PreditedPrice <- predict(lmModel, test)
 # Priting top 6 rows of actual and predited price
 head(test[ , c("Price", "PreditedPrice")])
+
+
+# Generación de valor R-Squared para el conjunto de datos de prueba
+# Estamos utilizando una fórmula definida por el usuario para generar el valor R-Squared aquí.
+actual <- test$Price
+preds <- test$PreditedPrice
+rss <- sum((preds - actual) ^ 2)
+tss <- sum((actual - mean(actual)) ^ 2)
+rsq <- 1 - rss/tss
+rsq
+
+
+# Nuestro modelo está funcionando fantástico.
+# En el conjunto de datos de prueba, obtuvimos una precisión de 0.9157176 y en un conjunto
+# de datos de entrenamiento, obtuvimos una precisión de 0.919.
