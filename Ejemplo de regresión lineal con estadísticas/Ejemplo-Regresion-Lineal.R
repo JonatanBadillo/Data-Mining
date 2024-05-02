@@ -56,5 +56,21 @@ ggplot(data=housing, aes(housing$Price)) + # especifica el conjunto de datos hou
                                                          # para que la suma de las áreas de las barras sea igual a 1,
   geom_density() # agrega una capa de gráfico de densidad al gráfico utilizando la función geom_density(). Esto muestra la distribución de probabilidad de los datos continuos. 
 
+# La variable precio (price) sigue una distribución normal y es bueno que la variable objetivo
+# siga una distribución normal desde la perspectiva de las regresiones lineales.
+
+
+
+
+# 2. Análisis de estadísticas de resumen:
+
+# Aquí, simplemente crearemos estadísticas de
+# resumen para todas las variables para comprender el comportamiento de todas las variables
+# independientes. También proporcionará información sobre valores faltantes o valores
+# atípicos, si los hubiera. 
+# Tanto los valores perdidos como los valores atípicos son motivo de preocupación para los
+# modelos de Machine Learning, ya que tienden a empujar el resultado hacia valores extremos.
+library(psych)
+psych::describe(housing)
 
 
