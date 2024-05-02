@@ -311,6 +311,33 @@ plot(lmModel)
 
 
 
+# VIF es un proceso iterativo. La función eliminará una variable a la vez, lo que es causa de
+# multicolinealidad y repite el proceso hasta que se eliminen todas las variables que causan
+# problemas. Entonces, finalmente, nos quedamos con la lista de variables que no tienen o
+# tienen muy poca correlación entre ellas.
+# Hay que copiar el archivo vif_fun.r en la carpeta Documentos de Windows y además cargar
+# la librería que se indica.
+library(fmsb)
+source("vif_fun.r")
+vif_func(housing[, 1:5])
+
+# No hay problema de multicolinealidad en el conjunto de datos. Generalmente, los valores de
+# VIF superiores a 5 o 7 son la causa de la multicolinealidad.
+
+
+
+
+# 3. No debe haber correlación serial automática: La correlación automática significa que los
+# términos de error no deben correlacionarse entre sí. Para verificar esto, podemos ejecutar la
+# prueba Durbin-Watson (prueba dw). La prueba devuelve un valor entre 0 y 4. Si el valor es
+# dos, decimos que no hay correlación serial automática. Sin embargo, un valor superior a 2
+# representa (-) correlación ve y un valor inferior a 2 representa (+) correlación ve.
+# 
+
+library("lmtest")
+dwtest(lmModel)
+
+# Obtuvimos un valor de 2.0154, lo que sugiere que no existe una correlación serial automática.
 
 
 # Predicción de la variable dependiente (Y) en el conjunto de datos de prueba
