@@ -74,3 +74,21 @@ library(psych)
 psych::describe(housing)
 
 
+# 3. Comprobación de valores atípicos mediante diagramas de caja: 
+
+# “Cómo identificar y tratar los valores atípicos mediante métodos univariados o
+# multivariados”. Aquí se está usando un diagrama de caja para trazar la distribución de cada
+# variable numérica para verificar si hay valores atípicos.
+# Si los puntos se encuentran más allá de los susurros, entonces tenemos valores atípicos
+# presentes. Por ahora, solo vamos por análisis de valores atípicos univariados. Pero se te anima
+# que busques también valores atípicos en un nivel multivariado. Si hay valores atípicos, debes
+# eliminarlos o realizar un tratamiento adecuado antes de seguir adelante.
+library(reshape)
+meltData <- melt(housing)
+
+p <- ggplot(meltData, aes(factor(variable), value))
+p + geom_boxplot() + facet_wrap(~variable, scale="free")
+# Aparte del área del número de habitaciones, todas las demás variables parecen tener valores
+# atípicos
+
+
