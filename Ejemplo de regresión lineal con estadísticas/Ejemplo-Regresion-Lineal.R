@@ -290,3 +290,39 @@ plot(lmModel)
 
 # Una línea roja recta más cercana al valor cero representa que no tenemos un problema de
 # heterocedasticidad en nuestros datos.
+
+
+
+
+
+# 3. No debe haber multicolinealidad: El modelo lineal supone que las variables predictoras no
+# se correlacionan entre sí. Si exhiben una alta correlación, es un problema y se llama
+# multicolinealidad. Una prueba del factor de inflación de variación puede ayudar a comprobar
+# el supuesto de multicolinealidad.
+
+# VIF = 1/(1-R2)
+
+# La implementación R de la siguiente función se puede encontrar aquí:
+#   (https://gist.github.com/fawda123/4717702)
+# VIF es un proceso iterativo. La función eliminará una variable a la vez, lo que es causa de
+# multicolinealidad y repite el proceso hasta que se eliminen todas las variables que causan
+# problemas. Entonces, finalmente, nos quedamos con la lista de variables que no tienen o
+# tienen muy poca correlación entre ellas.
+
+
+
+
+
+# Predicción de la variable dependiente (Y) en el conjunto de datos de prueba
+
+# Probamos el rendimiento del modelo en un conjunto de datos de prueba para garantizar que
+# nuestro modelo sea estable y obtengamos resultados iguales o lo suficientemente cercanos
+# como para usar este modelo entrenado para predecir y pronosticar los valores futuros de las
+# variables dependientes. Para predecir, usamos la función de predicción y luego generamos el
+# valor R-Squared para ver si obtenemos el mismo resultado que obtuvimos en el conjunto de
+# datos de entrenamiento o no.
+
+# Predicting Price in test dataset
+test$PreditedPrice <- predict(lmModel, test)
+# Priting top 6 rows of actual and predited price
+head(test[ , c("Price", "PreditedPrice")])
