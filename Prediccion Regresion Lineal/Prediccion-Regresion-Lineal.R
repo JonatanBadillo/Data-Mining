@@ -38,4 +38,29 @@ coffee_gap %>%select(Total.Cup.Points,altitude_mean_meters,Quakers) %>%plot_corr
 
 
 
+# Como la correlación es muy débil, podemos eliminar las características que contienen valor
+# de NA.
+
+coffee_new=coffee %>%select(-c(altitude_high_meters,altitude_low_meters,altitude_mean_meters,X,Quakers))
+
+
+#making a task
+coffee.task=makeRegrTask(data = coffee_new, target ="Total.Cup.Points")
+coffee.task
+
+
+  
+#making a learner
+coffee.learner=makeLearner("regr.lm")
+
+
+#spliting the dataset
+ho = makeResampleInstance("Holdout",coffee.task)
+coffee.train = subsetTask(coffee.task,ho$train.inds[[1]])
+coffee.test = subsetTask(coffee.task,ho$test.inds[[1]])
+coffee.train
+
+
+
+
 
