@@ -273,8 +273,6 @@ hist(lmModel$residuals, color = "grey")
 
 
 
-
-
 # Generando gráfico NPP
 
 # Exceptuamos que los puntos estén muy cerca de la línea punteada en un diagrama de NPP.
@@ -282,3 +280,13 @@ hist(lmModel$residuals, color = "grey")
 # normal.
 
 plot(lmModel)
+
+
+# 2. No debe haber heterocedasticidad: Esto significa que la varianza de los términos de error
+# debe ser constante. No veremos ningún patrón cuando dibujemos un gráfico entre residuos y
+# valores ajustados. Y la línea media debe estar cerca de cero.
+# Generación del diagrama de dispersión entre residuos y valores ajustados
+plot(lmModel)
+
+# Una línea roja recta más cercana al valor cero representa que no tenemos un problema de
+# heterocedasticidad en nuestros datos.
