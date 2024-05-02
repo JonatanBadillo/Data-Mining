@@ -92,3 +92,11 @@ p + geom_boxplot() + facet_wrap(~variable, scale="free")
 # atípicos
 
 
+# 4. Visualización de matriz de correlación
+# Usaremos el paquete corrgram para visualizar y analizar la matriz de correlación. En teoría, la
+# correlación entre las variables independientes debería ser cero. En la práctica, esperamos y
+# estamos de acuerdo con una correlación débil o nula entre las variables independientes.
+# También esperamos que las variables independientes reflejen una alta correlación con la
+# variable objetivo.
+require(corrgram)
+corrgram(housing, order=TRUE)
