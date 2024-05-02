@@ -259,6 +259,7 @@ rmse(actual = train$Price, predicted = lmModel$fitted.values)
 # continuación. Si el modelo no cumple con estos supuestos, entonces simplemente no
 # podemos usar este modelo.
 
+
 # 1. Los errores deben seguir una distribución normal: Esto se puede verificar dibujando
 # un histograma de residuos o usando la función plot(). La función plot crea 4 gráficos
 # diferentes. Uno de los cuales es un diagrama de NPP. El gráfico confirma si los errores siguen
@@ -266,3 +267,18 @@ rmse(actual = train$Price, predicted = lmModel$fitted.values)
 
 # Generando histograma
 hist(lmModel$residuals, color = "grey")
+
+# El histograma de errores anterior establece claramente que los errores se distribuyen
+# normalmente.
+
+
+
+
+
+# Generando gráfico NPP
+
+# Exceptuamos que los puntos estén muy cerca de la línea punteada en un diagrama de NPP.
+# Los puntos que están cerca de la línea significan que los errores siguen una distribución
+# normal.
+
+plot(lmModel)
