@@ -100,3 +100,30 @@ p + geom_boxplot() + facet_wrap(~variable, scale="free")
 # variable objetivo.
 require(corrgram)
 corrgram(housing, order=TRUE)
+
+
+
+
+# Entrenamiento del modelo de regresión
+
+# Para construir una regresión lineal, usaremos la función lm(). La función toma dos
+# argumentos principales.
+#     • Formula que establece las variables dependientes e independientes separadas por
+#     ~(tilder).
+#     • El nombre del conjunto de datos (dataset).
+#     • Hay otros argumentos útiles y, por lo tanto, te solicitaremos que uses help (lm) para
+#     leer más de la documentación.
+
+# División de los datos en subconjuntos de entrenamiento y prueba
+# Los datos de la vivienda se dividen en 70:30 división de entrenamiento y prueba. La división
+# 70:30 es la más común y se usa principalmente durante la fase de entrenamiento. El 70 % de
+# los datos se usa para entrenamiento, y el 30 % restante es para probar qué tan bien pudimos
+# aprender el comportamiento de los datos.
+library(caret)
+index <- createDataPartition(housing$Price, p = .70, list = FALSE)
+train <- housing[index, ]
+test <- housing[-index, ]
+dim(train)
+
+# Puedes ver que tenemos el 70 % de las observaciones aleatorias en el conjunto de datos de
+# entrenamiento.
