@@ -21,3 +21,21 @@ coffee=coffee %>% select_if(is.numeric)# Esta línea selecciona solo las columna
                                        # La función is.numeric se utiliza como criterio para seleccionar solo aquellas columnas que son numéricas. 
                                        # El operador %>%, toma el resultado de la expresión a su izquierda y lo pasa como primer argumento a la función a su derecha.
 vis_miss(coffee) # para visualizar los valores faltantes en el dataframe resultante.
+
+
+
+# Nuestra variable predictora no tiene datos faltantes. Algunos de los datos como
+# altitude_low_meters, altitude_high_meters están perdidos. Si eliminamos el NA y vemos la
+# correlación entre ellos y los puntos del total de tazas de café es decente, entonces podemos
+# imputarlos de otra manera no es necesario.
+
+library(DataExplorer)
+
+coffee_gap=coffee %>%filter(!is.na(altitude_mean_meters),!is.na(Quakers)) # dataframe que contiene solo las filas del dataframe original coffee donde 
+                                                                          # tanto la columna altitude_mean_meters como la columna Quakers tienen valores válidos, es decir, no son valores faltantes (NA).
+
+coffee_gap %>%select(Total.Cup.Points,altitude_mean_meters,Quakers) %>%plot_correlation(ggtheme = theme_light(),title = "correlation between Total.Cup.Points vs altitude_mean_meters")
+
+
+
+
