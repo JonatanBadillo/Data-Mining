@@ -1,0 +1,60 @@
+# Ejemplo de regresión lineal
+# 
+# En estadística, la regresión lineal se usa para modelar una relación entre una variable
+# dependiente continua y una o más variables independientes. La variable independiente puede
+# ser categórica o numérica. El caso en el que solo tenemos una variable independiente se
+# denomina regresión lineal simple. Si tenemos más de una variable independiente, entonces
+# se llama regresión multivariada.
+# Una representación matemática de un modelo de regresión lineal es la siguiente:
+#   
+#   Y = β0 + β1X1 + β2X2 + β3X3 + ... + βnXn + error
+# 
+# En la ecuación anterior, el coeficiente β_0 representa la intersección y el coeficiente β_i
+# representa la pendiente. Aquí usaremos un enfoque de estudio de caso para ayudarlo a
+# comprender el algoritmo de regresión lineal.
+
+# En el estudio de caso a continuación, usaremos datos de vivienda de EE. UU. para predecir
+# el precio. Veamos las seis observaciones principales de los datos de vivienda de EE. UU.
+
+housing <- read.csv("USA_Housing.csv", header = TRUE, sep = ",")
+head(housing)
+
+
+
+# Análisis exploratorio de datos
+# 
+# El ejercicio de análisis exploratorio de datos es fundamental para cualquier proyecto
+# relacionado con el aprendizaje automático (o minería de datos). Es un enfoque para
+# comprender y resumir las principales características de un dato dado. En su mayoría, esto
+# implica cortar y dividir los datos en diferentes niveles, y los resultados a menudo se presentan
+# con métodos visuales. Si se hace correctamente, puede revelar muchos aspectos de los datos,
+# lo que seguramente te ayudará a construir mejores modelos.
+
+
+# Cada conjunto de datos es diferente y, por lo tanto, no es fácil enumerar los pasos que se
+# deben realizar como parte de la exploración de datos. Sin embargo, la clave para un EDA
+# exitoso es seguir haciendo las preguntas que uno cree que ayudan a resolver el problema
+# comercial o presentar todo tipo de hipótesis y luego probarlas usando las pruebas estadísticas
+# apropiadas.
+
+# En otras palabras, trata de averiguar si existe una relación estadísticamente significativa entre
+# el objetivo y las variables independientes. ¿Cuáles son las cosas que derivan las variables
+# objetivo?
+
+
+#   A continuación, hay algunas cosas que deberíamos considerar explorar desde el punto de
+# vista estadístico:
+
+#   1. Comprobación de la distribución de la variable objetivo: En primer lugar, siempre debe
+# tratar de comprender la naturaleza de su variable objetivo. Para lograr esto, dibujaremos un
+# histograma con un gráfico de densidad.
+
+library(ggplot2)
+ggplot(data=housing, aes(housing$Price)) + # especifica el conjunto de datos housing y la variable Price que se utilizará para trazar los datos. 
+                                           # aes() se utiliza para mapear variables estéticas, como x, y, color, forma, etc.
+  geom_histogram(aes(y =..density..), fill = "orange") + # ..density.. se utiliza para normalizar la distribución en el histograma.
+                                                         # para que la suma de las áreas de las barras sea igual a 1,
+  geom_density() # agrega una capa de gráfico de densidad al gráfico utilizando la función geom_density(). Esto muestra la distribución de probabilidad de los datos continuos. 
+
+
+
