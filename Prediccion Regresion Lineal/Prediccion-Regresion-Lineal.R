@@ -103,3 +103,7 @@ tune
 coffee.filter.feature=filterFeatures(coffee.train,fval=filtervals,abs = unlist(tune$x))
 train.model=train(coffee.learner,coffee.filter.feature)
 getLearnerModel(train.model)
+
+
+pred=predict(train.model,coffee.test)
+as.data.frame(pred)
