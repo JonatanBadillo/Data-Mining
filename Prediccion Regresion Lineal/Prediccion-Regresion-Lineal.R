@@ -75,7 +75,26 @@ library(FSelectorRcpp)
 filtervals=generateFilterValuesData(coffee.train,method = "linear.correlation")
 filtervals
 
+plotFilterValues(filtervals)
 
 
 
+# Esto se muestra mediante el uso de la correlación lineal, podemos identificar qué
+# característica usar para nuestro modelo.
+
+# Hacer un envoltorio de filtro para usarlo en nuestro ajuste del hiperparametro y, a veces, esto
+# funcionará como un nuevo aprendiz
+filterwrapper=makeFilterWrapper(learner = coffee.learner, fw.method = "linear.correlation")
+getParamSet(filterwrapper)
+
+
+#hypermeter tuning the model
+#parameter setting, means the in terms of usefulness the absolute value will be lowest at 2 and highest at 12
+ps=makeParamSet(makeIntegerParam("fw.abs",2,20))
+#search control
+#we will use grid search for the best possible ans
+sc=makeTuneControlGrid()
+kfold=makeResampleDesc("CV", iters=10)
+#tuningparameters
+tune=tuneParams(filterwrapper,coffee.train, par.set=ps,control=sc,resampling=kfold,rmse)
 
