@@ -58,7 +58,22 @@ coffee.learner=makeLearner("regr.lm")
 ho = makeResampleInstance("Holdout",coffee.task)
 coffee.train = subsetTask(coffee.task,ho$train.inds[[1]])
 coffee.test = subsetTask(coffee.task,ho$test.inds[[1]])
+
+
 coffee.train
+coffee.test
+
+
+#this means the data will look like
+library(caTools)
+sample=sample.split(coffee_new$Total.Cup.Points,SplitRatio = 2/3)
+train=subset(coffee_new,sample==T)
+test=subset(coffee_new,sample==F)
+
+#automating feature selection
+library(FSelectorRcpp)
+filtervals=generateFilterValuesData(coffee.train,method = "linear.correlation")
+filtervals
 
 
 
