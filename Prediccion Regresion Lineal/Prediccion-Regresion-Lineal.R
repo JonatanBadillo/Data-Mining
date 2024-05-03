@@ -97,4 +97,9 @@ sc=makeTuneControlGrid()
 kfold=makeResampleDesc("CV", iters=10)
 #tuningparameters
 tune=tuneParams(filterwrapper,coffee.train, par.set=ps,control=sc,resampling=kfold,rmse)
+tune
 
+#new task with the filtered data
+coffee.filter.feature=filterFeatures(coffee.train,fval=filtervals,abs = unlist(tune$x))
+train.model=train(coffee.learner,coffee.filter.feature)
+getLearnerModel(train.model)
