@@ -59,3 +59,17 @@ error<-model$residuals # Same as data$Y - predictedY
 predictionRMSE<-rmse(error)
 predictionRMSE
 # Ahora sabemos que el RMSE de nuestro modelo de regresión lineal es 5.70. ¡Intentemos mejorarlo con SVM!
+
+
+# Paso 3: Regresión con SVM
+# Para crear un modelo SVM con R necesitarás el paquete e1071. 
+# A continuación, se muestra el código para hacer predicciones de regresión con SVM:
+library(e1071)
+# La función elegirá automáticamente SVM si detecta que los datos son categóricos (si la variable es un factor en R).
+model1<-svm(Y ~ X, data)
+predictedY<-predict(model1, data)
+plot(data, pch=16)
+points(data$X, predictedY, col = "red", pch=4)
+
+
+
