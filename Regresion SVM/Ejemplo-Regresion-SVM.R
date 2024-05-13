@@ -95,8 +95,29 @@ svmPredictionRMSE
 # selección del modelo.
 
 # perform a grid search
+# Usamos el método tune para entrenar modelos con ε = 0, 0.1, 0.2,...,1 y costo = 22, 23, 24, ...,29
+# lo que significa que entrenará 88 modelos (puede llevar mucho tiempo).
 tuneResult <- tune(svm, Y ~ X, data = data,ranges = list(epsilon = seq(0,1,0.1), cost = 2^(2:9)))
+# tuneResult devuelve el MSE, no olvides convertirlo a RMSE antes de comparar el
+# valor con nuestro modelo anterior.
 print(tuneResult)
 
 # Draw the tuning graph
 plot(tuneResult)
+# En este gráfico podemos ver que cuanto más oscura es la región, mejor es nuestro modelo
+# (porque el RMSE está más cerca de cero en las regiones más oscuras).
+
+
+
+# Esto significa que podemos intentar otra búsqueda en la rejilla en un rango más estrecho,
+# intentaremos con valores de ε entre 0 y 0.2. No parece que el valor del costo esté teniendo
+# efecto por el momento así que lo mantendremos como está para ver si cambia.
+# perform a grid search
+
+# Entrenamos diferentes 168 modelos con este pequeño fragmento de código.
+# A medida que nos acercamos dentro de la región oscura, podemos ver que hay varios parches
+# más oscuros.
+# En el gráfico puedes ver que los modelos con C entre 200 y 300 y ε entre 0.08 y 0.09 tienen
+# menos error.
+
+
