@@ -71,5 +71,11 @@ predictedY<-predict(model1, data)
 plot(data, pch=16)
 points(data$X, predictedY, col = "red", pch=4)
 
+# ¡Esta vez las predicciones están más cerca de los valores reales! Calculemos el RMSE de
+# nuestro modelo de regresión con SVM.
+error<-data$Y - predictedY
+svmPredictionRMSE<-rmse(error)
+svmPredictionRMSE
 
-
+# Como era de esperar, el RMSE es mejor: ahora es 3.15 en comparación con el 5.70 anterior.
+# ¿Pero podemos hacerlo mejor?
