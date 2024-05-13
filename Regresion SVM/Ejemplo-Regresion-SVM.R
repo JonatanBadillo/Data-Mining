@@ -79,3 +79,24 @@ svmPredictionRMSE
 
 # Como era de esperar, el RMSE es mejor: ahora es 3.15 en comparación con el 5.70 anterior.
 # ¿Pero podemos hacerlo mejor?
+
+
+
+
+
+# Paso 4: Ajustar tu modelo de regresión con SVM
+
+# Para mejorar el rendimiento de la regresión con SVM necesitaremos seleccionar los mejores
+# parámetros para el modelo.
+# En nuestro ejemplo anterior, realizamos una regresión épsilon, no establecimos ningún valor
+# para épsilon (ε), pero se tomó un valor predeterminado de 0.1. También hay un parámetro de
+# costo que podemos cambiar para evitar el sobreajuste.
+# El proceso de elección de estos parámetros se denomina optimización de hiperparámetros o
+# selección del modelo.
+
+# perform a grid search
+tuneResult <- tune(svm, Y ~ X, data = data,ranges = list(epsilon = seq(0,1,0.1), cost = 2^(2:9)))
+print(tuneResult)
+
+# Draw the tuning graph
+plot(tuneResult)
