@@ -14,10 +14,11 @@
 data <- read.csv('regression.csv')
 View(data)
 
-# > # Plot the data
+# Plot the data
 plot(data, pch=16)
 
-# > # Create a linear regression model
-#   > model <- lm(Y ~ X, data)
-# > # Add the fitted line
-#   > abline(model)
+# Create a linear regression model
+model <- lm(Y ~ X, data)
+summary(model)
+# Add the fitted line
+abline(model)
