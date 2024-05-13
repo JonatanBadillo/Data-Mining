@@ -43,18 +43,19 @@ points(data$X, predictedY, col = "blue", pch=4)
 # azul en el gráfico. La única diferencia con el gráfico anterior es que los puntos no están
 # conectados entre sí.
 # Para medir qué tan bueno es nuestro modelo, calcularemos cuántos errores comete.
-# Podemos comparar cada valor de Yi con el valor predicho asociado Ŷ
-# 
-# i y ver qué tan lejos están
-# 
+
+# Podemos comparar cada valor de Yi con el valor predicho asociado Ŷi y ver qué tan lejos están
 # con una simple diferencia.
-# Ten en cuenta que la expresión Ŷ
-# 
-# i− Yi es el error, si hacemos una predicción perfecta Ŷ
-# i
-# será
-# 
-# igual a Yi y el error será cero.
+# Ten en cuenta que la expresión Ŷi− Yi es el error, si hacemos una predicción perfecta Ŷi
+# seráigual a Yi y el error será cero.
 # Si hacemos esto para cada punto de datos y sumamos el error tendremos la suma de los
-# errores, y si tomamos la media obtendremos el error cuadrático medio (MSE, Mean Squared
-#                                                                       Error)
+# errores, y si tomamos la media obtendremos el error cuadrático medio (MSE, Mean Squared Error)
+
+# Usando R podemos usar el siguiente código para calcular el RMSE:
+rmse<-function(error){
+      sqrt(mean(error^2))
+      }
+error<-model$residuals # Same as data$Y - predictedY
+predictionRMSE<-rmse(error)
+predictionRMSE
+# Ahora sabemos que el RMSE de nuestro modelo de regresión lineal es 5.70. ¡Intentemos mejorarlo con SVM!
