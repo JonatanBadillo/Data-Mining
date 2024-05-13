@@ -120,4 +120,11 @@ plot(tuneResult)
 # En el gráfico puedes ver que los modelos con C entre 200 y 300 y ε entre 0.08 y 0.09 tienen
 # menos error.
 
-
+# R nos permite obtenerlo muy fácilmente y usarlo para hacer predicciones.
+tunedModel <- tuneResult$best.model
+tunedModelY <- predict(tunedModel, data)
+error <- data$Y - tunedModelY
+# this value can be different on your computer
+# because the tune method randomly shuffles the data
+tunedModelRMSE<-rmse(error)
+tunedModelRMSE
