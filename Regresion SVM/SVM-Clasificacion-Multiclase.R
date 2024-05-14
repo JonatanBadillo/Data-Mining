@@ -44,3 +44,21 @@ new <- predict(m, x)
 plot(x, y)
 points(x, log(x), col = 2)
 points(x, new, col = 4)
+
+
+## density-estimation
+# create 2-dim. normal with rho=0:
+X <- data.frame(a = rnorm(1000), b = rnorm(1000))
+attach(X)
+# traditional way:
+m <- svm(X, gamma = 0.1)
+# formula interface:
+m <- svm(~., data = X, gamma = 0.1)
+# or:
+m <- svm(~ a + b, gamma = 0.1)
+# test:
+newdata <- data.frame(a = c(0, 4), b = c(0, 4))
+predict (m, newdata)
+plot(X, col = 1:1000 %in% m$index + 1, xlim = c(-5,5), ylim=c(-5,5))
+points(newdata, pch = "+", col = 2, cex = 5)
+
