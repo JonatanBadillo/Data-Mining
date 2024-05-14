@@ -23,3 +23,10 @@ pred <- predict(model, x)
 pred <- fitted(model)
 # Check accuracy:
 table(pred, y)
+
+
+# compute decision values and probabilities:
+pred <- predict(model, x, decision.values = TRUE)
+attr(pred, "decision.values")[1:4,]
+# visualize (classes by color, SV by crosses):
+plot(cmdscale(dist(iris[,-5])),col = as.integer(iris[,5]),pch = c("o","+")[1:150 %in% model$index + 1])
