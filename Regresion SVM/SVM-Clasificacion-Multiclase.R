@@ -13,3 +13,13 @@ x <- subset(iris, select = -Species)
 y <- Species
 model <- svm(x, y)
 print(model)
+
+summary(model)
+
+
+# test with train data
+pred <- predict(model, x)
+# (same as:)
+pred <- fitted(model)
+# Check accuracy:
+table(pred, y)
