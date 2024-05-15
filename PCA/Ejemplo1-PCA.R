@@ -56,7 +56,30 @@ boston.housing.df$RM.bin <- .bincode(boston.housing.df$RM, c(1:9))
 # in aggregate() use the argument by= to define the list of aggregating variables,
 # and FUN= as an aggregating function.
 
-aggregate(boston.housing.df$MEDV, by=list(RM=boston.housing.df$RM.bin,CHAS=boston.housing.df$CHAS), FUN=mean) # MEDV promedio para CHAS y RM.
+# MEDV promedio para CHAS y RM.
+aggregate(boston.housing.df$MEDV, by=list(RM=boston.housing.df$RM.bin,CHAS=boston.housing.df$CHAS), FUN=mean) 
 
 
+# Otro conjunto útil de funciones son melt() y cast() en el paquete reshape, que permiten la
+# creación de tablas dinámicas. melt() toma un conjunto de columnas y las apila en una sola
+# columna. cast() luego cambia la forma de la columna única en múltiples columnas mediante
+# las variables agregadas de nuestra elección.
+# En las tareas de clasificación, donde el objetivo es encontrar variables predictoras que
+# distingan entre dos clases, un buen paso exploratorio es producir resúmenes para cada clase.
+# Esto puede ayudar a detectar predictores útiles que muestren alguna separación entre las dos
+# clases. Los resúmenes de datos son útiles para casi cualquier tarea de minería de datos y, por
+# lo tanto, son un paso preliminar importante para limpiar y comprender los datos antes de
+# realizar análisis adicionales.
 
+# use install.packages("reshape") the first time the package is used
+library(reshape)
+boston.housing.df <- read.csv("BostonHousing.csv")
+# create bins of size 1
+boston.housing.df$RM.bin <- .bincode(boston.housing.df$RM, c(1:9))
+# use melt() to stack a set of columns into a single column of data.
+# stack MEDV values for each combination of (binned) RM and CHAS
+mlt <- melt(boston.housing.df, id=c("RM.bin", "CHAS"), measure=c("MEDV"))
+head(mlt, 5)
+
+# use cast() to reshape data and generate pivot table
+cast(mlt, RM.bin ~ CHAS, subset=variable=="MEDV",margins=c("grand_row", "grand_col"), mean)
