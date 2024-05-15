@@ -36,6 +36,28 @@ svmfit <- svm(y~., data = dat, kernel = "linear", scale = FALSE)
 # Plot Results
 plot(svmfit, dat)
 
+# 
+# En la imagen, los puntos que están representados por una "x" son los vectores de soporte, o los puntos que
+# afectan directamente a la línea de clasificación. Los puntos marcados con una "o" son los otros puntos, que
+# no afectan el cálculo de la línea. Este principio sentará las bases para las máquinas de vectores de soporte.
+# El mismo diagrama se puede generar usando el paquete kernlab, con los siguientes resultados:
+# ajusta el modelo y realiza el plot
+
+kernfit <- ksvm(x, y, type = "C-svc", kernel = 'vanilladot')
+plot (kernfit, data = x)
 
 
-
+# Clasificadores de vectores de soporte
+# Por más conveniente que sea el clasificador marginal máximo para comprender, la mayoría de los conjuntos
+# de datos reales no serán completamente separables por un límite lineal. Para manejar tales datos, debemos
+# usar una metodología modificada. Simulamos un nuevo conjunto de datos donde las clases son más mixtas.
+# Construir conjunto de datos de muestra: no completamente separados
+x <- matrix(rnorm(20*2), ncol = 2)
+y <- c(rep(-1,10), rep(1,10))
+x[y==1,] <- x[y==1,] + 1
+dat <- data.frame(x=x, y=as.factor(y))
+# Conjunto de datos de trazado
+ggplot(data = dat, aes(x = x.2, y = x.1, color = y, shape = y)) +
+   geom_point(size = 2) +
+  scale_color_manual(values=c("#000000", "#FF0000")) +
+  theme(legend.position = "none")
