@@ -61,3 +61,22 @@ ggplot(data = dat, aes(x = x.2, y = x.1, color = y, shape = y)) +
    geom_point(size = 2) +
   scale_color_manual(values=c("#000000", "#FF0000")) +
   theme(legend.position = "none")
+
+
+# Si los datos son separables o no, la sintaxis del comando svm() es la misma. Sin embargo, en el caso de
+# datos que no son separables linealmente, el argumento costo = adquiere una importancia real.
+# Esto cuantifica la penalización asociada con tener una observación en el lado equivocado del límite de
+# clasificación. Podemos trazar el ajuste de la misma manera que el caso completamente separable. Primero
+# usamos e1071:
+# Ajustar el modelo de la máquina de vectores de soporte al conjunto de datos
+svmfit <- svm(y~., data = dat, kernel = "linear", cost = 10)
+# Trazar resultados
+plot(svmfit, dat)
+
+
+# Al aumentar el costo de la clasificación errónea de 10 a 100, puedes ver la diferencia en la línea de
+# clasificación. Repetimos el proceso de trazado de la SVM utilizando el paquete kernlab:
+# Ajustar el modelo de la máquina de vectores de soporte al conjunto de datos
+kernfit <- ksvm(x,y, type = "C-svc", kernel = 'vanilladot', C = 100)
+# Trazar resultados
+plot(kernfit, data = x)
