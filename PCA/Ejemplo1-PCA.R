@@ -30,3 +30,24 @@ data.frame(mean=sapply(boston.housing.df, mean),
 
 # tabla de correlacion para los datos de boston housing
 round(cor(boston.housing.df),2)
+
+
+
+
+# Tablas de agregación y pivote
+
+# Otro enfoque muy útil para explorar los datos es la agregación por una o más variables. Para
+# la agregación por una sola variable, podemos usar table(). 
+# rango de estadísticas de resumen (recuento, promedio, porcentaje, etc.).
+
+# Para las variables categóricas, obtenemos un desglose de los registros por combinación de
+# categorías. Por ejemplo, calculamos el MEDV promedio por CHAS y RM. Ten
+# en cuenta que la variable numérica RM (el número promedio de habitaciones por vivienda
+# en el vecindario) debe agruparse primero en contenedores de tamaño 1 (0–1, 1–2, etc.). Ten
+# en cuenta los valores vacíos, lo que indica que no hay vecindarios en el conjunto de datos
+# con esas combinaciones (por ejemplo, delimitando el río y con un promedio de 3 habitaciones).
+table(boston.housing.df$CHAS)
+
+
+
+
