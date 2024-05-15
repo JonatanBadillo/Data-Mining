@@ -80,3 +80,13 @@ plot(svmfit, dat)
 kernfit <- ksvm(x,y, type = "C-svc", kernel = 'vanilladot', C = 100)
 # Trazar resultados
 plot(kernfit, data = x)
+
+
+# Pero, ¿cómo decidimos qué tan costosas son realmente estas clasificaciones erróneas? En lugar de
+# especificar un costo por adelantado, podemos usar la función tune() de e1071 para probar varios costos e
+# identificar qué valor produce el mejor modelo de ajuste.
+# encontrar el costo óptimo de la clasificación errónea
+tune.out <- tune(svm, y~., data = dat, kernel = "linear",
+                  ranges = list(cost = c(0.001, 0.01, 0.1, 1, 5, 10, 100)))
+# extraer el mejor modelo
+(bestmod <- tune.out$best.model)
