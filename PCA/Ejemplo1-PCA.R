@@ -83,3 +83,22 @@ head(mlt, 5)
 
 # use cast() to reshape data and generate pivot table
 cast(mlt, RM.bin ~ CHAS, subset=variable=="MEDV",margins=c("grand_row", "grand_col"), mean)
+
+
+
+
+# se muestra un ejemplo, donde la distribución de la variable de resultado
+# CAT.MEDV se desglosa por ZN (tratada aquí como una variable categórica). Podemos ver
+# que la distribución de CAT.MEDV es idéntica para ZN = 17.5, 90, 95 y 100 (donde todos los
+#                                                                           vecindarios tienen CAT.MEDV = 1).
+# Estas cuatro categorías se pueden combinar en una sola categoría. De manera similar, las
+# categorías ZN = 12.5, 25, 28, 30 y 70 se pueden combinar. También es posible una
+# combinación adicional basada en barras similares.
+install.packages("ggmap")
+library(ggmap)
+tbl <- table(boston.housing.df$CAT..MEDV, boston.housing.df$ZN)
+prop.tbl <- prop.table(tbl, margin=2)
+barplot(prop.tbl, xlab="ZN", ylab="", yaxt="n",main="Distribution of CAT.MEDV by ZN")
+axis(2, at=(seq(0,1, 0.2)), paste(seq(0,100,20), "%"))
+# Distribución de CAT.MEDV (El negro denota CAT.MEDV = 0) POR ZN. Las
+# barras similares indican una baja separación entre clases y se pueden combinar.
