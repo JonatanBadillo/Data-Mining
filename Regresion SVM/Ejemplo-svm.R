@@ -90,3 +90,14 @@ tune.out <- tune(svm, y~., data = dat, kernel = "linear",
                   ranges = list(cost = c(0.001, 0.01, 0.1, 1, 5, 10, 100)))
 # extraer el mejor modelo
 (bestmod <- tune.out$best.model)
+
+
+# Para nuestro conjunto de datos, el costo óptimo (de entre las opciones que proporcionamos) se calcula en
+# 0.1, lo que no penaliza mucho al modelo por las observaciones mal clasificadas. Una vez que se ha
+# identificado este modelo, podemos construir una tabla de clases pronosticadas contra clases verdaderas
+# usando el comando predict() de la siguiente manera:
+# Crear una tabla de observaciones mal clasificadas
+ypred <- predict(bestmod, dat)
+(misclass <- table(predict = ypred, truth = dat$y))
+# Usando este clasificador de vector de soporte, el 80% de las observaciones fueron clasificadas
+# correctamente, lo que coincide con lo que vemos en la gráfica.
