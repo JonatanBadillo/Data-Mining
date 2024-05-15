@@ -26,3 +26,7 @@ data.frame(mean=sapply(boston.housing.df, mean),
            length=sapply(boston.housing.df, length),
            miss.val=sapply(boston.housing.df, function(x)
            sum(length(which(is.na(x))))))
+
+
+# tabla de correlacion para los datos de boston housing
+round(cor(boston.housing.df),2)
