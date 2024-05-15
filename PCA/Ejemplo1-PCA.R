@@ -46,8 +46,17 @@ round(cor(boston.housing.df),2)
 # en el vecindario) debe agruparse primero en contenedores de tamaño 1 (0–1, 1–2, etc.). Ten
 # en cuenta los valores vacíos, lo que indica que no hay vecindarios en el conjunto de datos
 # con esas combinaciones (por ejemplo, delimitando el río y con un promedio de 3 habitaciones).
-table(boston.housing.df$CHAS)
 
+table(boston.housing.df$CHAS) # Número de vecindarios que limitan con el río Charles frente a los que no.
+
+
+# create bins of size 1
+boston.housing.df$RM.bin <- .bincode(boston.housing.df$RM, c(1:9))
+# compute the average of MEDV by (binned) RM and CHAS
+# in aggregate() use the argument by= to define the list of aggregating variables,
+# and FUN= as an aggregating function.
+
+aggregate(boston.housing.df$MEDV, by=list(RM=boston.housing.df$RM.bin,CHAS=boston.housing.df$CHAS), FUN=mean) # MEDV promedio para CHAS y RM.
 
 
 
