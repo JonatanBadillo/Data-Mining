@@ -101,3 +101,48 @@ ypred <- predict(bestmod, dat)
 (misclass <- table(predict = ypred, truth = dat$y))
 # Usando este clasificador de vector de soporte, el 80% de las observaciones fueron clasificadas
 # correctamente, lo que coincide con lo que vemos en la gráfica.
+
+
+# ------------------------------------------------------------------------------
+# Máquinas de Vectores de Soporte
+# Los clasificadores de vectores de soporte son un subconjunto del grupo de estructuras de clasificación
+# conocidas como Máquinas de vectores de soporte. Las máquinas de vectores de soporte pueden construir
+# límites de clasificación que no son de forma lineal. Las opciones para las estructuras de clasificación que
+# utilizan el comando svm() del paquete e1071 son lineales, polinomiales, radiales y sigmoideas. Para
+# demostrar un límite de clasificación no lineal, construiremos un nuevo conjunto de datos.
+# construir un conjunto de datos aleatorios más grande
+x <- matrix(rnorm(200*2), ncol = 2)
+x[1:100,] <- x[1:100,] + 2.5
+x[101:150,] <- x[101:150,] - 2.5
+y <- c(rep(1,150), rep(2,50))
+dat <- data.frame(x=x,y=as.factor(y))
+# Trazar datos
+ggplot(data = dat, aes(x = x.2, y = x.1, color = y, shape = y)) +
+  geom_point(size = 2) +
+  scale_color_manual(values=c("#000000", "#FF0000")) +
+  theme(legend.position = "none")
+
+
+
+# Ten en cuenta que los datos no son separables linealmente y, además, no están agrupados en un solo grupo.
+# Hay dos secciones de observaciones de clase 1 con un grupo de observaciones de clase 2 en medio. Para
+# demostrar el poder de las SVM, tomaremos 100 observaciones aleatorias del conjunto y las usaremos para
+# construir nuestro límite. Establecemos kernel = "radial" en función de la forma de nuestros datos y
+# graficamos los resultados.
+# establecer generador de números pseudoaleatorios
+set.seed(123)
+# ejemplo de datos de entrenamiento y modelo de ajuste
+train <- base::sample(200,100, replace = FALSE)
+svmfit <- svm(y~., data = dat[train,], kernel = "radial", gamma = 1, cost = 1)
+# grafica el clasificador
+plot(svmfit, dat)
+
+
+# El mismo procedimiento se puede ejecutar utilizando el paquete Kernlab, que tiene muchas más opciones
+# de kernel que la función correspondiente en e1071. Además de las cuatro opciones en e1071, este paquete
+# permite el uso de una tangente hiperbólica, Laplaciano, Bessel, Spline, String o ANOVA RBF kernel. Para
+# ajustar esta información, establecemos que el costo sea el mismo que antes, 1.
+# Ajustar SVM radial en kernlab
+kernfit <- ksvm(x[train,],y[train], type = "C-svc", kernel = 'rbfdot', C = 1, scaled = c())
+# Trazar los datos de entrenamiento
+plot(kernfit, data = x[train,])
