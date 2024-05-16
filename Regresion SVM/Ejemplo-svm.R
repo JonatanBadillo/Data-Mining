@@ -146,3 +146,22 @@ plot(svmfit, dat)
 kernfit <- ksvm(x[train,],y[train], type = "C-svc", kernel = 'rbfdot', C = 1, scaled = c())
 # Trazar los datos de entrenamiento
 plot(kernfit, data = x[train,])
+
+# 
+# Vemos que, al menos visualmente, la SVM hace un trabajo razonable de separar las dos clases. Para
+# ajustarse al modelo, utilizamos el cost = 1, pero como se mencionó anteriormente, no suele ser obvio qué
+# costo producirá el límite de clasificación óptimo. Podemos usar el comando tune() para probar diferentes
+# valores de costo así como varios valores diferentes de γ, un parámetro de escala utilizado para ajustarse a
+# los límites no lineales.
+# modelo de sintonía para encontrar un costo óptimo, valores gamma
+tune.out <- tune(svm, y~., data = dat[train,], kernel = "radial",
+                   ranges = list(cost = c(0.1,1,10,100,1000),
+                                   gamma = c(0.5,1,2,3,4)))
+# show best model
+tune.out$best.model
+
+
+# El modelo que reduce más el error en los datos de entrenamiento utiliza un costo de 01 y un valor γ de 1.
+# Ahora podemos ver qué tan bien funciona la SVM al predecir la clase de las 100 observaciones de prueba:
+# validar el rendimiento del modelo
+(valid <- table(true = dat[-train,"y"], pred = predict(tune.out$best.model,newx = dat[-train,])))
