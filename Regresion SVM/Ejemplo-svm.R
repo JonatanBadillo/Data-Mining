@@ -165,3 +165,71 @@ tune.out$best.model
 # Ahora podemos ver qué tan bien funciona la SVM al predecir la clase de las 100 observaciones de prueba:
 # validar el rendimiento del modelo
 (valid <- table(true = dat[-train,"y"], pred = predict(tune.out$best.model,newx = dat[-train,])))
+# Nuestro modelo que mejor se adapta produce un 65% de precisión en la identificación de clases. Para una
+# forma tan complicada de observaciones, esto funcionó razonablemente bien. Podemos desafiar este método
+# aún más al agregar clases adicionales de observaciones.
+
+
+
+
+
+# SVM para múltiples clases
+# El procedimiento no cambia para conjuntos de datos que involucran más de dos clases de observaciones.
+# Construimos nuestro conjunto de datos de la misma manera que lo hicimos anteriormente, solo que ahora
+# especificamos tres clases en lugar de dos:
+ # conjunto de datos de construcción
+x <- rbind(x, matrix(rnorm(50*2), ncol = 2))
+y <- c(y, rep(0,50))
+x[y==0,2] <- x[y==0,2] + 2.5
+dat <- data.frame(x=x, y=as.factor(y))
+# plot del conjunto de datos
+ggplot(data = dat, aes(x = x.2, y = x.1, color = y, shape = y)) +
+  geom_point(size = 2) +
+  scale_color_manual(values=c("#000000","#FF0000","#00BA00")) +
+  theme(legend.position = "none")
+
+
+
+# Los comandos no cambian para el paquete e1071. Especificamos un parámetro de costo y ajuste γ y
+# ajustamos una máquina de vectores de soporte. Los resultados y la interpretación son similares a la
+# clasificación de dos clases.
+# modelo de ajuste
+svmfit <- svm(y~., data = dat, kernel = "radial", cost = 10, gamma = 1)
+# resultados del plot
+plot(svmfit, dat)
+
+# Podemos verificar qué tan bien nuestro modelo se ajusta a los datos utilizando el comando predict() de la
+# siguiente manera:
+#construct table
+ypred <- predict(svmfit, dat)
+(misclass <- table(predict = ypred, truth = dat$y))
+
+
+# Como se muestra en la tabla resultante, el 89% de nuestras observaciones de entrenamiento fueron
+# clasificadas correctamente. Sin embargo, dado que no dividimos nuestros datos en conjuntos de
+# entrenamiento y prueba, realmente no validamos nuestros resultados.
+# El paquete kernlab, por otro lado, puede contener más de 2 clases, pero no puede trazar los resultados. Para
+# visualizar los resultados de la función ksvm, tomamos los pasos enumerados a continuación para crear una
+# rejilla de puntos, predecir el valor de cada punto y representar los resultados:
+  # fit and plot
+kernfit <- ksvm(as.matrix(dat[,2:1]),dat$y, type = "C-svc", kernel = 'rbfdot', C = 100, scaled = c())
+
+# Create a fine grid of the feature space
+x.1 <- seq(from = min(dat$x.1), to = max(dat$x.1), length = 100)
+x.2 <- seq(from = min(dat$x.2), to = max(dat$x.2), length = 100)
+x.grid <- expand.grid(x.2, x.1)
+# Get class predictions over grid
+pred <- predict(kernfit, newdata = x.grid)
+# Plot the results
+cols <- brewer.pal(3, "Set1")
+plot(x.grid, pch = 19, col = adjustcolor(cols[pred], alpha.f = 0.05))
+classes <- matrix(pred, nrow = 100, ncol = 100)
+contour(x = x.2, y = x.1, z = classes, levels = 1:3, labels = "", add = TRUE)
+points(dat[, 2:1], pch = 19, col = cols[predict(kernfit)])
+
+
+
+
+
+
+
