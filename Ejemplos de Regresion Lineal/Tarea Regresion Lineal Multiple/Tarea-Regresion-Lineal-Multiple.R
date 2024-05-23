@@ -87,5 +87,18 @@ lapply(categorical_vars, summary_stats, data = tayko_data)
 
 
 
+# b. Explorar la relación entre el gasto y cada uno de los predictores continuos
+# Creamos diagramas de dispersión para Spending vs Freq y Spending vs LAST_UPDATE.
+# Diagrama de dispersión para Spending vs Freq
+ggplot(tayko_data, aes(x = Freq, y = Spending)) +
+  geom_point() +
+  geom_smooth(method = "lm", col = "red") +
+  labs(title = "Spending vs Freq", x = "Freq", y = "Spending")
+
+# Diagrama de dispersión para Spending vs last_update_days_ago
+ggplot(tayko_data, aes(x = last_update_days_ago, y = Spending)) +
+  geom_point() +
+  geom_smooth(method = "lm", col = "red") +
+  labs(title = "Spending vs last_update_days_ago", x = "last_update_days_ago", y = "Spending")
 
 
