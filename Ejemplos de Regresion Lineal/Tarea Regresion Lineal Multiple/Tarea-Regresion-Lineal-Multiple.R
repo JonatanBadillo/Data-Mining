@@ -63,5 +63,27 @@ head(tayko_data)
 
 
 
+# a. Crear una tabla dinámica para las variables categóricas
+# Calcularemos el promedio y la desviación estándar del gasto (SPENDING) para cada categoría de las variables categóricas 
+# (WEB, GENDER, ADDRESS_RES, ADDRESS_US).
+
+
+# Mostrar los nombres de las columnas
+colnames(tayko_data)
+
+# Crear una función para calcular promedio y desviación estándar
+summary_stats <- function(data, var) {
+  data %>%
+    group_by(!!sym(var)) %>%
+    summarise(
+      mean_spending = mean(Spending, na.rm = TRUE),
+      sd_spending = sd(Spending, na.rm = TRUE)
+    )
+}
+
+# Aplicar la función a las variables categóricas
+categorical_vars <- c("Web.order", "Gender.male", "Address_is_res", "US")
+lapply(categorical_vars, summary_stats, data = tayko_data)
+
 
 
