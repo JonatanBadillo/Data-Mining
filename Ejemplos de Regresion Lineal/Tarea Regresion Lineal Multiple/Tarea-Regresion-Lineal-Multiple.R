@@ -1,0 +1,67 @@
+# Tarea de regresión lineal múltiple
+
+# Predicción de beneficios de reventa de software
+# Tayko Software es una empresa de catálogos de software que vende juegos y software
+# educativo. Comenzó como un fabricante de software y luego agregó títulos de terceros a sus
+# ofertas. Recientemente revisó su colección de artículos en un nuevo catálogo, que envió por
+# correo a sus clientes. Este envío arrojó 2000 compras.
+# Con base en estos datos, Tayko quiere crear un modelo para predecir la cantidad de gasto que
+# producirá un cliente comprador. El archivo Tayko.csv contiene información sobre 2000
+# compras. La siguiente tabla describe las variables que se utilizarán en el problema (el archivo
+# de excel contiene variables adicionales).
+
+# Descripción de variables para el ejemplo de software Tayko
+# FREQ
+# LAST_UPDATE
+# WEB
+# GENDER
+# ADDRESS_RES
+# ADDRESS_US
+# SPENDING (response)
+
+# Número de transacciones en el año anterior
+# Número de días desde la última actualización del
+# registro del cliente
+# Si el cliente compró por pedido web al menos una vez
+# Masculino o femenino
+# Si es una dirección residencial
+# Si es una dirección de EE. UU.
+# Importe gastado por el cliente en envíos de prueba (edólares)
+
+
+
+
+
+# a. Explora el monto del gasto creando una tabla dinámica para las variables categóricas
+# y calcular el promedio y la desviación estándar del gasto en cada categoría.
+# b. Explora la relación entre el gasto y cada uno de los dos continuos predictores
+# mediante la creación de dos diagramas de dispersión (Spending vs Freq y Spending vs last_update_days_ago. ¿Parece haber una relación lineal?
+#  c. Para ajustar un modelo predictivo de gastos:
+#      i. Particiona los 2000 registros en conjuntos de entrenamiento y validación.
+#      ii. Ejecuta un modelo de regresión lineal múltiple para Spending vs. los seis predictores. Dar la ecuación predictiva estimada.
+#      iii. Con base en este modelo, ¿Qué tipo de comprador es más probable que gaste
+#           una gran cantidad de dinero?
+#      iv. Si usamos la eliminación hacia atrás para reducir el número de predictores,
+#         que predictor se eliminaría primero del modelo?
+#      v. Muestra cómo se calculan la predicción y el error de predicción para la primera compra en el conjunto de validación.
+
+
+
+
+# Cargar y explorar los datos
+# Primero, debemos cargar los datos y explorar las variables.
+# Cargar las librerías necesarias
+library(dplyr)
+library(ggplot2)
+library(caret)
+
+# Cargar los datos
+tayko_data <- read.csv("Tayko.csv")
+
+# Visualizar los primeros registros del dataset
+head(tayko_data)
+
+
+
+
+
