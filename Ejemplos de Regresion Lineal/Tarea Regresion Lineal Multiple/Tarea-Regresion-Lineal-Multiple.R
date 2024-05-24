@@ -147,3 +147,15 @@ validation_results <- data.frame(
 # Calcular el RMSE
 rmse <- sqrt(mean(validation_results$residuals^2))
 rmse
+
+
+# vii. Crear un histograma de los residuos del modelo
+# Crear histograma de los residuos
+ggplot(validation_results, aes(x = residuals)) +
+  geom_histogram(binwidth = 5, fill = "blue", color = "black") +
+  labs(title = "Histograma de los Residuos", x = "Residuos", y = "Frecuencia")
+
+# Evaluar si los residuos siguen una distribución normal
+qqnorm(validation_results$residuals)
+qqline(validation_results$residuals, col = "red")
+
