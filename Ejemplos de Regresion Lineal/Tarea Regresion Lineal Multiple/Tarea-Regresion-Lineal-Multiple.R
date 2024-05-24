@@ -212,3 +212,5 @@ ggplot(validation_results_log, aes(x = residuals)) +
 # Calcular el RMSE para el modelo transformado
 rmse_log <- sqrt(mean(validation_results_log$residuals^2))
 rmse_log
+
+hist(model$residuals, color = "grey")s
