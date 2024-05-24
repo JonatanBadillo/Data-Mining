@@ -117,3 +117,13 @@ validation_data <- tayko_data[-training_index, ]
 model <- lm(Spending ~ Freq + last_update_days_ago + Web.order + Gender.male + Address_is_res + US, data = training_data)
 summary(model)
 
+# iii. Analizar el tipo de comprador que gasta más
+# Mostrar los coeficientes del modelo
+coefficients(model)
+
+# iv. Eliminar predictores usando eliminación hacia atrás
+# Eliminar predictores no significativos usando eliminación hacia atrás
+step_model <- step(model, direction = "backward")
+summary(step_model)
+
+
