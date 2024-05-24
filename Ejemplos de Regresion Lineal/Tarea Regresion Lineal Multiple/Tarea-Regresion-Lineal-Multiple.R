@@ -209,3 +209,6 @@ ggplot(validation_results_log, aes(x = residuals)) +
   geom_histogram(binwidth = 0.1, fill = "blue", color = "black") +
   labs(title = "Histograma de los Residuos (Modelo Transformado)", x = "Residuos", y = "Frecuencia")
 
+# Calcular el RMSE para el modelo transformado
+rmse_log <- sqrt(mean(validation_results_log$residuals^2))
+rmse_log
