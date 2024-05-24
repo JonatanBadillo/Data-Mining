@@ -134,3 +134,16 @@ prediction_error <- first_actual - first_pred
 
 # Mostrar predicción y error
 list(prediction = first_pred, actual = first_actual, error = prediction_error)
+
+# vi. Evaluar la precisión predictiva del modelo
+# Evaluar el modelo en el conjunto de validación
+predictions <- predict(step_model, newdata = validation_data)
+validation_results <- data.frame(
+  actual = validation_data$Spending,
+  predicted = predictions,
+  residuals = validation_data$Spending - predictions
+)
+
+# Calcular el RMSE
+rmse <- sqrt(mean(validation_results$residuals^2))
+rmse
