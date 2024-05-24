@@ -159,3 +159,6 @@ ggplot(validation_results, aes(x = residuals)) +
 qqnorm(validation_results$residuals)
 qqline(validation_results$residuals, col = "red")
 
+
+
+
