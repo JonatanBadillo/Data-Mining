@@ -101,4 +101,13 @@ ggplot(tayko_data, aes(x = last_update_days_ago, y = Spending)) +
   geom_smooth(method = "lm", col = "red") +
   labs(title = "Spending vs last_update_days_ago", x = "last_update_days_ago", y = "Spending")
 
+# c. Ajustar un modelo predictivo de gastos
+# i. Particionar los datos en conjuntos de entrenamiento y validación
+# Particionar los datos en conjuntos de entrenamiento y validación
+library(caret)
+library(lattice)
+set.seed(123)
+training_index <- createDataPartition(tayko_data$Spending, p = 0.7, list = FALSE)
+training_data <- tayko_data[training_index, ]
+validation_data <- tayko_data[-training_index, ]
 
