@@ -126,4 +126,11 @@ coefficients(model)
 step_model <- step(model, direction = "backward")
 summary(step_model)
 
+# v. Calcular predicción y error de predicción para la primera compra en el conjunto de validación
+# Predicción para la primera compra en el conjunto de validación
+first_pred <- predict(step_model, newdata = validation_data[1, ])
+first_actual <- validation_data$Spending[1]
+prediction_error <- first_actual - first_pred
 
+# Mostrar predicción y error
+list(prediction = first_pred, actual = first_actual, error = prediction_error)
