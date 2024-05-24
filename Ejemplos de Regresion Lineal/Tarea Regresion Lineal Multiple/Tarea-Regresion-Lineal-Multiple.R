@@ -159,6 +159,12 @@ ggplot(validation_results, aes(x = residuals)) +
 qqnorm(validation_results$residuals)
 qqline(validation_results$residuals, col = "red")
 
+shapiro.test(model$residuals)
 
 
+plot(model,5)
 
+# Distancia de cook
+# ningun valor es influyente
+cooks.distance(model)
+which(cooks.distance(model) > 1)
