@@ -166,5 +166,7 @@ plot(model,5)
 
 # Distancia de cook
 # ningun valor es influyente
+# Esto es generalmente una situación favorable, ya que significa que el modelo 
+# es robusto a la presencia de valores atípicos o influyentes.
 cooks.distance(model)
 which(cooks.distance(model) > 1)
