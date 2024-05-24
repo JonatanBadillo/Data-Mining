@@ -111,3 +111,9 @@ training_index <- createDataPartition(tayko_data$Spending, p = 0.7, list = FALSE
 training_data <- tayko_data[training_index, ]
 validation_data <- tayko_data[-training_index, ]
 
+
+# ii. Ejecutar un modelo de regresión lineal múltiple
+# Ajustar el modelo de regresión lineal múltiple
+model <- lm(Spending ~ Freq + last_update_days_ago + Web.order + Gender.male + Address_is_res + US, data = training_data)
+summary(model)
+
