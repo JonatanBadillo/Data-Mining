@@ -170,3 +170,42 @@ plot(model,5)
 # es robusto a la presencia de valores atípicos o influyentes.
 cooks.distance(model)
 which(cooks.distance(model) > 1)
+
+
+
+
+# ----------------------- alternativa -------------------
+# Transformación logarítmica de la variable de respuesta Spending
+tayko_data$log_Spending <- log(tayko_data$Spending + 1) # Agregar 1 para evitar log(0)
+
+# Particionar los datos en conjuntos de entrenamiento y validación nuevamente
+set.seed(123)
+training_index <- createDataPartition(tayko_data$log_Spending, p = 0.7, list = FALSE)
+training_data <- tayko_data[training_index, ]
+validation_data <- tayko_data[-training_index, ]
+
+# Ajustar el modelo de regresión lineal múltiple con la variable transformada
+model_log <- lm(log_Spending ~ Freq + last_update_days_ago + Web.order + Gender.male + Address_is_res + US, data = training_data)
+summary(model_log)
+
+# Evaluar el modelo en el conjunto de validación
+log_predictions <- predict(model_log, newdata = validation_data)
+validation_results_log <- data.frame(
+  actual = validation_data$log_Spending,
+  predicted = log_predictions,
+  residuals = validation_data$log_Spending - log_predictions
+)
+
+# Calcular el RMSE para el modelo transformado
+rmse_log <- sqrt(mean(validation_results_log$residuals^2))
+rmse_log
+
+# Crear QQ-plot para los residuos del modelo transformado
+qqnorm(validation_results_log$residuals)
+qqline(validation_results_log$residuals, col = "red")
+
+# Crear histograma de los residuos del modelo transformado
+ggplot(validation_results_log, aes(x = residuals)) +
+  geom_histogram(binwidth = 0.1, fill = "blue", color = "black") +
+  labs(title = "Histograma de los Residuos (Modelo Transformado)", x = "Residuos", y = "Frecuencia")
+
