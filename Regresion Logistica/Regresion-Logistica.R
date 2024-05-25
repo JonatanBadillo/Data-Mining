@@ -46,3 +46,11 @@
 # Por ejemplo, si la probabilidad de que Brasil gane la Copa del Mundo es del 20 por ciento,
 # entonces las probabilidades son 0.2/1 - 0,2, lo que equivale a 0.25, lo que se traduce en
 # probabilidades de uno entre cuatro.
+# Para convertir las odds (probabilidades) en probabilidad, toma las odds y divídelas por uno
+# más las probabilidades. Por lo tanto, el ejemplo de la Copa del Mundo es 0.25/1 + 0.25, lo
+# que equivale al 20 por ciento. Además, consideremos la razón de las odds. Supongamos que
+# las odds de que Alemania gane la Copa son 0.18. Podemos comparar las odds de Brasil y
+# Alemania con la razón de las odds. En este ejemplo, la razón de las odds sería la de Brasil
+# dividida por la de Alemania. Terminaremos con una razón de probabilidades igual a
+# 0.25/0.18, que es igual a 1.39. Aquí diremos que Brasil tiene 1.39 veces más probabilidades
+# que Alemania de ganar la Copa del Mundo.
