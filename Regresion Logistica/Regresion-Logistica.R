@@ -80,5 +80,21 @@
 # Entonces, comencemos cargando los datos y entrenando un algoritmo de regresión logística.
 
 
+# Entrenamiento de un algoritmo de regresión logística
+# Sigue estos sencillos pasos para entrenar un algoritmo de regresión logística:
+#   1. El primer paso es asegurarnos de cargar nuestros paquetes y llamar a la biblioteca
+# magrittr en nuestro entorno:
+library(tidyverse)
+library(magrittr)
+library(caret)
+library(classifierplots)
+library(earth)
+library(Information)
+library(Metrics)
+
+
+
+
+
 
 
