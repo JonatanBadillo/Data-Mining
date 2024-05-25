@@ -100,6 +100,19 @@ dim(santander)
 
 table(santander$y)
 
+# Tenemos 76,020 observaciones, pero sólo 3,008 clientes están etiquetados con 1, lo
+# que significa insatisfecho. A continuación, usaremos el símbolo de intercalación para
+# crear conjuntos de entrenamiento y prueba con una división 80/20.
+
+# 3. Dentro de la función createDataPartition() de caret, estratifica automáticamente la
+# muestra según la respuesta, por lo que podemos estar seguros de tener un porcentaje
+# equilibrado entre el entrenamiento y los conjuntos de prueba:
+
+set.seed(1966)
+trainIndex <- caret::createDataPartition(santander$y, p = 0.8, list = FALSE)
+train <- santander[trainIndex, ]
+test <- santander[-trainIndex, ]
+
 
 
 
