@@ -92,7 +92,13 @@ library(earth)
 library(Information)
 library(Metrics)
 
+# 2. Aquí cargamos el archivo, luego verificamos las dimensiones y examinamos una
+# tabla de etiquetas de clientes:
+library(readr)
+santander <- read_csv("Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Regresion Logistica/santander_prepd.csv")
+dim(santander)
 
+table(santander$y)
 
 
 
