@@ -54,3 +54,31 @@
 # dividida por la de Alemania. Terminaremos con una razón de probabilidades igual a
 # 0.25/0.18, que es igual a 1.39. Aquí diremos que Brasil tiene 1.39 veces más probabilidades
 # que Alemania de ganar la Copa del Mundo.
+
+
+# Teniendo estos hechos en mente, la regresión logística es una técnica potente para predecir
+# los problemas que involucran clasificación y, a menudo, es el punto de partida para la
+# creación de modelos en dichos problemas. 
+
+
+# Formación y evaluación de modelos
+
+# Predeciremos la satisfacción del cliente. Los datos se
+# basan en un antiguo concurso online. Tomamos la parte de entrenamiento de los datos y la
+# limpiamos para nuestro uso (Santander customer satisfaction).
+# Este es un conjunto de datos excelente para un problema de clasificación por muchas razones.
+# Como muchos datos de clientes, es muy confuso, especialmente antes de que eliminaramos
+# un montón de características inútiles (había algo así como cuatro docenas de funciones de
+# variación cero). Como se analizó en termas previos anteriores, abordamos los valores
+# faltantes, las dependencias lineales y los pares altamente correlacionados. También
+# encontramos que los nombres de las funciones eran largos e inútiles, así que los codificamos
+# de V1 a V142. Los datos resultantes abordan lo que normalmente es difícil de medir: la
+# satisfacción. Debido a los métodos patentados, no se proporciona ninguna descripción o
+# definición de satisfacción.
+# El problema clásico es que se terminan con
+# bastantes falsos positivos al intentar clasificar las etiquetas minoritarias.
+# Entonces, comencemos cargando los datos y entrenando un algoritmo de regresión logística.
+
+
+
+
