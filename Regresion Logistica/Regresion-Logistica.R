@@ -113,7 +113,16 @@ trainIndex <- caret::createDataPartition(santander$y, p = 0.8, list = FALSE)
 train <- santander[trainIndex, ]
 test <- santander[-trainIndex, ]
 
+# 4. Veamos cómo se equilibra la respuesta entre los dos conjuntos de datos:
+table(train$y)
 
+table(test$y)
+
+# Hay aproximadamente un 4 por ciento en cada conjunto, así que podemos continuar.
+# Una cosa interesante que puede suceder cuando divides los datos es que ahora
+# terminas con lo que era una característica de varianza casi cero convirtiéndose en una
+# característica de varianza cero en tu conjunto de entrenamiento. Cuando trates estos
+# datos, solo elimina las características de varianza cero.
 
 
 
