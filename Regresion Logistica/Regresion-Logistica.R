@@ -28,3 +28,21 @@
 # sea la probabilidad de una observación de aprobado o reprobado. Sin embargo, las
 # estimaciones de Y en el modelo probablemente excederán las restricciones de probabilidad
 # de [0,1] y, por lo tanto, serán un poco difíciles de interpretar.
+
+
+
+# Regresión logística
+# Como sabemos de los métodos estudiado previamente, nuestro problema de clasificación se
+# modela mejor con las probabilidades ligadas por 0 y 1. Podemos hacer esto para todas
+# nuestras observaciones con algunas funciones diferentes, pero aquí nos centraremos en la
+# función logística. La función logística utilizada en la regresión logística es la siguiente:
+
+#   Probabilidad de 𝑌 =((𝑒0+𝛽1𝑥) / 1) +𝑒𝛽0+𝛽1𝑥
+
+# Si alguna vez has realizado una apuesta amistosa en carreras de caballos o en la Copa del
+# Mundo, es posible que comprendas mejor el concepto de probabilidades.
+# La función logística se puede convertir en probabilidades con la formulación de
+# Probabilidad(Y)/1 - Probabilidad (Y).
+# Por ejemplo, si la probabilidad de que Brasil gane la Copa del Mundo es del 20 por ciento,
+# entonces las probabilidades son 0.2/1 - 0,2, lo que equivale a 0.25, lo que se traduce en
+# probabilidades de uno entre cuatro.
