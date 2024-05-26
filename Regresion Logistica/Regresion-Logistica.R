@@ -380,3 +380,41 @@ earth_fit <-earth::earth(x = train[, -142],
     glm = list(family = binomial)
     )
 summary(earth_fit)
+
+
+
+# Ahora, especificamos la validación cruzada, pero earth simultáneamente selecciona y elimina
+# características hacia adelante y hacia atrás, utilizando la validación cruzada generalizada
+# (GCV, Generalized Cross-Validation). Por lo tanto, los resultados de GCV y rss para una
+# característica se normalizan de 0 a 100 con fines de comparación.
+# Como hicimos anteriormente, una gráfica de las densidades de probabilidad es útil y earth
+# viene con su propia función plotd():
+earth::plotd(earth_fit)
+
+
+
+# Nos gusta cómo se invierten los valores predichos en comparación con los gráficos
+# anteriores.
+# Aparte de eso, es difícil discernir algo significativo con la excepción de que las densidades
+# son bastante similares. Obtengamos el valor de corte:
+pred <- predict(earth_fit, train, type = 'response')
+mars_cutoff <-InformationValue::optimalCutoff(
+    train$y,
+    pred,
+    optimiseFor = 'Both',
+    returnDiagnostics = TRUE)
+View(mars_cutoff)
+
+# En comparación con la regresión logística, tenemos una tasa más alta de encontrar verdaderos
+# positivos a expensas de una tasa ligeramente mayor de falsos positivos.
+# Pasemos a evaluar el rendimiento en el conjunto de prueba:
+test_pred <- predict(earth_fit, test, type = 'response')
+Metrics::auc(test$y, test_pred)
+
+Metrics::logLoss(test$y, test_pred)
+
+# ¿Qué vemos aquí? Una ligera mejora en el AUC y una pérdida logarítmica menor (mejor).
+# Si bien no es dramático, puede ser valioso. Ahora podemos pasar a comparar visualmente los
+# dos modelos para confirmar que MARS es de hecho el algoritmo preferido.
+     
+     
