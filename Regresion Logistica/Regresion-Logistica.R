@@ -345,3 +345,20 @@ classifierplots::density_plot(test$y, glm_test_pred$one)
 # Resultados muy similares en los datos de la prueba. ¿Qué pasa con una matriz de confusión
 # dado nuestro umbral determinado durante el entrenamiento? Vamos a ver:
 InformationValue::confusionMatrix(test$y, glm_test_pred$one, threshold = 0.0607)
+
+
+# ¡Resultados consistentes! Ahora, examinemos el rendimiento de este modelo en los datos de
+# prueba para que podamos compararlo con lo que producirá el próximo modelo MARS. Dos
+# métricas deberían abordar el problema: el área bajo la curva (AUC, Area Under the Curve)
+# y la pérdida logarítmica (log-loss). El AUC proporciona un indicador útil de rendimiento y
+# se puede demostrar que el AUC es igual a la probabilidad de que el observador identifique
+# correctamente el caso positivo cuando se le presenta un par de casos elegidos al azar en los
+# que un caso es positivo y el otro es positivo. En nuestro caso, cambiaremos de observador
+# con nuestro algoritmo y evaluaremos en consecuencia. La pérdida logarítmica es una métrica
+# eficaz, ya que tiene en cuenta la probabilidad prevista y cuánto se desvía de la etiqueta
+# correcta. La siguiente fórmula lo produce:
+Metrics::auc(test$y, glm_test_pred$one)
+Metrics::logLoss(test$y, glm_test_pred$one)
+# Nuestras AUC no son tan buenas, diríamos. Si el modelo no fuera mejor que una suposición
+# aleatoria, entonces el AUC sería igual a 0.5 y, si fuera perfecto, sería 1. Nuestra pérdida
+# logarítmica solo es esencial cuando se compara con el siguiente modelo.
