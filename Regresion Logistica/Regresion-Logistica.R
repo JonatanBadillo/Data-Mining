@@ -142,8 +142,14 @@ table(train_zero$zeroVar)
 # solo conserva las columnas que no fueron identificadas como de baja varianza en el paso anterior
 train <- train[, train_zero$zeroVar == 'FALSE']
 
-
-
+# Como hicimos con la regresión lineal, para que la regresión logística tenga
+# resultados significativos, es decir, que no se sobreajuste, es necesario reducir la cantidad de
+# características de entrada. Podríamos seguir adelante con una selección gradual o similar,
+# como hicimos en el tema de regresión lineal. Podríamos implementar métodos de
+# regularización de características. Sin embargo, queremos presentar un método de reducción
+# de características univariadas utilizando el peso de la evidencia (WOE, Weight Of Evidence)
+# y el valor de la información (IV, Information Value) y discutir cómo podemos comprender
+# cómo usarlo en un problema de clasificación junto con la regresión logística.
 
 
 
