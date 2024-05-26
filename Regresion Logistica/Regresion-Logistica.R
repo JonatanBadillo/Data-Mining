@@ -322,3 +322,17 @@ colnames(glm_train_pred) <- c("zero", "one")
 classifierplots::density_plot(train_reduced$y, glm_train_pred$one)
 
 
+library(InformationValue)
+glm_cutoff <-InformationValue::optimalCutoff(train_reduced$y,
+    glm_train_pred$one,
+    optimiseFor = 'Both',
+    returnDiagnostics = TRUE)
+# Si haces clic en glm_cutoff en tu entorno global o ejecutas View(glm_cutoff), verás una lista
+# de seis resultados diferentes:
+
+# Si seleccionamos un límite de 0.0606, lograremos una tasa de verdaderos positivos (TPR) de
+# casi el 61 por ciento. Sin embargo, más del 19 por ciento serán falsos positivos.
+# Dado el desequilibrio en las clases, se trata de una enorme cantidad de clientes. Una matriz
+# de confusión puede demostrar ese hecho:
+InformationValue::confusionMatrix(train_reduced$y, glm_train_pred$one, threshold = 0.0607)
+
