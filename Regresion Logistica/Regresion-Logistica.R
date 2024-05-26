@@ -215,3 +215,17 @@ bin1IV + bin2IV
 # • 0.5 sospechoso
 # Nuestro siguiente ejemplo nos proporcionará decisiones interesantes que tomar con respecto
 # a dónde trazar la línea.
+
+
+# Selección de características
+# Lo que vamos a hacer ahora es usar el paquete Information para calcular los IV de nuestras
+# funciones. Luego, se mostrará cómo evaluar esos valores y también ejecutar algunos gráficos.
+# Dado que no existen reglas estrictas y rápidas sobre los umbrales para la inclusión de
+# funciones, daremos una opinión sobre dónde trazar la línea. Por supuesto, puedes rechazar
+# eso y aplicar el tuyo propio.
+# En este ejemplo, el código creará una serie de tablas que puedes utilizar para explorar los
+# resultados. Para comenzar, solo necesitas especificar los datos y la respuesta o variable "y":
+
+IV <- Information::create_infotables(data = train, y = "y", parallel = FALSE)
+# Esto nos dará un resumen IV de las 25 características principales:
+knitr::kable(head(IV$Summary, 25))
