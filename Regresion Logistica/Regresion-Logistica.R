@@ -134,7 +134,13 @@ train_zero <- caret::nearZeroVar(train, saveMetrics = TRUE)
 table(train_zero$zeroVar)
 
 
+# 6. Bien, una característica ahora tiene variación cero debido a la división y podemos
+# eliminarla:
 
+# selecciona todas las filas y solo aquellas columnas 
+# donde el valor en zeroVar  es FALSE. 
+# solo conserva las columnas que no fueron identificadas como de baja varianza en el paso anterior
+train <- train[, train_zero$zeroVar == 'FALSE']
 
 
 
