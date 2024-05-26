@@ -246,7 +246,49 @@ knitr::kable(IV$Tables$V2)
 # más de la mitad del IV. ¡Realmente sospechoso! ¿Cómo ayudará cualquier algoritmo que
 # produzcamos con estos datos si esta característica es AGE genuina, como sospecho? Sin
 # embargo, eso está fuera del alcance de este esfuerzo y no vale la pena perder más tiempo ni
-
-Information::plot_infotables(IV, "V2", show_values = TRUE)
 # esfuerzo. Aquí podemos mostrar rápidamente un diagrama de barras de los WOE por
 # contenedor:
+
+Information::plot_infotables(IV, "V2", show_values = TRUE)
+
+# Es interesante que exista una relación algo lineal entre esta característica y la respuesta. Lo
+# que se puede hacer es crear funciones que conviertan los valores agrupados en valores WOE.
+# Estas nuevas funciones serían lineales y podrían usarse en lugar de las funciones originales.
+# Renunciaremos a eso porque ¿qué método hará eso por nosotros? Así es, ¡MARS
+# puede hacer eso por nosotros! Aquí hay un diagrama de cuadrícula de las
+# cuatro características principales:
+Information::plot_infotables(IV, IV$Summary$Variable[1:4], same_scales=TRUE)
+
+
+
+# Ahora, dado el punto de corte que elegimos anteriormente, podemos seleccionar esas 21
+# características:
+features <- IV$Summary$Variable[1:21]
+train_reduced <- train[, colnames(train) %in% features]
+train_reduced$y <- train$y
+# Ahí tienes. Ahora estamos listos para comenzar a entrenar nuestro algoritmo.
+
+
+
+
+# Validación cruzada y regresión logística
+
+# Nuestro objetivo aquí es construir un modelo utilizando validación cruzada quíntuple.
+# Utilizaremos el paquete de intercalación para establecer nuestro esquema de muestreo y
+# producir el modelo final. Comience por crear una función trainControl() separada:
+  
+glm_control <-caret::trainControl(method = "cv",number = 5,returnResamp = "final")
+
+
+# Este objeto se pasa como argumento para entrenar el algoritmo. Ahora producimos nuestras
+# características de entrada, la variable de respuesta (debe ser un factor para que caret se entrene
+# como regresión logística), configuramos nuestra semilla aleatoria y entrenamos el modelo.
+# Para la función train(), especificamos glm para el modelo lineal generalizado (GLM, Generalized Linear Model):
+x <- train_reduced[, -22]
+y <- as.factor(train_reduced$y)
+set.seed(1988)
+glm_fit <-caret::train(x, y, method = "glm",
+                        trControl = glm_control,
+                        trace = FALSE)
+# Cuando hayas terminado, podrás comprobar rápidamente los resultados:
+glm_fit$results
