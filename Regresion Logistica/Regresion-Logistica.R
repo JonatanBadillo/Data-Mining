@@ -336,3 +336,12 @@ glm_cutoff <-InformationValue::optimalCutoff(train_reduced$y,
 # de confusión puede demostrar ese hecho:
 InformationValue::confusionMatrix(train_reduced$y, glm_train_pred$one, threshold = 0.0607)
 
+
+
+glm_test_pred <- predict(glm_fit, test, type = "prob")
+colnames(glm_test_pred) <- c("zero", "one")
+classifierplots::density_plot(test$y, glm_test_pred$one)
+
+# Resultados muy similares en los datos de la prueba. ¿Qué pasa con una matriz de confusión
+# dado nuestro umbral determinado durante el entrenamiento? Vamos a ver:
+InformationValue::confusionMatrix(test$y, glm_test_pred$one, threshold = 0.0607)
