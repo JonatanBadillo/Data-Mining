@@ -125,4 +125,20 @@ table(test$y)
 # datos, solo elimina las características de varianza cero.
 
 
+# 5. Hubo algunas características de baja variación, así que veamos si podemos eliminar
+# algunas nuevas de variación cero:
+
+# identifica las características en el conjunto de datos train que tienen una varianza muy baja.
+# Las características con una varianza muy baja pueden no ser informativas para su modelo y podrían eliminarse antes del entrenamiento.
+train_zero <- caret::nearZeroVar(train, saveMetrics = TRUE)
+table(train_zero$zeroVar)
+
+
+
+
+
+
+
+
+
 
