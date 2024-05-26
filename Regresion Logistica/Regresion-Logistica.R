@@ -362,3 +362,21 @@ Metrics::logLoss(test$y, glm_test_pred$one)
 # Nuestras AUC no son tan buenas, diríamos. Si el modelo no fuera mejor que una suposición
 # aleatoria, entonces el AUC sería igual a 0.5 y, si fuera perfecto, sería 1. Nuestra pérdida
 # logarítmica solo es esencial cuando se compara con el siguiente modelo.
+
+
+# Lo entrenaremos con validación cruzada quíntuple y estableceremos nprune = 15 para limitar
+# el número máximo de características a 15. Recuerda que, en regresión lineal múltiple, son
+# posibles más de 15 términos ya que se ajusta a splines por partes.
+# Este código nos dará nuestro objeto modelo. Ten en cuenta que esto puede tardar algún
+# tiempo en completarse:
+set.seed(1972)
+earth_fit <-earth::earth(x = train[, -142],
+    y = train[, 142],
+    pmethod = 'cv',
+    nfold = 5,
+    degree = 1,
+    minspan = -1,
+    nprune = 15,
+    glm = list(family = binomial)
+    )
+summary(earth_fit)
