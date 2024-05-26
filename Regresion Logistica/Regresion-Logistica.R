@@ -229,3 +229,22 @@ bin1IV + bin2IV
 IV <- Information::create_infotables(data = train, y = "y", parallel = FALSE)
 # Esto nos dará un resumen IV de las 25 características principales:
 knitr::kable(head(IV$Summary, 25))
+
+
+# Los resultados nos muestran el número de columna de la característica, el nombre de la
+# característica y el IV.
+# Observa que tenemos cinco características que posiblemente sean sospechosas. Estoy
+# totalmente a favor de tomar cualquier característica con un IV superior a 0.02, que es la parte
+# inferior de los predictores débiles. Eso nos dará 21 funciones de entrada. La característica V2
+# es interesante. Si nos fijamos en los valores y pensamos en los datos, parece claro que se trata
+# de la edad del cliente. Veamos cómo se agrupan los datos, los valores WOE y los IV:
+
+knitr::kable(IV$Tables$V2)
+
+# Mira el contenedor número 2, que creo que tiene una edad
+# de cliente de 23 años. Constituye casi el 27 por ciento del total de observaciones y aporta
+# más de la mitad del IV. ¡Realmente sospechoso! ¿Cómo ayudará cualquier algoritmo que
+# produzcamos con estos datos si esta característica es AGE genuina, como sospecho? Sin
+# embargo, eso está fuera del alcance de este esfuerzo y no vale la pena perder más tiempo ni
+# esfuerzo. Aquí podemos mostrar rápidamente un diagrama de barras de los WOE por
+# contenedor:
