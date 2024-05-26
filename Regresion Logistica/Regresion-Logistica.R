@@ -292,3 +292,33 @@ glm_fit <-caret::train(x, y, method = "glm",
                         trace = FALSE)
 # Cuando hayas terminado, podrás comprobar rápidamente los resultados:
 glm_fit$results
+
+
+
+
+# Mira eso, ¡96 por ciento de precisión! Sé que eso no tiene ningún sentido porque si
+# supusiéramos que todas las etiquetas en la respuesta eran cero, alcanzaríamos el 96 por
+# ciento.
+
+
+
+# Kappa se refiere a lo que se conoce como estadística Kappa de Cohen. La estadística Kappa
+# proporciona una idea de este problema ajustando las puntuaciones de precisión, lo que se
+# hace teniendo en cuenta que el modelo es completamente correcto por mera casualidad. La
+# fórmula de la estadística es la siguiente:
+#   Kappa = (porcentaje de acuerdo − porcentaje de posible acuerdo)/(1
+#                                                                    − porcentaje de posible acuerdo)
+# El porcentaje de acuerdo es la tasa que el modelo acordó para la clase (precisión) y el
+# porcentaje de posible acuerdo de probabilidad es la tasa que el modelo acordó aleatoriamente.
+# Cuanto mayor sea la estadística, mejor será el rendimiento, siendo el acuerdo máximo uno.
+# Entonces, con esta puntuación Kappa, el modelo es patético.
+# Bueno, Kappa sería útil con etiquetas más equilibradas. Ahora nos quedamos para encontrar
+# otras formas de examinar los resultados del modelo. Siempre es una buena idea comparar las
+# distribuciones de probabilidad de las diferentes clases con un diagrama de densidad o caja.
+# Aquí producimos una gráfica de densidad elegante y colorida en los datos de entrenamiento:
+
+glm_train_pred <- predict(glm_fit, train, type = "prob")
+colnames(glm_train_pred) <- c("zero", "one")
+classifierplots::density_plot(train_reduced$y, glm_train_pred$one)
+
+
