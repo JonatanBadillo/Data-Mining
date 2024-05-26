@@ -152,5 +152,45 @@ train <- train[, train_zero$zeroVar == 'FALSE']
 # cómo usarlo en un problema de clasificación junto con la regresión logística.
 
 
+# Peso de la evidencia y valor de la información
+# 
+# Dada la posibilidad de cientos, incluso miles, de características posibles, tuvimos que
+# aprender el uso de WOE y IV. Ahora bien, este método no es una panacea. En primer lugar,
+# es univariado, por lo que las características que se descartan pueden volverse significativas
+# en un modelo multivariado y viceversa. Podemos decir que proporciona un buen
+# complemento a otros métodos y deberías tenerlo en tu caja de herramientas de modelado.
+# Creo que tuvo su origen en el mundo de la calificación crediticia, por lo que, si trabajas en la
+# industria financiera, es posible que ya estés familiarizado con él.
+# Primero, veamos la fórmula de WOE:
+#   𝑊𝑂𝐸 = ln (porcentaje de eventos)/ (porcentaje de no eventos)
+
+# El WOE sirve como componente del IV. Para funciones numéricas, agruparía tus datos y
+# luego calcularías WOE por separado para cada contenedor. Para los categóricos, o cuando
+# están codificados en caliente, agrupa para cada nivel y calcula el WOE por separado. 
 
 
+
+
+# Tomemos un ejemplo y demostremos en R.
+# Nuestros datos constan de una característica de entrada codificada como 0 o 1, por lo que
+# solo tendremos dos contenedores. Para cada contenedor (bin), calculamos nuestro WOE. En
+# el contenedor 1, o donde los valores son iguales a 0, hay cuatro observaciones como eventos
+# y 96 como no eventos. Por el contrario, en el grupo 2, o donde los valores son iguales a 1,
+# tenemos 12 observaciones como eventos y 88 como no eventos. Veamos cómo calcular el
+# WOE para cada contenedor:
+bin1events <- 4
+bin1nonEvents <- 96
+bin2events <- 12
+bin2nonEvents <- 88
+totalEvents <- bin1events + bin2events
+totalNonEvents <- bin1nonEvents + bin2nonEvents
+# Now calculate the percentage per bin
+bin1percentE <- bin1events / totalEvents
+bin1percentNE <- bin1nonEvents / totalNonEvents
+bin2percentE <- bin2events / totalEvents
+bin2percentNE <- bin2nonEvents / totalNonEvents
+# It's now possible to produce WOE
+bin1WOE <- log(bin1percentE / bin1percentNE)
+bin2WOE <- log(bin2percentE / bin2percentNE)
+bin1WOE
+bin2WOE
