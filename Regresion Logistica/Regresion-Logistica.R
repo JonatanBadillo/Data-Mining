@@ -246,5 +246,7 @@ knitr::kable(IV$Tables$V2)
 # más de la mitad del IV. ¡Realmente sospechoso! ¿Cómo ayudará cualquier algoritmo que
 # produzcamos con estos datos si esta característica es AGE genuina, como sospecho? Sin
 # embargo, eso está fuera del alcance de este esfuerzo y no vale la pena perder más tiempo ni
+
+Information::plot_infotables(IV, "V2", show_values = TRUE)
 # esfuerzo. Aquí podemos mostrar rápidamente un diagrama de barras de los WOE por
 # contenedor:
