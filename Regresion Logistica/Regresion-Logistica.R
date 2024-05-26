@@ -194,3 +194,24 @@ bin1WOE <- log(bin1percentE / bin1percentNE)
 bin2WOE <- log(bin2percentE / bin2percentNE)
 bin1WOE
 bin2WOE
+
+# La fórmula es la siguiente:
+#   𝐼𝑉 = ∑(Porcentaje de eventos − Porcentaje de no eventos) ∗ WOE
+
+
+# Tomando nuestro ejemplo actual; esta es nuestra característica IV:
+bin1IV <- (bin1percentE - bin1percentNE) * bin1WOE
+bin2IV <- (bin2percentE - bin2percentNE) * bin2WOE
+
+bin1IV + bin2IV
+
+# El IV de la característica es 0.322. Ahora bien, ¿qué significa eso? La respuesta corta es que
+# depende. Se proporciona una heurística para ayudar a decidir qué umbral IV tiene sentido
+# para su inclusión en el desarrollo del modelo:
+#   • < 0.02 no predictivo
+# • 0.02 a 0.1 débil
+# • 0.1 a 0.3 medio
+# • 0.3 a 0.5 fuerte
+# • 0.5 sospechoso
+# Nuestro siguiente ejemplo nos proporcionará decisiones interesantes que tomar con respecto
+# a dónde trazar la línea.
