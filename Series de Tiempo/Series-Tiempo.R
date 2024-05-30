@@ -141,6 +141,38 @@ forecast::autoplot(ma1, main = "MA1")
 # significativas en el retraso 1 y el retraso 2:
 forecast::autoplot(acf(ma1, plot = F), main = "ACF of simulated MA1")
 
+# La figura anterior es el gráfico ACF y ahora veremos el gráfico PACF:
+forecast::autoplot(pacf(ma1, plot = F), main = "PACF of simulated MA1")
+
+# Con los modelos ARIMA es posible incorporar la estacionalidad, incluidos los términos
+# autorregresivos, integrados y de media móvil. La notación del modelo ARIMA no estacional
+# suele ser (p, d, q). Con ARIMA estacional, supongamos que los datos son mensuales,
+# entonces la notación sería (p, d, q) × (P, D, Q)12, y el 12 en la notación tomaría en cuenta la
+# estacionalidad mensual. En los paquetes que usaremos, R puede identificar automáticamente
+# si se debe incluir la estacionalidad; de ser así, también se incluirán los términos óptimos.
+
+
+
+# Comprender la causalidad de Granger
+# Imagina que te hacen una pregunta como: ¿Cuál es la relación entre el número de recetas
+# nuevas y el total de recetas del medicamento X? Tu sabes que estos se miden mensualmente,
+# entonces, ¿qué podrías hacer para comprender esa relación, dado que la gente cree que los
+# nuevos guiones aumentarán el total de guiones? ¿O qué tal si se prueba la hipótesis de que
+# los precios de las materias primas (en particular, el cobre) son un indicador adelantado de los
+# precios del mercado de valores en Estados Unidos?
+#   Bueno, con dos conjuntos de datos de series temporales, x e y, la causalidad de Granger es
+# un método que intenta determinar si es probable que una serie influya en un cambio en la
+# otra. Esto se hace tomando diferentes rezagos de una serie y utilizándolos para modelar el
+# cambio en la segunda serie. Para lograr esto, crearemos dos modelos que predecirán y, uno
+# solo con los valores pasados de y(Ω) y el otro con los valores pasados de y y x(π). Los
+# modelos son los siguientes, donde k es el número de rezagos en la serie de tiempo:
+#   Sea Ω = 𝑦𝑡 = 𝛽0 + 𝛽1𝑦𝑡 − 1 + ⋯ 𝛽𝑘𝑦𝑡 − 𝑘 + 𝜖 y
+# sea 𝜋 = 𝑦𝑡 = 𝛽0 + 𝛽1𝑦𝑡 − 1 + ⋯ + 𝛽𝑘𝑦𝑡 − 𝑘 + 𝛼1𝑦𝑡 − 1 + ⋯ + 𝛼𝑘𝑦𝑡 − 𝑘 + 𝜖
+# Luego se compara el RSS y se utiliza la prueba F para determinar si el modelo anidado (Ω)
+# es lo suficientemente adecuado para explicar los valores futuros de y o si el modelo completo
+# (π) es mejor. La prueba F se utiliza para probar las siguientes hipótesis nulas y alternativas:
+#   • H0:1=0 para cada i[1, k], sin causalidad de Granger
+# • H1: 1≠0 para al menos un i[1, k], causalidad de Granger
 
 
 
