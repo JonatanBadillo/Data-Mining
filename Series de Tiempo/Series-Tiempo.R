@@ -22,3 +22,64 @@
 # • Análisis univariado de series de tiempo
 # • Datos de series de tiempo
 # • Modelado y evaluación
+
+
+
+
+# Análisis univariado de series temporales
+
+# Nos centraremos en dos métodos para analizar y pronosticar una única serie temporal:
+# modelos de suavizado exponencial (exponential smoothing) y media móvil integrada
+# autorregresiva (ARIMA, Autoregressive Integrated Moving Average). Comenzaremos
+# analizando modelos de suavizado exponencial.
+# Al igual que los modelos de media móvil, los modelos de suavizado exponencial utilizan
+# ponderaciones para observaciones pasadas. Pero a diferencia de los modelos de media móvil, 
+# cuanto más reciente es la observación, más peso se le da en relación con las posteriores. Hay
+# tres posibles parámetros de suavizado para estimar: el parámetro de suavizado general, un
+# parámetro de tendencia y el parámetro de suavizado estacional. Si no hay tendencia o
+# estacionalidad, estos parámetros se vuelven nulos.
+
+# El parámetro de suavizado produce un pronóstico (forecast) con la siguiente ecuación:
+#   𝑌𝑡 + 1 = 𝛼(𝑌𝑡) + (1 − 𝛼)𝑌𝑡 − 1 + (1 − 𝛼)2𝑌𝑡 + ⋯ , donde 0 < 𝛼 ≤ 1
+
+# En esta ecuación, Yt es el valor en ese momento, T, y alfa (α) es el parámetro de suavizado.
+# Los algoritmos optimizan el alfa (y otros parámetros) minimizando los errores, la suma de
+# errores cuadráticos (SSE, Sum of Squared Error) o la máxima verosimilitud.
+# La ecuación de pronóstico junto con las ecuaciones de tendencia y estacionalidad, si
+# corresponde, será la siguiente:
+#   • El pronóstico, donde A es la ecuación de suavizado anterior y h es el número de
+# períodos de pronóstico: 𝑌𝑡 + ℎ = 𝐴 + ℎ𝐵𝑡 + 𝑆𝑡
+# • La ecuación de tendencia: 𝐵𝑡 = 𝛽(𝐴𝑡 − 𝐴𝑡 − 1) + (1 − 𝛽)𝐵𝑡 − 1
+# • La estacionalidad, donde m es el número de períodos estacionales:
+#   𝑆𝑡 = Ω(𝑌𝑡 − 𝐴𝑡 − 1 − 𝐵𝑡 − 1) + (1 − Ω)𝑆𝑡 − 𝑚
+
+# Esta ecuación se conoce como método de Holt-Winters. La ecuación de pronóstico es de
+# naturaleza aditiva y la tendencia es lineal. El método también permite la inclusión de una
+# tendencia amortiguada y una estacionalidad multiplicativa, donde la estacionalidad aumenta
+# o disminuye proporcionalmente con el tiempo. Con estos modelos, no tienes que preocuparte
+# por el supuesto de estacionariedad como en un modelo ARIMA. La estacionariedad es
+# cuando la serie de tiempo tiene una media, varianza y correlación constantes entre todos los
+# períodos de tiempo. Dicho esto, sigue siendo importante comprender los modelos ARIMA,
+# ya que habrá situaciones en las que tendrán el mejor rendimiento.
+# Comenzando con el modelo autorregresivo, el valor de Y en el tiempo T es una función lineal
+# de los valores anteriores de Y. La fórmula para un modelo autorregresivo de retraso lag-11
+# AR(1) es 𝑌𝑡 = constante + Φ𝑌𝑡 − 1 + 𝐸𝑡. Los supuestos críticos para el modelo son los
+# siguientes:
+#   • Et denota los errores que se distribuyen de manera idéntica e independiente con una
+# media cero y una varianza constante
+# • Los errores son independientes de Yt
+# • Yt, Yt-1, Yt-n... es estacionario, lo que significa que el valor absoluto de Φ es menor
+# que uno
+
+# Con una serie temporal estacionaria, se puede examinar la función de autocorrelación (ACF, Autocorrelation Function).
+# El ACF de una serie estacionaria proporciona correlaciones entre
+# Yt e Yt-h para h = 1, 2...n. Usemos R para crear una serie AR(1) y trazarla:
+
+
+
+
+
+
+
+
+
