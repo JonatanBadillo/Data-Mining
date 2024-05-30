@@ -133,6 +133,14 @@ set.seed(123)
 ma1 <- arima.sim(list(order = c(0, 0, 1), ma = -0.5), n = 200)
 forecast::autoplot(ma1, main = "MA1")
 
+# Los gráficos ACF y PACF son un poco diferentes del modelo AR(1). Ten en cuenta que
+# existen algunas reglas generales al observar los gráficos para determinar si el modelo tiene
+# términos AR y/o MA. Pueden ser un poco subjetivos, así que dejaremos que tu aprendas estas
+# heurísticas, pero confiamos en R para identificar el modelo adecuado. En los siguientes
+# gráficos, veremos una correlación significativa en el retraso 1 y dos correlaciones parciales
+# significativas en el retraso 1 y el retraso 2:
+forecast::autoplot(acf(ma1, plot = F), main = "ACF of simulated MA1")
+
 
 
 
