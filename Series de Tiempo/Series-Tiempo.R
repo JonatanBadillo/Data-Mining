@@ -110,9 +110,13 @@ forecast::autoplot(acf(ar1, plot = F), main = "ACF of simulated AR1")
 # el siguiente gráfico PACF, el valor de autocorrelación parcial en el lag-1 es idéntico al valor
 # de autocorrelación en el lag-1, ya que no se trata de una correlación condicional:
 
+forecast::autoplot(pacf(ar1, plot = F), main = "PACF of simulated AR1")
 
-
-
+# Podemos suponer con seguridad que la serie es estacionaria a partir de la apariencia del
+# gráfico de la serie temporal anterior. Veremos un par de pruebas estadísticas en el ejercicio
+# práctico para asegurarnos de que los datos sean estacionarios pero, en ocasiones, la prueba
+# del globo ocular (eyeball test) es suficiente. Si los datos no son estacionarios, entonces es
+# posible eliminar la tendencia de los datos tomando sus diferencias. 
 
 
 
