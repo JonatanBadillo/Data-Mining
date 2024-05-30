@@ -96,6 +96,23 @@ forecast::autoplot(acf(ar1, plot = F), main = "ACF of simulated AR1")
 
 
 
+# El gráfico ACF muestra que las correlaciones disminuyen exponencialmente a medida que
+# aumenta el Lag (retraso). Las líneas azules punteadas indican las bandas de confianza de una
+# correlación significativa. Cualquier línea que se extienda por encima o por debajo de la banda
+# mínima se considera significativa. Además de ACF, también deberíamos examinar la función
+# de autocorrelación parcial (PACF, Partial Autocorrelation Function). La PACF es una
+# correlación condicional, lo que significa que la correlación entre Yt e Yt-h está condicionada
+# a las observaciones que se encuentran entre los dos. Una forma de entender esto
+# intuitivamente es pensar en un modelo de regresión lineal y sus coeficientes. Supongamos
+# que tienes Y = 0 + 1X1 versus Y = 0 + 1X1 + 2X2. La relación de X a Y en el primer
+# modelo es lineal con un coeficiente, pero en el segundo modelo, el coeficiente será diferente
+# debido a que ahora también se tiene en cuenta la relación entre Y y X2. Ten en cuenta que, en
+# el siguiente gráfico PACF, el valor de autocorrelación parcial en el lag-1 es idéntico al valor
+# de autocorrelación en el lag-1, ya que no se trata de una correlación condicional:
+
+
+
+
 
 
 
