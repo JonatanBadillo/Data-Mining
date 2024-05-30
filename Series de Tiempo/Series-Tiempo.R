@@ -75,6 +75,21 @@
 # El ACF de una serie estacionaria proporciona correlaciones entre
 # Yt e Yt-h para h = 1, 2...n. Usemos R para crear una serie AR(1) y trazarla:
 
+install.packages("forecast")
+library(forecast)
+set.seed(1966)
+
+# este comando simula una serie temporal de un modelo autorregresivo de orden 1 (AR(1)).
+# especifica el modelo AR(1) con un coeficiente autorregresivo de 0.5.
+# order = c(1, 0, 0) indica que el modelo tiene un término autorregresivo de primer orden (1), sin diferencias (0), y sin términos de media móvil (0).
+# ar = 0.5 especifica el coeficiente del término autorregresivo.
+# n = 200 indica que se deben generar 200 observaciones para la serie temporal.
+ar1 <- arima.sim(list(order = c(1, 0, 0), ar = 0.5), n = 200)
+# Este comando utiliza la función autoplot del paquete forecast para graficar la serie temporal simulada.
+forecast::autoplot(ar1, main = "AR1")
+
+
+
 
 
 
