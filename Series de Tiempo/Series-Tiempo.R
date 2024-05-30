@@ -118,9 +118,20 @@ forecast::autoplot(pacf(ar1, plot = F), main = "PACF of simulated AR1")
 # del globo ocular (eyeball test) es suficiente. Si los datos no son estacionarios, entonces es
 # posible eliminar la tendencia de los datos tomando sus diferencias. 
 
+# Este es el Integrado (I) en ARIMA. Después de diferenciar, la nueva serie se convierte en
+# ΔYt = Yt - Yt-1. Se debería esperar que una diferencia de primer orden alcance la 
+# estacionariedad pero, en algunas ocasiones, puede ser necesaria una diferencia de segundo
+# orden. Un modelo ARIMA con AR(1) e I(1) se anotaría como (1, 1, 0).
+# MA significa media móvil (Moving Average). Este no es el promedio móvil simple como el
+# promedio móvil de 50 días del precio de una acción, sino más bien un coeficiente que se
+# aplica a los errores. Por supuesto, los errores se distribuyen de forma idéntica e independiente
+# con una media cero y una varianza constante. La fórmula para un modelo MA(1) es Yt =
+# constante + Et + ΘEt-1. Como hicimos con el modelo AR(1), podemos construir un MA(1)
+# en R, de la siguiente manera:
 
-
-
+set.seed(123)
+ma1 <- arima.sim(list(order = c(0, 0, 1), ma = -0.5), n = 200)
+forecast::autoplot(ma1, main = "MA1")
 
 
 
