@@ -89,6 +89,12 @@ ar1 <- arima.sim(list(order = c(1, 0, 0), ar = 0.5), n = 200)
 forecast::autoplot(ar1, main = "AR1")
 
 
+# Ahora, examinemos ACF:
+# Calcula la función de autocorrelación (ACF) de la serie temporal ar1 sin generar un gráfico inmediatamente.
+# Utiliza autoplot del paquete forecast para graficar la función de autocorrelación.
+forecast::autoplot(acf(ar1, plot = F), main = "ACF of simulated AR1")
+
+
 
 
 
