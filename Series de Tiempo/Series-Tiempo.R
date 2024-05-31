@@ -201,3 +201,38 @@ forecast::autoplot(pacf(ma1, plot = F), main = "PACF of simulated MA1")
 # En R, este proceso es bastante sencillo de implementar como veremos en el siguiente
 # problema práctico.
 
+
+
+# ------------------------------------------------------------------------------
+
+# Datos de series de tiempo
+
+# El cambio climático está ocurriendo. Siempre lo ha sido y lo será, pero la gran pregunta, al
+# menos desde un punto de vista político y económico, ¿es el cambio climático provocado por
+# el hombre? Utilizaremos esta parte del documento para poner a prueba el modelado
+# econométrico de series temporales para tratar de aprender si las emisiones de carbono causan,
+# estadísticamente hablando, el cambio climático y, en particular, el aumento de las
+# temperaturas.
+
+# Los datos que usaremos se proporcionan como una anomalía anual, que se calcula como la
+# diferencia de la temperatura superficial anual media para un período de tiempo determinado
+# versus el promedio de los años de referencia (1961-1990). La temperatura superficial anual
+# es un conjunto de temperaturas recopiladas a nivel mundial y combinadas a partir de los
+# conjuntos de datos de temperatura del aire en la superficie CRUTEM4 y de la superficie del
+# mar HadSST3. Los escépticos han atacado a los parciales y poco fiables:
+#   https://www.telegraph.co.uk/comment/11561629/Top-scientists-start-to-examine-fiddledglobal-warming-figures.html. Esto está muy fuera de nuestro alcance de esfuerzo aquí, por
+# lo que debemos aceptar y utilizar estos datos tal como están, pero de todos modos lo
+# encontramos divertido. Obtuvimos los datos desde 1919 hasta 2013 para que coincidan con
+# nuestros datos de CO2.
+
+# Las estimaciones de emisiones globales de CO2 se pueden encontrar en el Centro de Análisis
+# de Información sobre Dióxido de Carbono (CDIAC) del Departamento de Energía de EE.
+# UU. en el siguiente sitio web: https://data.globalchange.gov/organization/carbon-dioxideinformation-analysis-center.
+# Instalemos bibliotecas según sea necesario, carguemos los datos y examinemos la estructura:
+library(magrittr)
+library(ggthemes)
+library(tseries)
+library(ggplot2)
+library(tidyverse)
+climate <- readr::read_csv("climate.csv")
+> str(climate)
