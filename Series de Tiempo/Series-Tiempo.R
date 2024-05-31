@@ -541,3 +541,29 @@ forecast::ndiffs(climate49[, 2], test = "adf")
 # empezar, crearemos una diferencia. Luego, completaremos el método tradicional, donde
 # ambas series son estacionarias:
 climate_diff <- diff(climate49)
+
+# Ahora es cuestión de determinar la estructura de retardo (lag) óptima basándose en los
+# criterios de información utilizando vectores autorregresivos. Esto se hace con la función
+# VARselect en el paquete vars. Solo necesitas especificar los datos y la cantidad de retrasos
+# en el modelo usando lag.max = x en la función. Utilicemos un máximo de 12 rezagos (lags):
+
+install.packages("vars")
+library(vars)
+lag.select <- vars::VARselect(climate_diff, lag.max = 12)
+lag.select$selection
+
+# Llamamos a los criterios de información usando lag$selection. Se proporcionan cuatro
+# criterios diferentes, incluidos AIC, Criterio de Hannan-Quinn (HQ), Criterio de
+# SchwarzBayes (SC) y FPE. Ten en cuenta que AIC y SC se tratan en regresión lineal
+# comúnmente, por lo que no repasaremos aquí las fórmulas de criterios ni las diferencias. Si
+# deseas ver los resultados reales de cada retraso, puedes utilizar lag$criteria. Podemos ver que
+# AIC y FPE han seleccionado el retraso 5 y HQ y SC el retraso 1 como la estructura óptima
+# para un modelo VAR. Parece tener sentido que se utilice el desfase de cinco años. Crearemos
+# ese modelo usando la función var(). Te dejaremos probarlo con el retraso 1:
+
+fit1 <- vars::VAR(climate_diff, p = 5)
+
+# El resumen de resultados es bastante extenso ya que construye dos modelos separados y
+# probablemente ocuparía dos páginas enteras. Lo que proporcionamos es el resultado
+# abreviado que muestra los resultados con la temperatura como predicción:
+summary(fit1)
