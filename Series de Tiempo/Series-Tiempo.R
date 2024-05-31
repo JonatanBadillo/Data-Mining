@@ -243,6 +243,18 @@ str(climate)
 climate_ts <- ts(climate[, 2:3],
                  start = 1919,
                  end = 2013)
-
 #   Con nuestros datos cargados y colocados en estructuras de series temporales, ahora podemos
 # comenzar a comprenderlos y prepararlos aún más para el análisis.
+
+
+# Exploración de datos
+# Comencemos con una gráfica de la serie temporal usando la base de R:
+
+plot(climate_ts, main = "CO2 and Temperature Deviation")
+
+# Parece que los niveles de CO2 realmente comenzaron a aumentar después de la Segunda
+# Guerra Mundial y hay un rápido aumento de las anomalías de temperatura a mediados de los
+# años 1970. No parece haber valores atípicos obvios y la variación a lo largo del tiempo parece
+# constante.
+# Utilizando el procedimiento estándar, podemos ver que las dos series están altamente
+# correlacionadas, como sigue:
