@@ -440,3 +440,28 @@ c(ets = forecast::accuracy(ETS, temp_ts)["Test set", c("Theil's U")],
 plot(NN)
 lines(test, type = "o")
 
+# ¿Qué vamos a hacer con todo esto? Aquí hay un par de pensamientos. Si nos fijamos en el
+# patrón de las series temporales, observamos que pasa por lo que podríamos llamar diferentes
+# cambios estructurales. Hay varios paquetes de R para examinar esta estructura y determinar
+# un punto en el que tiene más sentido iniciar la serie temporal para la previsión. Por ejemplo,
+# parece haber un cambio perceptible en la pendiente de la serie temporal a mediados de los
+# años sesenta. Cuando haces esto con tus datos, estás desperdiciando puntos de datos que
+# podrían ser valiosos, por lo que entra en juego el criterio. La implicación es que, si deseas
+# automatizar totalmente tus modelos de series temporales, deberás tener esto en cuenta.
+# Puedes intentar transformar toda la serie temporal con valores logarítmicos (esto no funciona
+#                                                                              muy bien con valores negativos) o Box-Cox. En el paquete forecast, puedes configurar
+# lambda = "auto", en la función de tu modelo. Hice esto y el rendimiento no mejoró. A modo
+# de ejemplo, intentemos detectar cambios estructurales y construir un modelo ARIMA en un
+# punto de partida seleccionado.
+# Demostraremos el cambio estructural con el paquete strucchange, que computacionalmente
+# determina cambios en las relaciones de regresión lineal. Puedes encontrar una discusión
+# completa y una viñeta sobre el paquete en este enlace:
+#   https://cran.r-project.org/web/packages/strucchange/vignettes/strucchange-intro.pdf
+# Encontramos que este método es útil en las discusiones con las partes interesadas, ya que les
+# ayuda a comprender cuándo e incluso por qué cambió el proceso subyacente de generación
+# de datos. Aquí va:
+  
+install.packages("strucchange")
+library(strucchange)
+temp_struc <- strucchange::breakpoints(temp_ts ~ 1)
+summary(temp_struc)
