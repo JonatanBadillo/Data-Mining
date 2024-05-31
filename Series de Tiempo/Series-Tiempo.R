@@ -259,3 +259,23 @@ plot(climate_ts, main = "CO2 and Temperature Deviation")
 # Utilizando el procedimiento estándar, podemos ver que las dos series están altamente
 # correlacionadas, como sigue:
 cor(climate_ts)
+
+
+# Como se mencionó anteriormente, esto no es motivo de alegría, ya que no prueba
+# absolutamente nada. Buscaremos la estructura trazando ACF y PACF para ambas series:
+forecast::autoplot(acf(climate_ts[, 2], plot = F), main="Temperature ACF")
+
+# Este código nos da el gráfico PACF para la temperatura:
+forecast::autoplot(pacf(climate_ts[, 2], plot = F), main = "Temperature PACF")
+
+# Este código nos da el gráfico ACF para CO2:
+forecast::autoplot(acf(climate_ts[, 1], plot = F), main = "CO2 ACF")
+
+# Este código nos da el gráfico PACF para CO2:
+forecast::autoplot(acf(climate_ts[, 1], plot = F), main = "CO2 PACF")
+
+# Con los patrones ACF que decaen lentamente y los patrones PACF que decaen rápidamente,
+# podemos suponer que ambas series son autorregresivas, aunque Temp parece tener algunos
+# términos MA significativos. A continuación, echemos un vistazo a la función de correlación
+# cruzada (CCF, Cross-Correlation Function). Ten en cuenta que ponemos nuestra x antes de
+# nuestra y en la función:
