@@ -507,3 +507,10 @@ fit.arima2 %>% forecast::forecast(h = 6) %>%forecast::accuracy(temp_ts)
 # examinamos los resultados:
 fit.lm <- lm(Temp ~ CO2, data = climate)
 summary(fit.lm)
+
+
+# Observe cómo todo es significativo y tenemos una R-cuadrada ajustada de 0.7. Vale, están
+# muy correlacionados, pero nada de esto tiene sentido, como lo analizan Granger y Newbold
+# (1974). Podemos trazar la correlación serial, comenzando con una gráfica de serie temporal
+# de los residuos, que produce un patrón claro:
+forecast::checkresiduals(fit.lm)
