@@ -279,3 +279,23 @@ forecast::autoplot(acf(climate_ts[, 1], plot = F), main = "CO2 PACF")
 # términos MA significativos. A continuación, echemos un vistazo a la función de correlación
 # cruzada (CCF, Cross-Correlation Function). Ten en cuenta que ponemos nuestra x antes de
 # nuestra y en la función:
+
+forecast::autoplot(ccf(climate_ts[, 1], climate_ts[, 2], plot = F), main = "CCF")
+
+# El CCF nos muestra la correlación entre la temperatura y los lags de CO2. Si los lags
+# negativos de la variable x tienen una correlación alta, podemos decir que x adelanta a y. Si
+# los lags positivos de x tienen una correlación alta, decimos que x lags y. Aquí podemos ver
+# que el CO2 es una variable tanto adelantada como retrasada. Para nuestro análisis, es
+# alentador que veamos lo primero, pero extraño que veamos lo segundo. Veremos durante el
+# análisis de causalidad del VAR y de Granger si esto importará o no.
+# Además, necesitamos probar si los datos son estacionarios. Podemos probar esto con la
+# prueba Augmented Dickey-Fuller (ADF) disponible en el paquete tseries, usando la función
+# adf.test(), de la siguiente manera:
+
+tseries::adf.test(climate_ts[, 1])
+tseries::adf.test(climate_ts[, 2])
+
+# Para ambas series, tenemos valores p insignificantes, por lo que no podemos rechazar el valor
+# nulo y concluir que no son estacionarios.
+# Habiendo explorado los datos, comencemos el proceso de modelado, comenzando con la
+# aplicación de técnicas univariadas a las anomalías de temperatura.
