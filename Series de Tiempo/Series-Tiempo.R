@@ -567,3 +567,43 @@ fit1 <- vars::VAR(climate_diff, p = 5)
 # probablemente ocuparía dos páginas enteras. Lo que proporcionamos es el resultado
 # abreviado que muestra los resultados con la temperatura como predicción:
 summary(fit1)
+
+
+# El modelo es significativo con un R-cuadrada ajustada resultante de 0.36.
+# Como hicimos en la sección anterior, debemos verificar la correlación serial.
+# Aquí, el paquete VAR proporciona la función serial.test() para la autocorrelación
+# multivariada. Ofrece varias pruebas diferentes, pero centrémonos en la prueba Portmanteau
+# y ten en cuenta que la popular prueba Durbin-Watson es solo para series univariadas. La
+# hipótesis nula es que las autocorrelaciones son cero y la alternativa es que no son cero:
+vars::serial.test(fit1, type = "PT.asymptotic")
+
+
+# Con un valor p de 0.8794, no tenemos evidencia para rechazar el valor nulo y podemos decir
+# que los residuos no están autocorrelacionados. ¿Qué dice la prueba con 1 de retraso?
+#   Para realizar las pruebas de causalidad de Granger en R, puedes utilizar el paquete lmtest y
+# la función Grangertest() o la función causality() en el paquete vars.
+# Demostraremos la técnica usando causality(). Es muy fácil ya que sólo necesitas crear dos
+# objetos, uno para x que causa y y otro para y que causa x, utilizando el objeto fit1 creado
+# previamente:
+x2y <- vars::causality(fit1, cause = "CO2")
+y2x <- vars::causality(fit1, cause = "Temp")
+# Ahora es muy sencillo llamar a los resultados de la prueba de Granger:
+x2y$Granger
+y2x$Granger
+
+# El valor p para las diferencias de CO2 de Granger que causan la temperatura es 0.02133 y no
+# es significativo en la otra dirección. Entonces, ¿Qué significa todo esto? Lo primero que
+# podemos decir es que Y no causa X. En cuanto a que X causa Y, podemos rechazar el valor
+# nulo en el nivel de significancia 0.05 y, por lo tanto, concluir que X Granger causa Y. Sin
+# embargo, ¿es esa la conclusión relevante aquí? Recuerda, el valor p evalúa la probabilidad
+# del efecto si la hipótesis nula es cierta. Además, recuerda que la prueba nunca fue diseñada
+# para ser un sí o un no binario.
+# Dado que este estudio se basa en datos de observación, creo que podemos decir que es muy
+# probable que las emisiones de CO2 de Granger provoquen anomalías en la temperatura de la
+# superficie. Pero hay mucho margen de crítica sobre esa conclusión. Mencionamos desde el
+# principio la controversia en torno a la calidad de los datos.
+# Sin embargo, todavía necesitamos modelar los niveles originales de CO2 utilizando la técnica
+# alternativa de causalidad de Granger. El proceso para encontrar el número correcto de
+# retrasos es el mismo que antes, excepto que no es necesario que los datos sean estacionarios:
+level.select <- vars::VARselect(climate49, lag.max = 12)
+level.select$selection
