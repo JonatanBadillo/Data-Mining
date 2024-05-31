@@ -340,3 +340,14 @@ fit.ets
 # proporcionan los valores de los criterios del modelo. Puedes trazar cómo cambian las
 # estimaciones con el tiempo:
 forecast::autoplot(fit.ets)
+
+
+# Ahora trazaremos el pronóstico y veremos qué tan bien se desempeñó visualmente en los
+# datos de prueba:
+plot(forecast::forecast(fit.ets, h = 6))
+lines(test, type = "o")
+
+
+# Mirando el gráfico, parece que este pronóstico muestra una ligera tendencia alcista lineal y
+# está sobreestimando los valores reales. Ahora veremos las medidas de precisión del modelo:
+fit.ets %>% forecast::forecast(h = 6) %>%  forecast::accuracy(temp_ts)
