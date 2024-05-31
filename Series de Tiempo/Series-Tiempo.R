@@ -258,3 +258,4 @@ plot(climate_ts, main = "CO2 and Temperature Deviation")
 # constante.
 # Utilizando el procedimiento estándar, podemos ver que las dos series están altamente
 # correlacionadas, como sigue:
+cor(climate_ts)
