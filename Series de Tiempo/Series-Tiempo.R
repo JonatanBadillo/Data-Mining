@@ -647,3 +647,10 @@ aod::wald.test(
 # muestra aquí es cómo utilizar un vector de auto regresión para producir un pronóstico. Hay
 # una función de predicción disponible y trazaremos el pronóstico para 24 años:
 plot(predict(fit1, n.ahead = 24, ci = 0.95))
+
+
+# De aquí a un par de décadas, veremos anomalías de temperatura cercanas a 1 grado. Al
+# menos, esperemos que esto haya estimulado tu pensamiento sobre cómo aplicar la técnica a
+# tus propios problemas del mundo real o tal vez incluso examinar los datos del cambio
+# climático con más detalle. Debería haber un listón alto cuando se trata de demostrar
+# causalidad, y la causalidad de Granger es una gran herramienta para ayudar en ese esfuerzo.
