@@ -514,3 +514,30 @@ summary(fit.lm)
 # (1974). Podemos trazar la correlación serial, comenzando con una gráfica de serie temporal
 # de los residuos, que produce un patrón claro:
 forecast::checkresiduals(fit.lm)
+
+
+# Al examinar los gráficos y la prueba de Breusch Godfrey, no sorprende que podamos
+# rechazar con seguridad la hipótesis nula de no autocorrelación.
+# La forma sencilla de abordar la autocorrelación es incorporar variables rezagadas (lagged)
+# de la serie temporal dependiente y/o hacer que todos los datos sean estacionarios. Lo haremos
+# a continuación utilizando vectores de auto regresión para identificar la estructura de retraso
+# adecuada para incorporar en nuestros esfuerzos de causalidad. Uno de los puntos de cambio
+# estructural fue 1949, así que comenzaremos por ahí.
+
+# Autoregresión vectorial
+# Hemos visto en la sección anterior que la temperatura y el CO2 requieren una diferencia de
+# primer orden. Otra forma sencilla de mostrar esto es con la función ndiffs() del paquete de
+# pronóstico (forecast). Proporciona un resultado que detalla el número mínimo de diferencias
+# necesarias para que los datos sean estacionarios. En la función, puedes especificar qué prueba
+# de las tres disponibles te gustaría utilizar: Kwiatkowski, Philips, Schmidt & Shin (KPSS),
+# Augmented DickeyFuller (ADF) o Philips-Peron (PP). Usaremos ADF en el siguiente
+# código, que tiene una hipótesis nula de que los datos no son estacionarios:
+
+climate49 <- window(climate_ts, start = 1949)
+forecast::ndiffs(climate49[, 1], test = "adf")
+forecast::ndiffs(climate49[, 2], test = "adf")
+
+# Vemos que ambos requieren una diferencia de primer orden para volverse estacionarios. Para
+# empezar, crearemos una diferencia. Luego, completaremos el método tradicional, donde
+# ambas series son estacionarias:
+climate_diff <- diff(climate49)
