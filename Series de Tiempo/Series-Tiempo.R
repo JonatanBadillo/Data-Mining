@@ -386,3 +386,12 @@ summary(fit.arima)
 # manera que antes:
 plot(forecast::forecast(fit.arima, h = 6))
 lines(test, type = "o")
+
+# Esto es muy similar al método anterior. Revisemos esas estadísticas de precisión, por
+# supuesto centrándonos en la U de Theil:
+fit.arima %>% forecast::forecast(h = 6) %>% forecast::accuracy(temp_ts)
+
+# El error de pronóstico es ligeramente mejor con el modelo ARIMA. Siempre debes revisar
+# los residuos con tus modelos y especialmente ARIMA, que se basa en el supuesto de que no
+# hay correlación serial en dichos residuos:
+forecast::checkresiduals(fit.arima)
