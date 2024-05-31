@@ -480,3 +480,30 @@ fit.arima2 %>% forecast::forecast(h = 6) %>%forecast::accuracy(temp_ts)
 # Con esto, hemos completado la construcción de un modelo de pronóstico univariado para las
 # anomalías de la temperatura de la superficie y ahora pasaremos a la siguiente tarea de ver si
 # los niveles de CO2 causan estas anomalías.
+
+
+# Examinando la causalidad
+# Para esta parte del documento, creemos que aquí es donde llega el momento y separaremos
+# la causalidad de la mera correlación; bueno, estadísticamente hablando, al menos. Esta no es
+# la primera vez que se aplica esta técnica al problema. Triacca (2005) no encontró evidencia
+# que sugiera que el CO2 atmosférico de Granger causara las anomalías en la temperatura de
+# la superficie. Por otro lado, Kodra (2010) concluyó que existe una relación causal, pero
+# advirtió que sus datos no eran estacionarios incluso después de una diferenciación de segundo
+# orden.
+# Si bien este esfuerzo no resolverá el debate, es de esperar que te inspire a aplicar la
+# metodología en tus esfuerzos personales. El tema que nos ocupa ciertamente proporciona un
+# campo de entrenamiento eficaz para demostrar la causalidad de Granger.
+# Nuestro plan aquí es demostrar primero una regresión lineal espuria donde los residuos sufren
+# de autocorrelación, también conocida como correlación serial. Luego, examinaremos dos
+# enfoques diferentes de la causalidad de Granger. Los primeros serán los métodos
+# tradicionales, donde ambas series son estacionarias. Luego, veremos el método demostrado
+# por Toda y Yamamoto (1995), que aplica la metodología a los datos brutos o, como a veces
+# se les llama, los niveles (levels).
+# 
+# 
+# Regresión lineal
+# Comencemos entonces con la regresión espuria, que has visto implementada en el mundo
+# real con demasiada frecuencia. Aquí simplemente construimos un modelo lineal y
+# examinamos los resultados:
+fit.lm <- lm(Temp ~ CO2, data = climate)
+summary(fit.lm)
