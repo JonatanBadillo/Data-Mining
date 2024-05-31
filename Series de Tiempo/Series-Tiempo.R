@@ -351,3 +351,38 @@ lines(test, type = "o")
 # Mirando el gráfico, parece que este pronóstico muestra una ligera tendencia alcista lineal y
 # está sobreestimando los valores reales. Ahora veremos las medidas de precisión del modelo:
 fit.ets %>% forecast::forecast(h = 6) %>%  forecast::accuracy(temp_ts)
+
+
+# Hay ocho medidas de error. En el que creo que deberíamos centrarnos es en la U de Theil (en
+# realidad, la U2, ya que la U de Theil original tenía algunos defectos), que sólo está disponible
+# en los datos de prueba. La U de Theil es una estadística interesante ya que no depende de la
+# escala, por lo que se pueden comparar varios modelos.
+# Por ejemplo, si en un modelo transformas la serie temporal usando una escala logarítmica,
+# puedes comparar la estadística con un modelo que no transforma los datos. Puedes
+# considerarlo como la proporción en la que el pronóstico mejora la previsibilidad con respecto
+# a un pronóstico ingenuo, o podemos describirlo como la raíz del error cuadrático medio
+# (RMSE) del modelo dividido por el RMSE de un modelo ingenuo.
+# Por lo tanto, las estadísticas U de Theil mayores que 1 funcionan peor que un pronóstico
+# ingenuo, un valor de 1 equivale a ingenuo y menos de 1 indica que el modelo tiene un
+# rendimiento ingenuo. Más información sobre cómo se deriva la estadística está disponible en
+# este enlace:
+#   https://www.researchgate.net/publication/323754973_Forecasting_methods_and_principles
+# _Evidence-based_checklists_forecastingprinciplescom_forprincom
+# El modelo de suavizado proporcionó una estadística de 0.7940449. Eso no es muy
+# impresionante a pesar de que está por debajo de uno. En la opinión de los expertos,
+# deberíamos esforzarnos por alcanzar valores iguales o inferiores a 0.5.
+# Ahora desarrollaremos un modelo ARIMA, usando auto.arima(), que también pertenece al
+# paquete forecast.
+# Hay muchas opciones que puedes especificar en la función, o simplemente puedes incluir los
+# datos de tu serie de tiempo y encontrarás el mejor ajuste ARIMA. Recomendamos utilizar la
+# función con precaución, ya que a menudo puede devolver un modelo que viola los supuestos
+# para los residuos, como veremos:
+fit.arima <- forecast::auto.arima(train)
+summary(fit.arima)
+
+
+# El resultado abreviado muestra que el modelo seleccionado es AR = 0, I = 1 y MA = 4, I = 1, o
+# ARIMA(0,1,4). Podemos examinar el gráfico de su desempeño en los datos de prueba de la misma
+# manera que antes:
+plot(forecast::forecast(fit.arima, h = 6))
+lines(test, type = "o")
