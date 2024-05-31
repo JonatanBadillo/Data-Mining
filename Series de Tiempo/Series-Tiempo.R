@@ -299,3 +299,30 @@ tseries::adf.test(climate_ts[, 2])
 # nulo y concluir que no son estacionarios.
 # Habiendo explorado los datos, comencemos el proceso de modelado, comenzando con la
 # aplicación de técnicas univariadas a las anomalías de temperatura.
+
+
+# Modelado y evaluación
+# Para el paso de modelado y evaluación, nos centraremos en tres tareas. La primera es producir
+# un modelo de pronóstico univariado aplicado únicamente a la temperatura de la superficie.
+# El segundo es desarrollar un modelo de auto regresión vectorial de la temperatura de la
+# superficie y los niveles de CO2, utilizando ese resultado para informar nuestro trabajo sobre
+# si los niveles de CO2 causan las anomalías de la temperatura de la superficie.
+# Previsión de series temporales univariadas
+# Con esta tarea, el objetivo es producir un pronóstico univariado para la temperatura de la
+# superficie, centrándose en elegir un modelo de suavizado exponencial, un modelo ARIMA o
+# un conjunto de métodos, incluida una red neuronal. Entrenaremos los modelos y
+# determinaremos su precisión predictiva en un conjunto de pruebas fuera de tiempo, tal como
+# lo hemos hecho en otros esfuerzos de aprendizaje. El siguiente código crea el entrenamiento
+# y los conjuntos de prueba:
+  
+temp_ts <- ts(climate$Temp, start = 1919, frequency = 1)
+train <- window(temp_ts, end = 2007)
+test <- window(temp_ts, start = 2008)
+
+# Para construir nuestro modelo de suavizado exponencial, usaremos la función ets() que se
+# encuentra en el paquete forecast. La función encontrará el mejor modelo con el AIC más
+# bajo:
+  
+fit.ets <- forecast::ets(train)
+fit.ets
+
