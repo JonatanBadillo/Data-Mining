@@ -235,4 +235,14 @@ library(tseries)
 library(ggplot2)
 library(tidyverse)
 climate <- readr::read_csv("climate.csv")
-> str(climate)
+str(climate)
+
+
+# Pondremos esto en una estructura de serie temporal, especificando los años de inicio y
+# finalización:
+climate_ts <- ts(climate[, 2:3],
+                 start = 1919,
+                 end = 2013)
+
+#   Con nuestros datos cargados y colocados en estructuras de series temporales, ahora podemos
+# comenzar a comprenderlos y prepararlos aún más para el análisis.
