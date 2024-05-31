@@ -607,3 +607,43 @@ y2x$Granger
 # retrasos es el mismo que antes, excepto que no es necesario que los datos sean estacionarios:
 level.select <- vars::VARselect(climate49, lag.max = 12)
 level.select$selection
+
+
+# Probemos la estructura de retardo 6 y veamos si podemos lograr significancia, recordando
+# agregar un retardo adicional para tener en cuenta la serie integrada. Una discusión sobre la
+# técnica y por qué es necesario hacerlo está disponible en:
+#   https://davegiles.blogspot.com/2011/04/testing-for-granger-causality.html
+#   Ahora, para determinar la causalidad de Granger para que X cause Y, se realiza una prueba
+# de Wald, donde los coeficientes de X y solo X son 0 en la ecuación para predecir Y,
+# recordando no incluir los coeficientes adicionales que explican la integración en la prueba.
+# La prueba de Wald en R está disponible en el paquete aod que tenemos que instalar y cargar.
+# Necesitamos especificar los coeficientes del modelo completo, su matriz de covarianza y
+# varianza y los coeficientes de la variable causante.
+# Los coeficientes de Temp que necesitamos probar en el objeto VAR constan de un
+# rango de números pares de 2 a 12, mientras que los coeficientes de CO2 son impares
+# de 1 a 11. En lugar de usar c(2, 4, 6, etc.) en nuestra función, creemos un objeto con
+# la función seq() de la base de R.
+# Primero, veamos cómo el CO2 causa Granger la temperatura:
+CO2terms <- seq(1, 11, 2)
+Tempterms <- seq(2, 12, 2)
+# Ahora estamos listos para ejecutar la prueba de Wald, que se describe en el siguiente código
+# y en el resultado abreviado:
+aod::wald.test( b = coef(fit1$varresult$Temp),
+    Sigma = vcov(fit1$varresult$Temp),
+    Terms = c(CO2terms)
+    )
+
+
+# ¿Qué hay sobre eso? Tenemos un valor p significativo, así que probemos la causalidad en
+# otra dirección con el siguiente código:
+aod::wald.test(
+  b = coef(fit1$varresult$CO2),
+  Sigma = vcov(fit1$varresult$CO2),
+ Terms = c(Tempterms)
+  )
+
+
+# Por el contrario, podemos decir que la temperatura no causa Granger CO2. Lo último que se
+# muestra aquí es cómo utilizar un vector de auto regresión para producir un pronóstico. Hay
+# una función de predicción disponible y trazaremos el pronóstico para 24 años:
+plot(predict(fit1, n.ahead = 24, ci = 0.95))
