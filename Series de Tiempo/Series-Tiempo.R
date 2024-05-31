@@ -395,3 +395,48 @@ fit.arima %>% forecast::forecast(h = 6) %>% forecast::accuracy(temp_ts)
 # los residuos con tus modelos y especialmente ARIMA, que se basa en el supuesto de que no
 # hay correlación serial en dichos residuos:
 forecast::checkresiduals(fit.arima)
+
+
+
+# En primer lugar, echa un vistazo a la prueba Ljung-Box Q. La hipótesis nula es que las
+# correlaciones en los residuos son cero y la alternativa es que los residuos exhiben una
+# correlación serial. Vemos un valor p significativo por lo que podemos rechazar el valor nulo.
+# Esto se confirma visualmente en el gráfico ACF de los residuos donde existe una correlación
+# significativa en el desfase 10 y el desfase 17. Con la correlación serial presente, los
+# coeficientes del modelo son insesgados, pero los errores estándar y cualquier estadística que
+# se base en ellos son incorrectos. Este hecho puede requerir que selecciones manualmente un
+# modelo ARIMA apropiado mediante prueba y error. Explicar cómo hacerlo requeriría un
+# documento extra, por lo que no está dentro del alcance de este primer documento.
+# Con un par de modelos relativamente débiles, podemos probar otros métodos. Juntaremos
+# los dos modelos recién creados y agregaremos una red neuronal de alimentación directa desde
+# la función nnetar() disponible en el paquete de forecast. No apilaremos los modelos,
+# simplemente tomaremos el promedio de los tres modelos para compararlos con los datos de
+# prueba.
+# El primer paso en este proceso es desarrollar los pronósticos para cada uno de los modelos.
+# Esto es sencillo:
+  
+ETS <- forecast::forecast(forecast::ets(train), h = 6)
+ARIMA <- forecast::forecast(forecast::auto.arima(train), h = 6)
+NN <- forecast::forecast(forecast::nnetar(train), h = 6)
+
+
+
+
+# El siguiente paso es crear los valores del conjunto, que nuevamente es solo un promedio
+# simple:
+ensemble.fit <- (ETS[["mean"]] + ARIMA[["mean"]] + NN[["mean"]]) / 3
+# El paso de comparación es una especie de lienzo abierto para que tu produzcas las estadísticas
+# que desees. Ten en cuenta que estamos obteniendo la precisión solo para los datos de prueba
+# y la U de Theil. Puedes obtener las estadísticas necesarias, como RMSE o MAPE, si así lo
+# deseas:
+c(ets = forecast::accuracy(ETS, temp_ts)["Test set", c("Theil's U")],
+      arima = forecast::accuracy(ARIMA, temp_ts)["Test set", c("Theil's U")],
+      nn = forecast::accuracy(NN, temp_ts)["Test set", c("Theil's U")],
+      ef = forecast::accuracy(ensemble.fit, temp_ts)["Test set", c("Theil's U")])
+# 
+# Creo que esto es interesante, ya que los valores obtenidos son diferentes entre si, ets y ef son
+# parecidos, casi iguales.
+# Solo para una comparación visual, tracemos la red neuronal:
+plot(NN)
+lines(test, type = "o")
+
