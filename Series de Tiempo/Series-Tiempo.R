@@ -465,3 +465,18 @@ install.packages("strucchange")
 library(strucchange)
 temp_struc <- strucchange::breakpoints(temp_ts ~ 1)
 summary(temp_struc)
+
+
+# El algoritmo nos dio cinco posibles puntos de interrupción en la serie temporal, devolviendo
+# la información como un número de observación y un año. Efectivamente, 1963 indica un
+# cambio estructural, pero nos dice que 1978 y 1996 también califican.
+# Sigamos la pausa de 1963 como inicio de nuestra serie temporal para un modelo ARIMA:
+train_bp <- window(temp_ts, start = 1963, end = 2007)
+fit.arima2 <- forecast::auto.arima(train_bp)
+fit.arima2 %>% forecast::forecast(h = 6) %>%forecast::accuracy(temp_ts)
+
+# Ahí lo tienes: para nuestra sorpresa, el desempeño es incluso peor que un pronóstico ingenuo,
+# pero al menos hemos explicado cómo implementar esa metodología.
+# Con esto, hemos completado la construcción de un modelo de pronóstico univariado para las
+# anomalías de la temperatura de la superficie y ahora pasaremos a la siguiente tarea de ver si
+# los niveles de CO2 causan estas anomalías.
