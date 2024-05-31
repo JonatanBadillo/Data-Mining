@@ -326,3 +326,17 @@ test <- window(temp_ts, start = 2008)
 fit.ets <- forecast::ets(train)
 fit.ets
 
+# El objeto modelo devuelve una serie de parámetros de interés. Lo primero que hay que
+# comprobar es qué significa (A, A, N). Representa que el modelo seleccionado es un
+# suavizado exponencial simple con errores aditivos. La primera letra indica el tipo de error, la 
+# segunda letra la tendencia y la tercera letra la estacionalidad. Las letras posibles son las
+# siguientes:
+#   • A = aditivo
+# • M = multiplicativo
+# • N = ninguno
+# También vemos las estimaciones de parámetros con alfa, el parámetro de suavizado, para la
+# corrección de errores (el nivel) y beta para la pendiente. Los valores del estado inicial se
+# utilizaron para iniciar la selección del modelo; sigma es la variación de los residuos y se
+# proporcionan los valores de los criterios del modelo. Puedes trazar cómo cambian las
+# estimaciones con el tiempo:
+forecast::autoplot(fit.ets)
