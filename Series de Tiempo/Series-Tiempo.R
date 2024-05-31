@@ -174,5 +174,30 @@ forecast::autoplot(pacf(ma1, plot = F), main = "PACF of simulated MA1")
 #   • H0:1=0 para cada i[1, k], sin causalidad de Granger
 # • H1: 1≠0 para al menos un i[1, k], causalidad de Granger
 
+# Básicamente, estamos tratando de determinar si podemos decir que, estadísticamente, x
+# proporciona más información sobre los valores futuros de y que los valores pasados de y
+# solos. En esta definición, está claro que no estamos tratando de probar una causalidad real,
+# sólo que los dos valores están relacionados por algún fenómeno. En este sentido, también
+# debemos ejecutar este modelo a la inversa para verificar que y no proporciona información
+# sobre los valores futuros de x. Si encontramos que este es el caso, es probable que haya alguna
+# variable exógena, digamos Z, que deba controlarse o que posiblemente sea una mejor
+# candidata para la causalidad de Granger. Originalmente, había que aplicar el método a series
+# temporales estacionarias para evitar resultados espurios. Este ya no es el caso como se
+# demostrará.
 
+# Hay un par de formas diferentes de identificar la estructura de retraso (lag) adecuada.
+# Naturalmente, podemos utilizar la fuerza bruta y la ignorancia para probar todos los retrasos
+# razonables, uno a la vez. Es posible que tengamos una intuición racional basada en la
+# experiencia en el dominio o quizás en investigaciones previas que existan para guiar la
+# selección del retraso.
+# De lo contrario, puedes aplicar auto regresión vectorial (VAR, Vector Autoregression) para
+# identificar la estructura de retraso con el criterio de información más bajo, como el criterio
+# de información de Aikake (AIC, Aikake’s Information Criterion) o el error de predicción
+# final (FPE, Final Prediction Error). Para simplificar, aquí está la notación para los modelos
+# VAR con dos variables, y esto incorpora solo un lag para cada variable. Esta notación se
+# puede ampliar para tantas variables y lags como sea apropiado:
+#   • Y = constante1 + B11Yt-1 + B12Yt-1 + e1
+# • X = constante1 + B21Yt-1 + B22Yt-1 + e2
+# En R, este proceso es bastante sencillo de implementar como veremos en el siguiente
+# problema práctico.
 
