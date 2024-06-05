@@ -22,3 +22,24 @@
 # Para las semanas siguientes, solo cambia el número al final, por ejemplo.
 # https://www.weltfussball.de/spielplan/eng-premier-league-2018-2019-spieltag/2/ ←
 # https://www.weltfussball.de/spielplan/eng-premier-league-2018-2019-spieltag/3/ ←
+
+library(rvest)
+library(tidyverse)
+library(gganimate)
+library(RColorBrewer)
+library(kableExtra)
+baseUrl <- "https://www.weltfussball.de/"
+path <- "spielplan/eng-premier-league-2018-2019-spieltag/"
+fileName <- 1
+url <- paste0(baseUrl, path, fileName)
+url
+
+
+
+
+
+
+
+
+
+
