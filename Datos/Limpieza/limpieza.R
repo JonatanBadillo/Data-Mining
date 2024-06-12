@@ -30,6 +30,8 @@ data <- data %>%
 head(data)
 
 
+# Guardar el dataframe limpio en un nuevo archivo CSV
+write.csv(data, "~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/NINFAS/NINFAS-2023-limpiado.csv", row.names = FALSE)
 
 
 
