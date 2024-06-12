@@ -34,6 +34,12 @@ data[cols_to_convert] <- lapply(data[cols_to_convert], as.numeric)
 data <- data %>%
   mutate(across(all_of(cols_to_convert), ~ replace_na(., mean(., na.rm = TRUE))))
 
+
+# Formatear los números (sin decimales para enteros, tres decimales para otros)
+data <- data %>%
+  mutate(across(all_of(cols_to_convert), ~ ifelse(round(.) == ., format(round(.)), format(round(., 3)))))
+
+
 # Verificar los cambios
 head(data)
 
