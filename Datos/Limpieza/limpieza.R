@@ -5,3 +5,14 @@ View(data)
 
 library(dplyr)
 
+
+# Ver las primeras filas del dataframe
+head(data)
+
+summary(data)
+
+# Convertir valores específicos a NA
+data[data == "F.O." | data == "D.I." | data == "Mtto." | data == "Mtto"] <- NA
+
+# Ver las primeras filas del dataframe
+head(data)
