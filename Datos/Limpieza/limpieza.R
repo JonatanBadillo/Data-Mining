@@ -1,6 +1,6 @@
 # Importacion de Datos
 library(readr)
-data <- read_csv("~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/NINFAS/NINFAS-2023.csv")
+data <- read_csv("~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/BINE/BINE-2023.csv")
 View(data)
 
 library(dplyr)
@@ -48,7 +48,7 @@ na_count <- colSums(is.na(data))
 na_count
 
 # Guardar el dataframe limpio en un nuevo archivo CSV
-write.csv(data, "~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/NINFAS/NINFAS-2023-limpiado.csv", row.names = FALSE)
+write.csv(data, "~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/BINE/BINE-2023-limpiado.csv", row.names = FALSE)
 
 
 
