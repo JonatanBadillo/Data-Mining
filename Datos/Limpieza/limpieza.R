@@ -28,9 +28,20 @@ head(data)
 
 # Convertir las columnas numéricas que tienen valores como texto a tipo numérico
 cols_to_convert <- c("O3", "NO2", "CO", "SO2", "PM-10", "PM-2.5")
+
+
+# aplica la función as.numeric a cada una de las columnas seleccionadas. 
+# lapply devuelve una lista donde cada elemento es el resultado de  aplicar as.numeric a las columnas, 
+# convirtiéndolas a numérico.
+
 data[cols_to_convert] <- lapply(data[cols_to_convert], as.numeric)
 
 # Reemplazar los NA por el promedio de cada columna
+# Dentro de mutate, across se utiliza para aplicar una función a las columnas especificadas en cols_to_convert.
+# all_of(cols_to_convert) asegura que se utilicen las columnas especificadas en cols_to_convert.
+# ~ replace_na(., mean(., na.rm = TRUE)) es una fórmula que define la operación a realizar en cada columna seleccionada. 
+# replace_na(., mean(., na.rm = TRUE)) reemplaza los NA en cada columna (.) con el promedio de la columna, 
+# calculado con mean(., na.rm = TRUE), donde na.rm = TRUE indica que se deben omitir los NA al calcular el promedio.
 data <- data %>%
   mutate(across(all_of(cols_to_convert), ~ replace_na(., mean(., na.rm = TRUE))))
 
