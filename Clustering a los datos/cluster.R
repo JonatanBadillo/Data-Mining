@@ -25,7 +25,16 @@ data_scaled <- scale(data[, c("O3", "NO2", "CO", "SO2", "PM-10", "PM-2.5")])
 # Método del codo para determinar el número óptimo de clusters
 set.seed(123) 
 # suma de los cuadrados por cada grupo : wss
+
+# Suma todas las varianzas calculadas de las características.
+# Multiplica la suma de las varianzas por el número de observaciones menos uno. 
+# inicializa el vector wss con el valor de la suma total de las varianzas de las características,por el número de observaciones.
 wss <- (nrow(data_scaled)-1)*sum(apply(data_scaled, 2, var)) 
+
+# Este bucle for itera sobre los valores de i desde 2 hasta 15
+# Ejecuta el algoritmo k-means en el conjunto de datos data_scaled con i centros. 
+# Calcula la suma de los valores de withinss para obtener el WSS total para i centros.
+# Asigna el WSS calculado para i centros a la i-ésima posición del vector wss.
 for (i in 2:15) wss[i] <- sum(kmeans(data_scaled, centers=i)$withinss)
 
 
@@ -33,7 +42,7 @@ for (i in 2:15) wss[i] <- sum(kmeans(data_scaled, centers=i)$withinss)
 
 
 # Graficar el método del codo
-# El "codo" en la gráfica dará una idea del número óptimo de clusters. Supongamos que decidimos usar 3 clusters.
+# El "codo" en la gráfica dará una idea del número óptimo de clusters. 
 plot(1:15, wss, type="b", xlab="Número de Clusters", ylab="Suma de Cuadrados Dentro de los Clusters (WSS)")
 
 # sugiere que lo ideal sean hasta 4 o 5 clusters
