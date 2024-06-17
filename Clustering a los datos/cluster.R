@@ -45,3 +45,14 @@ data$cluster <- kmeans_result$cluster
 head(data)
 
 
+
+# visualización
+library(ggplot2)
+
+# Crear un gráfico de pares coloreado por clusters
+pairs(data[, c("O3", "NO2", "CO", "SO2", "PM-10", "PM-2.5")], col=data$cluster, pch=19)
+
+
+# Calcular la media de cada variable para cada cluster
+aggregate(data[, c("O3", "NO2", "CO", "SO2", "PM-10", "PM-2.5")], by=list(cluster=data$cluster), FUN=mean)
+
