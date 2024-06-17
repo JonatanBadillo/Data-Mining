@@ -13,4 +13,8 @@ data$`PM-2.5` <- as.numeric(data$`PM-2.5`)
 # Revisar los primeros datos para confirmar que están bien cargados
 head(data)
 
+# Normalizar las columnas numéricas
+data_scaled <- scale(data[, c("O3", "NO2", "CO", "SO2", "PM-10", "PM-2.5")])
+
+
 
