@@ -54,3 +54,16 @@ ggplot(promedio_hora, aes(x = Hora, y = Promedio_Concentracion, fill = Contamina
        y = "Promedio de concentración") +
   theme_minimal()
 
+
+
+promedio_hora <- promedio_hora %>%
+  group_by(Contaminante) %>%
+  mutate(Normalized_Concentration = scale(Promedio_Concentracion))
+
+ggplot(promedio_hora, aes(x = Hora, y = Normalized_Concentration, fill = Contaminante)) +
+  geom_bar(stat = "identity", position = "dodge", alpha = 0.7) +
+  labs(title = "Promedio de concentración normalizada de contaminantes por hora en Puebla",
+       x = "Hora del día",
+       y = "Concentración normalizada") +
+  theme_minimal()
+
