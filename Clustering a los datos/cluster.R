@@ -71,3 +71,9 @@ pairs(data[, c("O3", "NO2", "CO", "SO2", "PM-10", "PM-2.5")], col=data$cluster, 
 aggregate(data[, c("O3", "NO2", "CO", "SO2", "PM-10", "PM-2.5")], by=list(cluster=data$cluster), FUN=mean)
 
 
+library(ggplot2)
+ggplot(data, aes(x=factor(cluster), y=O3, fill=factor(cluster))) + geom_boxplot()
+ggplot(data, aes(x=factor(cluster), y=NO2, fill=factor(cluster))) + geom_boxplot()
+
+
+
