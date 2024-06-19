@@ -8,3 +8,10 @@ library(dplyr)
 library(ggplot2)
 library(lubridate)
 library(tidyr)
+
+
+# Convertir las columnas FECHA y Horas a un solo datetime
+data <- data %>%
+  mutate(Datetime = dmy_hms(paste(FECHA, Horas))) %>%
+  select(-FECHA, -Horas) %>%
+  arrange(Datetime)
