@@ -66,3 +66,14 @@ ggplot(promedio_hora, aes(x = Hora, y = Promedio_Concentracion, color = Contamin
   theme_minimal()
 
 
+
+# Volver al formato original y usar facetas para una mejor comparación
+ggplot(promedio_hora, aes(x = Hora, y = Promedio_Concentracion, fill = Contaminante)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(~ Contaminante, scales = "free_y") +
+  labs(title = "Promedio de concentración de contaminantes por hora en Puebla",
+       x = "Hora del día",
+       y = "Promedio de concentración") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
