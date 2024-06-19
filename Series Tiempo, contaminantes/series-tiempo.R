@@ -32,3 +32,25 @@ ggplot(data_long, aes(x = Datetime, y = Concentracion, color = Contaminante)) +
        y = "Concentración") +
   theme_minimal() +
   theme(legend.position = "none")
+
+
+
+
+
+# Extraer la hora del datetime
+data_long <- data_long %>%
+  mutate(Hora = hour(Datetime))
+
+# Calcular el promedio por hora
+promedio_hora <- data_long %>%
+  group_by(Hora, Contaminante) %>%
+  summarise(Promedio_Concentracion = mean(Concentracion, na.rm = TRUE))
+
+# Crear el gráfico de barras
+ggplot(promedio_hora, aes(x = Hora, y = Promedio_Concentracion, fill = Contaminante)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Promedio de concentración de contaminantes por hora en Puebla",
+       x = "Hora del día",
+       y = "Promedio de concentración") +
+  theme_minimal()
+
