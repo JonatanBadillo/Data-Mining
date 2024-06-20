@@ -63,7 +63,6 @@ for(contaminante in contaminantes_unicos) {
   
   # Crear el gráfico
   grafico <- ggplot(datos_contaminante, aes(x = Hora, y = Promedio_Concentracion)) +
-    ylim(c(min_value, max_value)) + 
     geom_line(size = 1) +
     scale_x_continuous(breaks = 0:23, limits = c(0, 23)) + # Asegura que se muestren todas las horas
     labs(title = paste("Promedio de concentración de", contaminante, "por hora en Puebla NINFAS 2023"),
