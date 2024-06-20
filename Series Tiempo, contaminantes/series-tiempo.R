@@ -60,7 +60,7 @@ ggplot(promedio_hora, aes(x = Hora, y = Promedio_Concentracion, fill = Contamina
 ggplot(promedio_hora, aes(x = Hora, y = Promedio_Concentracion, color = Contaminante, group = Contaminante)) +
   geom_line(size = 1) +
   facet_wrap(~ Contaminante, scales = "free_y") +
-  labs(title = "Promedio de concentración de contaminantes por hora en Puebla",
+  labs(title = "Promedio de concentración de contaminantes por hora en Puebla NINFAS 2023",
        x = "Hora del día",
        y = "Promedio de concentración") +
   theme_minimal()
@@ -76,4 +76,7 @@ ggplot(promedio_hora, aes(x = Hora, y = Promedio_Concentracion, fill = Contamina
        y = "Promedio de concentración") +
   theme_minimal() +
   theme(legend.position = "none")
+
+
+
 
