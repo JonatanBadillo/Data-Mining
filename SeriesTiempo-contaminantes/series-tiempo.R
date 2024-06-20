@@ -37,14 +37,22 @@ promedio_hora <- data_long %>%
 
 
 
-# gráfico de líneas para una visualización más clara
-ggplot(promedio_hora, aes(x = Hora, y = Promedio_Concentracion, color = Contaminante, group = Contaminante)) +
+# Asignar el gráfico a una variable
+NINFAS2023_hora_contaminantes <- ggplot(promedio_hora, aes(x = Hora, y = Promedio_Concentracion, color = Contaminante, group = Contaminante)) +
   geom_line(size = 1) +
   facet_wrap(~ Contaminante, scales = "free_y") +
   labs(title = "Promedio de concentración de contaminantes por hora en Puebla NINFAS 2023",
        x = "Hora del día",
        y = "Promedio de concentración") +
   theme_minimal()
+
+# Crear la carpeta 'imagenes' si no existe
+if (!dir.exists("imagenes")) {
+  dir.create("imagenes")
+}
+
+# Guardar el gráfico en la carpeta 'imagenes'
+ggsave("~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/SeriesTiempo-contaminantes/imagenes/NINFAS2023_hora_contaminantes.jpg", NINFAS2023_hora_contaminantes, width = 10, height = 6, dpi = 300)
 
 
 
