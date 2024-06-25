@@ -126,13 +126,13 @@ write.csv(data, "~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/AGUA SAN
 
 # -------------------------------------------------------------
 # DATOS 2020 - 2022
-# AGUA SANTA 2020
+# AGUA SANTA 2021
 library(dplyr)
 library(lubridate)
 library(readr)
 
 # Leer el archivo CSV
-data <- read_csv("~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/AGUA SANTA/Datos_Santa_2020.csv")
+data <- read_csv("~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/AGUA SANTA/Datos_Santa_2021.csv")
 
 # Convertir valores específicos a NA en las columnas adecuadas
 data <- data %>%
@@ -182,3 +182,7 @@ head(data)
 
 na_count <- colSums(is.na(data))
 na_count
+
+# Guardar el dataframe limpio en un nuevo archivo CSV
+write.csv(data, "~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/AGUA SANTA/AGUA-SANTA-2021-limpiado.csv", row.names = FALSE)
+
