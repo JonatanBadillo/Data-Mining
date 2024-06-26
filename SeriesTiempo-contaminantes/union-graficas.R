@@ -224,15 +224,8 @@ annual_means <- data %>%
   summarize(across(O3:`PM-2.5`, mean, na.rm = TRUE))
 
 
+annual_means_long <- pivot_longer(annual_means, cols = O3:`PM-2.5`, names_to = "Contaminante", values_to = "Promedio")
 
-# Gráfico de Barras
-ggplot(annual_means_long, aes(x = Year, y = Promedio, fill = Contaminante)) +
-  geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Promedio Anual de Concentración de Contaminantes en Puebla",
-       x = "Año",
-       y = "Concentración Promedio",
-       fill = "Contaminante") +
-  theme_minimal()
 
 # Gráfico de Líneas y Puntos Combinados
 plot1<-ggplot(annual_means_long, aes(x = Year, y = Promedio, color = Contaminante, group = Contaminante)) +
@@ -246,6 +239,41 @@ plot1<-ggplot(annual_means_long, aes(x = Year, y = Promedio, color = Contaminant
 
 # Guardar el gráfico en la carpeta 'imagenes'
 ggsave("~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/SeriesTiempo-contaminantes/imagenes/años/AGUASANTA/AGUASANTA_anios_contaminantes.jpg", plot1, width = 10, height = 6, dpi = 300)
+
+
+# -------------------------------------------------------------------------------------------------
+# BINE
+library(tidyverse)
+library(readr)
+data <- read_csv("Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/BINE/limpios/BINE_2021-2024_combinado.csv")
+
+# Convierte la columna de fechas a un formato de fecha:
+data$FECHA <- as.Date(data$FECHA, format = "%d/%m/%Y")
+
+# Agrega una columna de año:
+data$Year <- format(data$FECHA, "%Y")
+
+# Calcula los promedios anuales para cada contaminante:
+annual_means <- data %>%
+  group_by(Year) %>%
+  summarize(across(O3:`PM-2.5`, mean, na.rm = TRUE))
+
+
+annual_means_long <- pivot_longer(annual_means, cols = O3:`PM-2.5`, names_to = "Contaminante", values_to = "Promedio")
+
+
+# Gráfico de Líneas y Puntos Combinados
+plot1<-ggplot(annual_means_long, aes(x = Year, y = Promedio, color = Contaminante, group = Contaminante)) +
+  geom_line() +
+  geom_point(size = 3) +
+  labs(title = "Promedio Anual de Concentración de Contaminantes en Puebla BINE",
+       x = "Año",
+       y = "Concentración Promedio",
+       color = "Contaminante") +
+  theme_minimal()
+
+# Guardar el gráfico en la carpeta 'imagenes'
+ggsave("~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/SeriesTiempo-contaminantes/imagenes/años/BINE/BINE_anios_contaminantes.jpg", plot1, width = 10, height = 6, dpi = 300)
 
 
 
