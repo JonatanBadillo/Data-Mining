@@ -1,37 +1,32 @@
 library(shiny)
-library(dplyr)
 library(ggplot2)
+library(dplyr)
+library(readr)
 library(lubridate)
 library(tidyr)
-library(readr)
 
-# Define UI
+# Interfaz de usuario
 ui <- fluidPage(
-  titlePanel("Promedio de Concentración de Contaminantes por Hora"),
-  
+  titlePanel("Análisis de Contaminantes por Estación"),
   sidebarLayout(
     sidebarPanel(
-      selectInput("estacion", "Selecciona la Estación:",
-                  choices = c("NINFAS", "Otra_Estacion")),
-      selectInput("anio", "Selecciona el Año:",
-                  choices = c("2023", "2024")),
-      uiOutput("contaminante_ui")
+      selectInput("estacion", "Seleccione la Estación:", choices = c("NINFAS", "UTP", "AGUA SANTA")),
+      numericInput("anio", "Seleccione el Año:", value = 2023, min = 2020, max = 2024),
+      selectInput("contaminante", "Seleccione el Contaminante:", choices = c("Todos", "O3", "NO2", "CO", "SO2", "PM-10", "PM-2.5")),
+      actionButton("btn", "Actualizar")
     ),
-    
     mainPanel(
-      plotOutput("grafico")
+      plotOutput("plotContaminantes")
     )
   )
 )
 
-# Define server logic
-server <- function(input, output, session) {
-  
-  # Cargar datos dependiendo de la selección del usuario
-  datos <- reactive({
-    archivo <- paste0("~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/", input$estacion, "/", input$estacion, "-", input$anio, "-limpiado.csv")
-    data <- read_csv(archivo)
-    
+server <- function(input, output) {
+  datos_filtrados <- eventReactive(input$btn, {
+    # Aquí deberías cargar tus datos en función de la estación y el año seleccionados por el usuario
+    # Por simplicidad, se asume que todos los datos están en un solo archivo y se filtran en consecuencia
+    ruta <- paste0("~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/", input$estacion, "/", input$estacion, "-", input$anio, "-limpiado.csv")
+    data <- read_csv(ruta)
     data <- data %>%
       mutate(Datetime = dmy_hms(paste(FECHA, Horas))) %>%
       select(-FECHA, -Horas) %>%
@@ -41,27 +36,18 @@ server <- function(input, output, session) {
                    values_to = "Concentracion") %>%
       mutate(Hora = hour(Datetime))
     
+    if (input$contaminante != "Todos") {
+      data <- data %>% filter(Contaminante == input$contaminante)
+    }
+    
+    data
+  })
+  
+  output$plotContaminantes <- renderPlot({
+    data <- datos_filtrados()
     promedio_hora <- data %>%
       group_by(Hora, Contaminante) %>%
       summarise(Promedio_Concentracion = mean(Concentracion, na.rm = TRUE))
-    
-    return(promedio_hora)
-  })
-  
-  # Actualizar los contaminantes disponibles
-  output$contaminante_ui <- renderUI({
-    contaminantes <- unique(datos()$Contaminante)
-    selectInput("contaminante", "Selecciona el Contaminante:",
-                choices = c("Todos", contaminantes))
-  })
-  
-  # Renderizar el gráfico
-  output$grafico <- renderPlot({
-    promedio_hora <- datos()
-    
-    if (input$contaminante != "Todos") {
-      promedio_hora <- filter(promedio_hora, Contaminante == input$contaminante)
-    }
     
     ggplot(promedio_hora, aes(x = Hora, y = Promedio_Concentracion, color = Contaminante, group = Contaminante)) +
       geom_line(size = 1) +
@@ -73,5 +59,5 @@ server <- function(input, output, session) {
   })
 }
 
-# Run the application 
+# Ejecutar la aplicación
 shinyApp(ui = ui, server = server)
