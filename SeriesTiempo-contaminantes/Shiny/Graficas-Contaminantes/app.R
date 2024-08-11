@@ -1,69 +1,80 @@
+# Cargar las librerías necesarias
 library(shiny)
-library(readr)
-library(dplyr)
 library(ggplot2)
+library(dplyr)
 library(lubridate)
+library(tidyr)
+library(readr) # Asegúrate de incluir readr para la función read_csv
 
-# UI
+# Define la función para cargar y procesar datos
+load_and_process_data <- function(station, year) {
+  file_path <- paste0("~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/SeriesTiempo-contaminantes/datos-limpios/", station, "/", station, "-", year, "-limpiado.csv")
+  data <- read_csv(file_path, col_types = cols()) # Ajusta col_types según sea necesario
+  
+  data <- data %>%
+    mutate(Datetime = dmy_hms(paste(FECHA, Horas))) %>%
+    select(-FECHA, -Horas) %>%
+    arrange(Datetime) %>%
+    pivot_longer(cols = c(O3, NO2, CO, SO2, `PM-10`, `PM-2.5`), names_to = "Contaminante", values_to = "Concentracion") %>%
+    mutate(Hora = hour(Datetime)) %>%
+    group_by(Hora, Contaminante) %>%
+    summarise(Promedio_Concentracion = mean(Concentracion, na.rm = TRUE), .groups = 'drop')
+  
+  return(data)
+}
+
+# Define la interfaz de usuario
 ui <- fluidPage(
-  titlePanel("Análisis de Contaminantes por Estación - Estático"),
+  titlePanel("Promedio de Concentración de Contaminantes por Hora en Puebla"),
   sidebarLayout(
     sidebarPanel(
-      selectInput("estacion", "Seleccione la Estación:", choices = c("NINFAS", "UTP", "AGUA SANTA")),
-      numericInput("anio", "Seleccione el Año:", value = 2023, min = 2020, max = 2024)
+      selectInput("station", "Seleccionar Estación:",
+                  choices = c("NINFAS", "UTP", "AGUA SANTA", "BINE")),
+      selectInput("year", "Seleccionar Año:",
+                  choices = c("2020","2021","2022","2023", "2024")),
+      checkboxGroupInput("contaminants", "Seleccionar Contaminantes:",
+                         choices = c("O3", "NO2", "CO", "SO2", "PM-10", "PM-2.5"), 
+                         selected = c("O3", "NO2", "CO", "SO2", "PM-10", "PM-2.5"))
     ),
     mainPanel(
-      plotOutput("graficoO3"),
-      plotOutput("graficoNO2"),
-      plotOutput("graficoCO"),
-      plotOutput("graficoSO2"),
-      plotOutput("graficoPM10"),
-      plotOutput("graficoPM25")
+      plotOutput("contaminantPlot")
     )
   )
 )
 
-# Server
+# Define la función del servidor
 server <- function(input, output) {
-  estacionModificada <- reactive({
-    if(input$estacion == "AGUA SANTA") {
+  
+  station <- reactive({
+    if(input$station == "AGUA SANTA"){
       return("AGUASANTA")
-    } else {
-      return(input$estacion)
+    }else{
+      return(input$station)
     }
   })
   
-  datos <- reactive({
-    ruta <- paste0("~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/SeriesTiempo-contaminantes/datos-limpios/", estacionModificada(), "/", estacionModificada(), "-", input$anio, "-limpiado.csv")
-    data <- read_csv(ruta, col_types = cols(
-      `PM-10` = col_double(),
-      `PM-2.5` = col_double()
-    ))
-    data <- data %>%
-      mutate(FechaHora = dmy_hms(paste(FECHA, Horas))) %>%
-      select(-FECHA, -Horas) %>%
-      arrange(FechaHora)
-    data
+  output$contaminantPlot <- renderPlot({
+    # Usa station() en lugar de input$station para obtener el valor modificado
+    data <- load_and_process_data(station(), input$year)
+    
+    if (length(input$contaminants) > 0) {
+      filtered_data <- data %>%
+        filter(Contaminante %in% input$contaminants)
+      
+      ggplot(filtered_data, aes(x = Hora, y = Promedio_Concentracion, color = Contaminante, group = Contaminante)) +
+        geom_line(size = 1) +
+        facet_wrap(~ Contaminante, scales = "free_y") +
+        labs(title = paste("Promedio de concentración de contaminantes por hora en Puebla -", station(), input$year),
+             x = "Hora del día",
+             y = "Promedio de concentración") +
+        theme_minimal()
+    } else {
+      ggplot() + 
+        labs(title = "Selecciona al menos un contaminante", x = NULL, y = NULL) +
+        theme_void()
+    }
   })
-  
-  generar_grafico <- function(contaminante) {
-    data <- datos()
-    data %>%
-      ggplot(aes(x = FechaHora, y = !!sym(contaminante))) +
-      geom_line() +
-      labs(title = paste("Concentración de", contaminante, "en", estacionModificada(), input$anio),
-           x = "Fecha y Hora",
-           y = "Concentración") +
-      theme_minimal()
-  }
-  
-  output$graficoO3 <- renderPlot({ generar_grafico("O3") })
-  output$graficoNO2 <- renderPlot({ generar_grafico("NO2") })
-  output$graficoCO <- renderPlot({ generar_grafico("CO") })
-  output$graficoSO2 <- renderPlot({ generar_grafico("SO2") })
-  output$graficoPM10 <- renderPlot({ generar_grafico("PM-10") })
-  output$graficoPM25 <- renderPlot({ generar_grafico("PM-2.5") })
 }
 
-# Run the application 
+# Ejecutar la aplicación Shiny
 shinyApp(ui = ui, server = server)
