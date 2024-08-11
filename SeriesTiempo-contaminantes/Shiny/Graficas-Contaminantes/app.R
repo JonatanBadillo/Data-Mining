@@ -1,63 +1,61 @@
 library(shiny)
-library(ggplot2)
-library(dplyr)
 library(readr)
+library(dplyr)
+library(ggplot2)
 library(lubridate)
-library(tidyr)
 
-# Interfaz de usuario
+# UI
 ui <- fluidPage(
-  titlePanel("Análisis de Contaminantes por Estación"),
+  titlePanel("Análisis de Contaminantes por Estación - Estático"),
   sidebarLayout(
     sidebarPanel(
       selectInput("estacion", "Seleccione la Estación:", choices = c("NINFAS", "UTP", "AGUA SANTA")),
-      numericInput("anio", "Seleccione el Año:", value = 2023, min = 2020, max = 2024),
-      selectInput("contaminante", "Seleccione el Contaminante:", choices = c("Todos", "O3", "NO2", "CO", "SO2", "PM-10", "PM-2.5")),
-      actionButton("btn", "Actualizar")
+      numericInput("anio", "Seleccione el Año:", value = 2023, min = 2020, max = 2024)
     ),
     mainPanel(
-      plotOutput("plotContaminantes")
+      plotOutput("graficoO3"),
+      plotOutput("graficoNO2"),
+      plotOutput("graficoCO"),
+      plotOutput("graficoSO2"),
+      plotOutput("graficoPM10"),
+      plotOutput("graficoPM25")
     )
   )
 )
 
+# Server
 server <- function(input, output) {
-  datos_filtrados <- eventReactive(input$btn, {
-    # Aquí deberías cargar tus datos en función de la estación y el año seleccionados por el usuario
-    # Por simplicidad, se asume que todos los datos están en un solo archivo y se filtran en consecuencia
+  datos <- reactive({
     ruta <- paste0("~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/", input$estacion, "/", input$estacion, "-", input$anio, "-limpiado.csv")
-    data <- read_csv(ruta)
+    data <- read_csv(ruta, col_types = cols(
+      `PM-10` = col_double(),
+      `PM-2.5` = col_double()
+    ))
     data <- data %>%
-      mutate(Datetime = dmy_hms(paste(FECHA, Horas))) %>%
+      mutate(FechaHora = dmy_hms(paste(FECHA, Horas))) %>%
       select(-FECHA, -Horas) %>%
-      arrange(Datetime) %>%
-      pivot_longer(cols = c(O3, NO2, CO, SO2, `PM-10`, `PM-2.5`), 
-                   names_to = "Contaminante", 
-                   values_to = "Concentracion") %>%
-      mutate(Hora = hour(Datetime))
-    
-    if (input$contaminante != "Todos") {
-      data <- data %>% filter(Contaminante == input$contaminante)
-    }
-    
+      arrange(FechaHora)
     data
   })
   
-  output$plotContaminantes <- renderPlot({
-    data <- datos_filtrados()
-    promedio_hora <- data %>%
-      group_by(Hora, Contaminante) %>%
-      summarise(Promedio_Concentracion = mean(Concentracion, na.rm = TRUE))
-    
-    ggplot(promedio_hora, aes(x = Hora, y = Promedio_Concentracion, color = Contaminante, group = Contaminante)) +
-      geom_line(size = 1) +
-      facet_wrap(~ Contaminante, scales = "free_y") +
-      labs(title = paste("Promedio de concentración de contaminantes por hora en", input$estacion, input$anio),
-           x = "Hora del día",
-           y = "Promedio de concentración") +
+  generar_grafico <- function(contaminante) {
+    data <- datos()
+    data %>%
+      ggplot(aes(x = FechaHora, y = !!sym(contaminante))) +
+      geom_line() +
+      labs(title = paste("Concentración de", contaminante, "en", input$estacion, input$anio),
+           x = "Fecha y Hora",
+           y = "Concentración") +
       theme_minimal()
-  })
+  }
+  
+  output$graficoO3 <- renderPlot({ generar_grafico("O3") })
+  output$graficoNO2 <- renderPlot({ generar_grafico("NO2") })
+  output$graficoCO <- renderPlot({ generar_grafico("CO") })
+  output$graficoSO2 <- renderPlot({ generar_grafico("SO2") })
+  output$graficoPM10 <- renderPlot({ generar_grafico("PM-10") })
+  output$graficoPM25 <- renderPlot({ generar_grafico("PM-2.5") })
 }
 
-# Ejecutar la aplicación
+# Run the application 
 shinyApp(ui = ui, server = server)
