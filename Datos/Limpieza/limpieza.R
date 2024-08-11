@@ -776,3 +776,26 @@ na_count
 
 # Guardar el dataframe limpio en un nuevo archivo CSV
 write.csv(data, "~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/VELODROMO/VELO-2022-limpiado.csv", row.names = FALSE)
+
+
+
+
+
+
+##--------------------------------------------------------------------------------------------
+# BINE 2024
+library(readr)
+data<- read_csv("Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/BINE/BINE-2024-limpiado.csv")
+View(data)
+
+library(dplyr)
+
+# Seleccionar solo las columnas deseadas
+# Seleccionar columnas por índice
+data_reducida <- data[, 1:8]
+data_reducida
+View(data_reducida)
+
+write.csv(data_reducida, "Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/BINE/BINE-2024-limpiado.csv", row.names = FALSE)
+
+
