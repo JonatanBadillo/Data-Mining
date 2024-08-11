@@ -43,9 +43,8 @@ ui <- fluidPage(
                   choices = c("NINFAS", "UTP", "AGUA SANTA", "BINE")),
       selectInput("year", "Seleccionar Año:",
                   choices = c("2020","2021","2022","2023", "2024")),
-      checkboxGroupInput("contaminants", "Seleccionar Contaminantes:",
-                         choices = c("O3", "NO2", "CO", "SO2", "PM-10", "PM-2.5"), 
-                         selected = c("O3", "NO2", "CO", "SO2", "PM-10", "PM-2.5"))
+      selectInput("contaminants", "Seleccionar Contaminantes:",
+                  choices = c("Todos" = "ALL", "O3", "NO2", "CO", "SO2", "PM-10", "PM-2.5"))
     ),
     mainPanel(
       plotOutput("contaminantPlot")
@@ -72,9 +71,14 @@ server <- function(input, output) {
       ggplot() + 
         labs(title = paste("Error: No se encontraron suficientes datos para", station(), input$year), x = NULL, y = NULL) +
         theme_void()
-    } else if (length(input$contaminants) > 0) {
-      filtered_data <- data %>%
-        filter(Contaminante %in% input$contaminants)
+    } else {
+      # Maneja la opción de seleccionar todos los contaminantes
+      if ("ALL" %in% input$contaminants) {
+        filtered_data <- data
+      } else {
+        filtered_data <- data %>%
+          filter(Contaminante %in% input$contaminants)
+      }
       
       ggplot(filtered_data, aes(x = Hora, y = Promedio_Concentracion, color = Contaminante, group = Contaminante)) +
         geom_line(size = 1) +
@@ -83,10 +87,6 @@ server <- function(input, output) {
              x = "Hora del día",
              y = "Promedio de concentración") +
         theme_minimal()
-    } else {
-      ggplot() + 
-        labs(title = "Selecciona al menos un contaminante", x = NULL, y = NULL) +
-        theme_void()
     }
   })
 }
