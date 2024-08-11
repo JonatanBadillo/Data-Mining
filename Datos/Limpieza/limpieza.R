@@ -785,7 +785,7 @@ write.csv(data, "~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/VELODROM
 ##--------------------------------------------------------------------------------------------
 # BINE 2024
 library(readr)
-data<- read_csv("Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/BINE/BINE-2024-limpiado.csv")
+data<- read_csv("Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/UTP/limpios/UTP-2023-limpiado.csv")
 View(data)
 
 library(dplyr)
@@ -796,6 +796,6 @@ data_reducida <- data[, 1:8]
 data_reducida
 View(data_reducida)
 
-write.csv(data_reducida, "Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/BINE/BINE-2024-limpiado.csv", row.names = FALSE)
+write.csv(data_reducida, "Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/UTP/limpios/UTP-2023-limpiado.csv", row.names = FALSE)
 
 
