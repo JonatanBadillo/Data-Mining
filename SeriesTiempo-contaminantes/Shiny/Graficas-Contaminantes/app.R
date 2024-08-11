@@ -7,6 +7,9 @@ library(readr)
 
 # Define la función para cargar y procesar datos
 load_and_process_data <- function(station, year, type) {
+  # Reemplaza "AGUA SANTA" por "AGUASANTA" antes de construir la ruta del archivo
+  station <- gsub("AGUA SANTA", "AGUASANTA", station)
+  
   file_path <- paste0("~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/SeriesTiempo-contaminantes/datos-limpios/", station, "/", station, "-", year, "-limpiado.csv")
   
   # Intenta leer el archivo, maneja el error si el archivo no existe
