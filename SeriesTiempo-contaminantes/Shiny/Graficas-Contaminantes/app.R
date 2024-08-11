@@ -1,15 +1,26 @@
-# Cargar las librerías necesarias
 library(shiny)
 library(ggplot2)
 library(dplyr)
 library(lubridate)
 library(tidyr)
-library(readr) # Asegúrate de incluir readr para la función read_csv
+library(readr)
 
 # Define la función para cargar y procesar datos
 load_and_process_data <- function(station, year) {
   file_path <- paste0("~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/SeriesTiempo-contaminantes/datos-limpios/", station, "/", station, "-", year, "-limpiado.csv")
-  data <- read_csv(file_path, col_types = cols()) # Ajusta col_types según sea necesario
+  
+  # Intenta leer el archivo, maneja el error si el archivo no existe
+  data <- tryCatch({
+    read_csv(file_path, col_types = cols())
+  }, error = function(e) {
+    # Retorna NULL o un mensaje de error específico si el archivo no existe
+    return(NULL)
+  })
+  
+  # Verifica si data es NULL, lo que indica que el archivo no se pudo leer
+  if (is.null(data)) {
+    return(NULL)
+  }
   
   data <- data %>%
     mutate(Datetime = dmy_hms(paste(FECHA, Horas))) %>%
@@ -54,10 +65,14 @@ server <- function(input, output) {
   })
   
   output$contaminantPlot <- renderPlot({
-    # Usa station() en lugar de input$station para obtener el valor modificado
     data <- load_and_process_data(station(), input$year)
     
-    if (length(input$contaminants) > 0) {
+    # Verifica si data es NULL y muestra un mensaje de error en lugar de intentar graficar
+    if (is.null(data)) {
+      ggplot() + 
+        labs(title = paste("Error: No se encontraron suficientes datos para", station(), input$year), x = NULL, y = NULL) +
+        theme_void()
+    } else if (length(input$contaminants) > 0) {
       filtered_data <- data %>%
         filter(Contaminante %in% input$contaminants)
       
