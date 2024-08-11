@@ -1,48 +1,49 @@
-library(shiny)
-library(ggplot2)
-library(dplyr)
-library(lubridate)
-library(tidyr)
-library(readr)
+library(shiny)      # Para construir la aplicación Shiny
+library(ggplot2)    # Para la visualización de datos
+library(dplyr)      # Para la manipulación de datos
+library(lubridate)  # Para el manejo de fechas y horas
+library(tidyr)      # Para la transformación de datos
+library(readr)      # Para la lectura de archivos CSV
 
 # Define la función para cargar y procesar datos
 load_and_process_data <- function(station, year, type) {
-  # Reemplaza "AGUA SANTA" por "AGUASANTA" antes de construir la ruta del archivo
+  # Reemplaza "AGUA SANTA" por "AGUASANTA" en el nombre de la estación
   station <- gsub("AGUA SANTA", "AGUASANTA", station)
   
   if (type == "year") {
-    # Para el gráfico anual, leer todos los años
+    # Para el gráfico anual, leer datos de todos los años
     years <- c("2020", "2021", "2022", "2023", "2024")
     data_list <- lapply(years, function(y) {
       file_path <- paste0("~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/SeriesTiempo-contaminantes/datos-limpios/", station, "/", station, "-", y, "-limpiado.csv")
       data <- tryCatch({
         read_csv(file_path, col_types = cols())
       }, error = function(e) {
-        return(NULL)
+        return(NULL)  # Retorna NULL si hay un error al leer el archivo
       })
       if (!is.null(data)) {
         data <- data %>%
-          mutate(Datetime = dmy_hms(paste(FECHA, Horas))) %>%
-          select(-FECHA, -Horas) %>%
-          arrange(Datetime) %>%
-          pivot_longer(cols = c(O3, NO2, CO, SO2, `PM-10`, `PM-2.5`), names_to = "Contaminante", values_to = "Concentracion") %>%
-          mutate(Year = year(Datetime)) %>%
-          select(-Datetime)
+          mutate(Datetime = dmy_hms(paste(FECHA, Horas))) %>%  # Crear columna Datetime combinando FECHA y Horas
+          select(-FECHA, -Horas) %>%  # Eliminar las columnas FECHA y Horas
+          arrange(Datetime) %>%  # Ordenar los datos por Datetime
+          pivot_longer(cols = c(O3, NO2, CO, SO2, `PM-10`, `PM-2.5`), names_to = "Contaminante", values_to = "Concentracion") %>%  # Transformar los datos a formato largo
+          mutate(Year = year(Datetime)) %>%  # Extraer el año de la columna Datetime
+          select(-Datetime)  # Eliminar la columna Datetime
         return(data)
       } else {
         return(NULL)
       }
     })
+    # Combinar todos los datos en un solo data frame y calcular el promedio de concentración por año y contaminante
     data <- bind_rows(data_list) %>%
       group_by(Year, Contaminante) %>%
       summarise(Promedio_Concentracion = mean(Concentracion, na.rm = TRUE), .groups = 'drop')
   } else {
-    # Para los gráficos por hora y por mes, leer un solo año
+    # Para los gráficos por hora y por mes, leer datos de un solo año
     file_path <- paste0("~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/SeriesTiempo-contaminantes/datos-limpios/", station, "/", station, "-", year, "-limpiado.csv")
     data <- tryCatch({
       read_csv(file_path, col_types = cols())
     }, error = function(e) {
-      return(NULL)
+      return(NULL)  # Retorna NULL si hay un error al leer el archivo
     })
     
     if (is.null(data)) {
@@ -50,19 +51,21 @@ load_and_process_data <- function(station, year, type) {
     }
     
     data <- data %>%
-      mutate(Datetime = dmy_hms(paste(FECHA, Horas))) %>%
-      select(-FECHA, -Horas) %>%
-      arrange(Datetime) %>%
+      mutate(Datetime = dmy_hms(paste(FECHA, Horas))) %>%  # Crear columna Datetime combinando FECHA y Horas
+      select(-FECHA, -Horas) %>%  # Eliminar las columnas FECHA y Horas
+      arrange(Datetime) %>%  # Ordenar los datos por Datetime
       pivot_longer(cols = c(O3, NO2, CO, SO2, `PM-10`, `PM-2.5`), names_to = "Contaminante", values_to = "Concentracion")
     
     if (type == "hour") {
+      # Para gráficos por hora: calcular el promedio de concentración por hora y contaminante
       data <- data %>%
-        mutate(Hora = hour(Datetime)) %>%
+        mutate(Hora = hour(Datetime)) %>%  # Extraer la hora de la columna Datetime
         group_by(Hora, Contaminante) %>%
         summarise(Promedio_Concentracion = mean(Concentracion, na.rm = TRUE), .groups = 'drop')
     } else if (type == "month") {
+      # Para gráficos por mes: calcular el promedio de concentración por mes y contaminante
       data <- data %>%
-        mutate(Mes = month(Datetime, label = TRUE, abbr = TRUE)) %>%
+        mutate(Mes = month(Datetime, label = TRUE, abbr = TRUE)) %>%  # Extraer el mes de la columna Datetime
         group_by(Mes, Contaminante) %>%
         summarise(Promedio_Concentracion = mean(Concentracion, na.rm = TRUE), .groups = 'drop')
     }
@@ -79,12 +82,12 @@ ui <- fluidPage(
       selectInput("graphType", "Seleccionar Tipo de Gráfico:",
                   choices = c("Por Hora" = "hour", "Por Año" = "year", "Por Mes" = "month")),
       
-      uiOutput("station_ui"),
-      uiOutput("time_ui"),
-      uiOutput("contaminants_ui")
+      uiOutput("station_ui"),  # Salida dinámica para seleccionar la estación
+      uiOutput("time_ui"),     # Salida dinámica para seleccionar el año (solo para gráficos que no son por año)
+      uiOutput("contaminants_ui")  # Salida dinámica para seleccionar los contaminantes
     ),
     mainPanel(
-      plotOutput("contaminantPlot")
+      plotOutput("contaminantPlot")  # Salida dinámica para el gráfico
     )
   )
 )
@@ -92,7 +95,7 @@ ui <- fluidPage(
 # Define la función del servidor
 server <- function(input, output, session) {
   
-  # Reacciona a los cambios en el tipo de gráfico
+  # Reacciona a los cambios en el tipo de gráfico para actualizar los controles de entrada
   observe({
     if (input$graphType == "year") {
       output$station_ui <- renderUI({
@@ -122,11 +125,11 @@ server <- function(input, output, session) {
     }
   })
   
-  # Reacciona a los cambios en el tipo de gráfico y en los filtros para cargar datos
+  # Reacciona a los cambios en el tipo de gráfico y en los filtros para cargar datos y generar el gráfico
   output$contaminantPlot <- renderPlot({
     data <- load_and_process_data(input$station, input$year, input$graphType)
     
-    # Depuración: Imprimir los primeros registros del dataset
+    # Depuración: Imprimir los primeros registros del dataset cargado
     print(head(data))
     
     if (input$graphType == "hour") {
