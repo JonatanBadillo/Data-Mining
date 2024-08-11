@@ -25,8 +25,16 @@ ui <- fluidPage(
 
 # Server
 server <- function(input, output) {
+  estacionModificada <- reactive({
+    if(input$estacion == "AGUA SANTA") {
+      return("AGUASANTA")
+    } else {
+      return(input$estacion)
+    }
+  })
+  
   datos <- reactive({
-    ruta <- paste0("~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/Datos/", input$estacion, "/", input$estacion, "-", input$anio, "-limpiado.csv")
+    ruta <- paste0("~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/SeriesTiempo-contaminantes/datos-limpios/", estacionModificada(), "/", estacionModificada(), "-", input$anio, "-limpiado.csv")
     data <- read_csv(ruta, col_types = cols(
       `PM-10` = col_double(),
       `PM-2.5` = col_double()
@@ -43,7 +51,7 @@ server <- function(input, output) {
     data %>%
       ggplot(aes(x = FechaHora, y = !!sym(contaminante))) +
       geom_line() +
-      labs(title = paste("Concentración de", contaminante, "en", input$estacion, input$anio),
+      labs(title = paste("Concentración de", contaminante, "en", estacionModificada(), input$anio),
            x = "Fecha y Hora",
            y = "Concentración") +
       theme_minimal()
