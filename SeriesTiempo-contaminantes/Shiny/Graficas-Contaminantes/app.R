@@ -4,7 +4,7 @@ library(dplyr)
 library(lubridate)
 library(tidyr)
 library(readr)
-library(forecast)  # Librería para predicciones con ARIMA
+library(forecast)
 
 # Define la función para cargar y procesar datos
 load_and_process_data <- function(station, year, type) {
@@ -21,7 +21,8 @@ load_and_process_data <- function(station, year, type) {
       })
       if (!is.null(data)) {
         data <- data %>%
-          mutate(Datetime = dmy_hms(paste(FECHA, Horas))) %>%
+          filter(!is.na(FECHA) & !is.na(Horas)) %>%  # Eliminar filas con fechas u horas faltantes
+          mutate(Datetime = parse_date_time(paste(FECHA, Horas), orders = c("dmy HMS", "dmy HM", "dmy H"))) %>%  # Crear columna Datetime combinando FECHA y Horas
           select(-FECHA, -Horas) %>%
           arrange(Datetime) %>%
           pivot_longer(cols = c(O3, NO2, CO, SO2, `PM-10`, `PM-2.5`), names_to = "Contaminante", values_to = "Concentracion") %>%
@@ -46,7 +47,8 @@ load_and_process_data <- function(station, year, type) {
       return(NULL)
     }
     data <- data %>%
-      mutate(Datetime = dmy_hms(paste(FECHA, Horas))) %>%
+      filter(!is.na(FECHA) & !is.na(Horas)) %>%  # Eliminar filas con fechas u horas faltantes
+      mutate(Datetime = parse_date_time(paste(FECHA, Horas), orders = c("dmy HMS", "dmy HM", "dmy H"))) %>%
       select(-FECHA, -Horas) %>%
       arrange(Datetime) %>%
       pivot_longer(cols = c(O3, NO2, CO, SO2, `PM-10`, `PM-2.5`), names_to = "Contaminante", values_to = "Concentracion")
@@ -143,6 +145,13 @@ server <- function(input, output, session) {
           predicciones <- lapply(unique(filtered_data$Contaminante), function(contaminante) {
             datos_contaminante <- filtered_data %>% filter(Contaminante == contaminante)
             ts_data <- ts(datos_contaminante$Promedio_Concentracion, frequency = 24)
+            
+            # Verifica si hay valores NA
+            if (any(is.na(ts_data))) {
+              warning(paste("No se puede aplicar ARIMA a", contaminante, "debido a valores NA"))
+              return(NULL)
+            }
+            
             fit <- auto.arima(ts_data)
             pred <- forecast(fit, h = 24)
             pred_df <- data.frame(Hora = (max(datos_contaminante$Hora) + 1):(max(datos_contaminante$Hora) + 24),
@@ -152,6 +161,7 @@ server <- function(input, output, session) {
           })
           
           predicciones <- bind_rows(predicciones)
+          predicciones <- predicciones[complete.cases(predicciones), ]  # Eliminar filas con valores NA
           
           p <- p + geom_line(data = predicciones, aes(x = Hora, y = Prediccion, color = Contaminante, linetype = "Predicción"), size = 1, inherit.aes = FALSE)
         }
