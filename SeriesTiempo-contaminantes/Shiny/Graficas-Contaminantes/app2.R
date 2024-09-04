@@ -4,14 +4,11 @@ library(leaflet)
 ui <- fluidPage(
   titlePanel("Mapa de la Ciudad de Puebla"),
   leafletOutput("map"),
-  br(),
-  div(style = "text-align: center;",
-      tags$b("Leyenda:"),
-      tags$ul(
-        tags$li(tags$span(style = "color: blue;", "●"), " Centro Histórico de Puebla"),
-        tags$li(tags$span(style = "color: red;", "●"), " Área de Bine"),
-        tags$li(tags$span(style = "color: green;", "●"), " Área de Ninfas")
-      )
+  tags$div(style="margin-top: 20px;",
+           h4("Leyenda:"),
+           tags$p(tags$span(style="color: lightblue;", "●"), "Centro Histórico de Puebla"),
+           tags$p(tags$span(style="color: pink;", "●"), "Área de Bine"),
+           tags$p(tags$span(style="color: lightgreen;", "●"), "Área de Ninfas")
   )
 )
 
@@ -30,7 +27,7 @@ server <- function(input, output, session) {
         popup = "Centro Histórico de Puebla"
       ) %>%
       addCircles(
-        lng = -98.2063, lat = 19.0385,  # Área de Bine
+        lng = -98.2070, lat = 19.0400,  # Área de Bine
         radius = 300,                    # Radio en metros
         color = "red",
         weight = 2,
