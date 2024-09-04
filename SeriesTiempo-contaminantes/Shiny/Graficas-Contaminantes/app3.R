@@ -7,7 +7,7 @@ ui <- fluidPage(
   tags$div(style="margin-top: 20px;",
            h4("Leyenda:"),
            tags$p(tags$span(style="color: lightblue;", "●"), "Centro Histórico de Puebla"),
-           tags$p(tags$span(style="color: pink;", "●"), "Área de Bine")
+           tags$p(tags$span(style="color: lightgreen;", "●"), "Área de Ninfas")
   )
 )
 
@@ -25,15 +25,16 @@ server <- function(input, output, session) {
         fillOpacity = 0.5,
         popup = "Centro Histórico de Puebla"
       ) %>%
+      
       addCircles(
-        lng = -98.2070, lat = 19.0400,  # Área de Bine
+        lng = -98.2100, lat = 19.0450,  # Área de Ninfas
         radius = 300,                    # Radio en metros
-        color = "red",
+        color = "green",
         weight = 2,
-        fillColor = "pink",
+        fillColor = "lightgreen",
         fillOpacity = 0.5,
-        popup = "Área de Bine"
-      ) 
+        popup = "Área de Ninfas"
+      )
   })
 }
 
