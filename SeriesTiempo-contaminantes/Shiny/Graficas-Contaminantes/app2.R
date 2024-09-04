@@ -7,6 +7,8 @@ ui <- fluidPage(
   leafletOutput("map"),
   tags$div(style="margin-top: 20px;",
            h4("Leyenda:"),
+                    tags$p(tags$span(style="color: lightblue;", "●"), "Centro Histórico de Puebla"),
+                    tags$p(tags$span(style="color: pink;", "●"), "Área de Bine"),
            tags$p(tags$span(style="color: green;", "●"), "O3"),
            tags$p(tags$span(style="color: yellow;", "●"), "NO2"),
            tags$p(tags$span(style="color: blue;", "●"), "CO"),
@@ -62,7 +64,7 @@ server <- function(input, output, session) {
         color = "blue",
         weight = 2,
         fillColor = "lightblue",
-        fillOpacity = 0.5,
+        fillOpacity = 0.9,
         popup = "Centro Histórico de Puebla"
       ) %>%
       addCircles(
@@ -71,7 +73,7 @@ server <- function(input, output, session) {
         color = "red",
         weight = 2,
         fillColor = "pink",
-        fillOpacity = 0.5,
+        fillOpacity = 0.95,
         popup = paste("Área de Bine<br>",
                       "O3:", round(8.47, 2), "ppm<br>",
                       "NO2:", round(4.75, 2), "ppm<br>",
@@ -84,42 +86,42 @@ server <- function(input, output, session) {
         lng = puntos_O3$lng, lat = puntos_O3$lat,
         color = "green",
         radius = 3,
-        fillOpacity = 0.8,
+        fillOpacity = 0.5,
         popup = "O3"
       ) %>%
       addCircleMarkers(
         lng = puntos_NO2$lng, lat = puntos_NO2$lat,
         color = "yellow",
         radius = 3,
-        fillOpacity = 0.8,
+        fillOpacity = 0.05,
         popup = "NO2"
       ) %>%
       addCircleMarkers(
         lng = puntos_CO$lng, lat = puntos_CO$lat,
         color = "blue",
         radius = 3,
-        fillOpacity = 0.8,
+        fillOpacity = 0.05,
         popup = "CO"
       ) %>%
       addCircleMarkers(
         lng = puntos_SO2$lng, lat = puntos_SO2$lat,
         color = "purple",
         radius = 3,
-        fillOpacity = 0.8,
+        fillOpacity = 0.05,
         popup = "SO2"
       ) %>%
       addCircleMarkers(
         lng = puntos_PM10$lng, lat = puntos_PM10$lat,
         color = "orange",
         radius = 3,
-        fillOpacity = 0.8,
+        fillOpacity = 0.5,
         popup = "PM-10"
       ) %>%
       addCircleMarkers(
         lng = puntos_PM25$lng, lat = puntos_PM25$lat,
         color = "red",
         radius = 3,
-        fillOpacity = 0.8,
+        fillOpacity = 0.05,
         popup = "PM-2.5"
       )
   })
