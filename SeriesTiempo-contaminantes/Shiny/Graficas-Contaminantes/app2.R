@@ -5,16 +5,32 @@ library(dplyr)
 ui <- fluidPage(
   titlePanel("Mapa de la Ciudad de Puebla"),
   leafletOutput("map"),
-  tags$div(style="margin-top: 20px;",
-           h4("Leyenda:"),
-                    tags$p(tags$span(style="color: lightblue;", "●"), "Centro Histórico de Puebla"),
-                    tags$p(tags$span(style="color: pink;", "●"), "Área de Bine"),
-           tags$p(tags$span(style="color: green;", "●"), "O3"),
-           tags$p(tags$span(style="color: yellow;", "●"), "NO2"),
-           tags$p(tags$span(style="color: blue;", "●"), "CO"),
-           tags$p(tags$span(style="color: purple;", "●"), "SO2"),
-           tags$p(tags$span(style="color: orange;", "●"), "PM-10"),
-           tags$p(tags$span(style="color: red;", "●"), "PM-2.5")
+  tags$div(
+    style = "margin-top: 20px;",
+    h4("Leyenda:"),
+    tags$div(
+      style = "display: flex; justify-content: space-between;",
+      tags$div(
+        style = "flex: 1;",
+        tags$p(tags$span(style = "color: lightblue;", "■"), "Centro Histórico de Puebla"),
+        tags$p(tags$span(style = "color: pink;", "■"), "Área de Bine"),
+        
+      ),
+      tags$div(
+        style = "flex: 1;",
+        tags$p(tags$span(style = "color: green;", "●"), "O3"),
+        tags$p(tags$span(style = "color: yellow;", "●"), "NO2"),
+        tags$p(tags$span(style = "color: blue;", "●"), "CO"),
+        
+
+      ),
+      tags$div(
+        style = "flex: 1;",
+        tags$p(tags$span(style = "color: purple;", "●"), "SO2"),
+        tags$p(tags$span(style = "color: orange;", "●"), "PM-10"),
+        tags$p(tags$span(style = "color: red;", "●"), "PM-2.5")
+      )
+    )
   )
 )
 
@@ -57,7 +73,7 @@ server <- function(input, output, session) {
   output$map <- renderLeaflet({
     leaflet() %>%
       addTiles() %>%
-      setView(lng = -98.2063, lat = 19.0413, zoom = 12) %>%  # Coordenadas de Puebla
+      setView(lng = -98.2063, lat = 19.0413, zoom = 16) %>%  # Coordenadas de Puebla
       addCircles(
         lng = -98.2063, lat = 19.0413,  # Centro Histórico
         radius = 500,                    # Radio en metros
