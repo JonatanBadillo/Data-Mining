@@ -101,42 +101,42 @@ server <- function(input, output, session) {
       addCircleMarkers(
         lng = puntos_O3$lng, lat = puntos_O3$lat,
         color = "green",
-        radius = 3,
+        radius = 0.5,
         fillOpacity = 0.5,
         popup = "O3"
       ) %>%
       addCircleMarkers(
         lng = puntos_NO2$lng, lat = puntos_NO2$lat,
         color = "yellow",
-        radius = 3,
+        radius = 0.5,
         fillOpacity = 0.05,
         popup = "NO2"
       ) %>%
       addCircleMarkers(
         lng = puntos_CO$lng, lat = puntos_CO$lat,
         color = "blue",
-        radius = 3,
+        radius = 0.5,
         fillOpacity = 0.05,
         popup = "CO"
       ) %>%
       addCircleMarkers(
         lng = puntos_SO2$lng, lat = puntos_SO2$lat,
         color = "purple",
-        radius = 3,
+        radius = 0.5,
         fillOpacity = 0.05,
         popup = "SO2"
       ) %>%
       addCircleMarkers(
         lng = puntos_PM10$lng, lat = puntos_PM10$lat,
         color = "orange",
-        radius = 3,
-        fillOpacity = 0.5,
+        radius = 0.5,
+        fillOpacity = 0.05,
         popup = "PM-10"
       ) %>%
       addCircleMarkers(
         lng = puntos_PM25$lng, lat = puntos_PM25$lat,
         color = "red",
-        radius = 3,
+        radius = 0.5,
         fillOpacity = 0.05,
         popup = "PM-2.5"
       )
