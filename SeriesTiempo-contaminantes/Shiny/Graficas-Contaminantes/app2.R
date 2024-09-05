@@ -73,7 +73,7 @@ server <- function(input, output, session) {
   output$map <- renderLeaflet({
     leaflet() %>%
       addTiles() %>%
-      setView(lng = -98.2063, lat = 19.0413, zoom = 16) %>%  # Coordenadas de Puebla
+      setView(lng = -98.2063, lat = 19.0413, zoom = 17) %>%  # Coordenadas de Puebla
       addCircles(
         lng = -98.2063, lat = 19.0413,  # Centro Histórico
         radius = 500,                    # Radio en metros
