@@ -2,14 +2,15 @@ library(shiny)
 library(dplyr)
 library(plotly)
 library(reshape2)
+library(ggplot2)
 
 ui <- fluidPage(
   titlePanel("Visualización de Contaminantes en Área de Ninfas"),
   sidebarLayout(
     sidebarPanel(
       radioButtons("plotType", "Selecciona el tipo de gráfico:",
-                   choices = c("Barras con clustering", "Diagrama de dispersión", "Mapa de calor"),
-                   selected = "Barras con clustering")
+                   choices = c("Diagrama de dispersión", "Mapa de calor"),
+                   selected = "Diagrama de dispersión")
     ),
     mainPanel(
       plotlyOutput("contaminantesPlot")
@@ -38,16 +39,7 @@ server <- function(input, output) {
   
   # Renderizar el gráfico según la selección
   output$contaminantesPlot <- renderPlotly({
-    if (input$plotType == "Barras con clustering") {
-      # Gráfico de barras con clustering
-      p <- ggplot(promedios_melted, aes(x = Contaminante, y = Concentración, fill = Contaminante)) +
-        geom_bar(stat = "identity", position = "dodge") +
-        theme_minimal() +
-        labs(title = "Promedio de Contaminantes", y = "Concentración", x = "Contaminante")
-      
-      ggplotly(p)
-      
-    } else if (input$plotType == "Diagrama de dispersión") {
+    if (input$plotType == "Diagrama de dispersión") {
       # Diagrama de dispersión
       p <- ggplot(promedios_melted, aes(x = Contaminante, y = Concentración, color = Contaminante)) +
         geom_point(size = 5) +
