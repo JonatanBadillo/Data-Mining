@@ -1,34 +1,51 @@
 library(shiny)
-library(leaflet)
 library(dplyr)
+library(plotly)
+library(reshape2)
+library(ggplot2)
+library(tidyr) # Para usar replace_na
+library(leaflet) # Para el mapa
+library(leaflet.extras) # Para usar addHeatmap
 
 ui <- fluidPage(
-  titlePanel("Mapa de la Ciudad de Puebla"),
-  leafletOutput("map"),
-  tags$div(
-    style = "margin-top: 20px;",
-    h4("Leyenda:"),
-    tags$div(
-      style = "display: flex; justify-content: space-between;",
-      tags$div(
-        style = "flex: 1;",
-        tags$p(tags$span(style = "color: lightblue;", "■"), "Centro Histórico de Puebla"),
-        tags$p(tags$span(style = "color: pink;", "■"), "Área de Bine"),
-        
+  titlePanel("Visualización de Contaminantes en Área de Bine"),
+  sidebarLayout(
+    sidebarPanel(
+      radioButtons("plotType", "Selecciona el tipo de visualización:",
+                   choices = c("Diagrama de dispersión", "Mapa de calor", "Gráfico de líneas", "Mapa"),
+                   selected = "Diagrama de dispersión")
+    ),
+    mainPanel(
+      conditionalPanel(
+        condition = "input.plotType != 'Mapa'",
+        plotlyOutput("contaminantesPlot")
       ),
-      tags$div(
-        style = "flex: 1;",
-        tags$p(tags$span(style = "color: green;", "●"), "O3"),
-        tags$p(tags$span(style = "color: yellow;", "●"), "NO2"),
-        tags$p(tags$span(style = "color: blue;", "●"), "CO"),
-        
-
-      ),
-      tags$div(
-        style = "flex: 1;",
-        tags$p(tags$span(style = "color: purple;", "●"), "SO2"),
-        tags$p(tags$span(style = "color: orange;", "●"), "PM-10"),
-        tags$p(tags$span(style = "color: red;", "●"), "PM-2.5")
+      conditionalPanel(
+        condition = "input.plotType == 'Mapa'",
+        leafletOutput("map"),
+        tags$div(
+          style = "margin-top: 20px;",
+          h4("Leyenda:"),
+          tags$div(
+            style = "display: flex; justify-content: space-between;",
+            tags$div(
+              style = "flex: 1;",
+              tags$p(tags$span(style = "color: lightblue;", "■"), "Área de Bine")
+            ),
+            tags$div(
+              style = "flex: 1;",
+              tags$p(tags$span(style = "color: green;", "●"), "O3"),
+              tags$p(tags$span(style = "color: yellow;", "●"), "NO2"),
+              tags$p(tags$span(style = "color: blue;", "●"), "CO")
+            ),
+            tags$div(
+              style = "flex: 1;",
+              tags$p(tags$span(style = "color: purple;", "●"), "SO2"),
+              tags$p(tags$span(style = "color: orange;", "●"), "PM-10"),
+              tags$p(tags$span(style = "color: red;", "●"), "PM-2.5")
+            )
+          )
+        )
       )
     )
   )
@@ -38,6 +55,16 @@ server <- function(input, output, session) {
   
   # Cargar los datos desde la ruta especificada
   datos_bine <- read.csv("~/Desktop/UNIVERSITY/Servicio-Social/Data-Mining/SeriesTiempo-contaminantes/datos-limpios/BINE/BINE_2021-2024_combinado.csv")
+  
+  # Convertir la columna de FECHA al formato Date ("dd/mm/yyyy")
+  if ("FECHA" %in% colnames(datos_bine)) {
+    datos_bine$FECHA <- as.Date(datos_bine$FECHA, format = "%d/%m/%Y")
+  } else {
+    stop("La columna 'FECHA' no existe en el conjunto de datos.")
+  }
+  
+  # Reemplazar valores no finitos (NA, NaN, Inf) por ceros
+  datos_bine <- datos_bine %>% mutate(across(where(is.numeric), ~ tidyr::replace_na(., 0)))
   
   # Calcular los promedios de contaminantes
   promedios_contaminantes <- datos_bine %>% 
@@ -50,95 +77,95 @@ server <- function(input, output, session) {
       PM25 = mean(PM.2.5, na.rm = TRUE)
     )
   
-  # Coordenadas del centro del área de Bine
-  bine_center <- c(lng = -98.2070, lat = 19.0400)
+  # Preparar los datos para diferentes gráficos
+  promedios_melted <- melt(promedios_contaminantes, id.vars = NULL, measure.vars = c("O3", "NO2", "CO", "SO2", "PM10", "PM25"),
+                           variable.name = "Contaminante", value.name = "Concentración")
   
-  # Función para generar puntos aleatorios dentro de la zona del Bine
-  generate_random_points <- function(center, n, radius = 0.001) {
-    tibble(
-      lng = rnorm(n, mean = center['lng'], sd = radius),
-      lat = rnorm(n, mean = center['lat'], sd = radius)
-    )
-  }
-  
-  # Generar puntos proporcionales al valor de cada contaminante
-  puntos_O3 <- generate_random_points(bine_center, round(promedios_contaminantes$O3 * 100))
-  puntos_NO2 <- generate_random_points(bine_center, round(promedios_contaminantes$NO2 * 100))
-  puntos_CO <- generate_random_points(bine_center, round(promedios_contaminantes$CO * 100))
-  puntos_SO2 <- generate_random_points(bine_center, round(promedios_contaminantes$SO2 * 100))
-  puntos_PM10 <- generate_random_points(bine_center, round(promedios_contaminantes$PM10 * 2))  # Se ajusta para visibilidad
-  puntos_PM25 <- generate_random_points(bine_center, round(promedios_contaminantes$PM25 * 2))  # Se ajusta para visibilidad
+  # Renderizar los gráficos según la selección
+  output$contaminantesPlot <- renderPlotly({
+    if (input$plotType == "Diagrama de dispersión") {
+      # Diagrama de dispersión
+      p <- ggplot(promedios_melted, aes(x = Contaminante, y = Concentración, color = Contaminante)) +
+        geom_point(size = 5) +
+        theme_minimal() +
+        labs(title = "Promedio de Contaminantes (Diagrama de Dispersión)", y = "Concentración", x = "Contaminante")
+      
+      ggplotly(p)
+      
+    } else if (input$plotType == "Mapa de calor") {
+      # Mapa de calor
+      p <- ggplot(promedios_melted, aes(x = Contaminante, y = "Concentración", fill = Concentración)) +
+        geom_tile(color = "white") +
+        scale_fill_gradient(low = "yellow", high = "red") +
+        theme_minimal() +
+        labs(title = "Mapa de Calor de Contaminantes", x = "Contaminante", y = "")
+      
+      ggplotly(p)
+      
+    } else if (input$plotType == "Gráfico de líneas") {
+      # Filtrar datos no finitos
+      datos_bine_filtrado <- datos_bine %>% filter(across(where(is.numeric), is.finite))
+      
+      # Gráfico de líneas
+      p <- ggplot(datos_bine_filtrado, aes(x = FECHA)) +
+        geom_line(aes(y = O3, color = "O3")) +
+        geom_line(aes(y = NO2, color = "NO2")) +
+        geom_line(aes(y = CO, color = "CO")) +
+        geom_line(aes(y = SO2, color = "SO2")) +
+        geom_line(aes(y = PM.10, color = "PM10")) +
+        geom_line(aes(y = PM.2.5, color = "PM25")) +
+        theme_minimal() +
+        labs(title = "Evolución de Contaminantes a lo Largo del Tiempo", y = "Concentración", x = "FECHA")
+      
+      ggplotly(p)
+    }
+  })
   
   # Renderizar el mapa
   output$map <- renderLeaflet({
+    # Coordenadas del área de Bine
+    bine_center <- c(lng = -98.2070, lat = 19.0400)
+    
+    # Función para generar puntos aleatorios dentro de la zona de Bine
+    generate_random_points <- function(center, n, radius = 0.001) {
+      tibble(
+        lng = rnorm(n, mean = center['lng'], sd = radius),
+        lat = rnorm(n, mean = center['lat'], sd = radius)
+      )
+    }
+    
+    # Generar puntos proporcionales al valor de cada contaminante
+    puntos_O3 <- generate_random_points(bine_center, round(promedios_contaminantes$O3 * 100))
+    puntos_NO2 <- generate_random_points(bine_center, round(promedios_contaminantes$NO2 * 100))
+    puntos_CO <- generate_random_points(bine_center, round(promedios_contaminantes$CO * 100))
+    puntos_SO2 <- generate_random_points(bine_center, round(promedios_contaminantes$SO2 * 100))
+    puntos_PM10 <- generate_random_points(bine_center, round(promedios_contaminantes$PM10 * 2))  # Ajuste para visibilidad
+    puntos_PM25 <- generate_random_points(bine_center, round(promedios_contaminantes$PM25 * 2))  # Ajuste para visibilidad
+    
+    # Combinar todos los puntos en un solo conjunto de datos para el mapa de calor
+    puntos_todos <- bind_rows(puntos_O3, puntos_NO2, puntos_CO, puntos_SO2, puntos_PM10, puntos_PM25)
+    
+    # Crear el mapa
     leaflet() %>%
       addTiles() %>%
-      setView(lng = -98.2063, lat = 19.0413, zoom = 17) %>%  # Coordenadas de Puebla
+      setView(lng = bine_center['lng'], lat = bine_center['lat'], zoom = 17) %>%
+      # Añadir el mapa de calor primero
+      addHeatmap(lng = ~lng, lat = ~lat, intensity = 0.5, blur = 20, max = 0.05, radius = 15, data = puntos_todos) %>%
+      # Añadir los círculos después
       addCircles(
-        lng = -98.2063, lat = 19.0413,  # Centro Histórico
-        radius = 500,                    # Radio en metros
-        color = "blue",
-        weight = 2,
-        fillColor = "lightblue",
-        fillOpacity = 0.9,
-        popup = "Centro Histórico de Puebla"
-      ) %>%
-      addCircles(
-        lng = -98.2070, lat = 19.0400,  # Área de Bine
+        lng = bine_center['lng'], lat = bine_center['lat'],  # Área de Bine
         radius = 300,                    # Radio en metros
-        color = "red",
-        weight = 2,
-        fillColor = "pink",
-        fillOpacity = 0.95,
-        popup = paste("Área de Bine<br>",
-                      "O3:", round(8.47, 2), "ppm<br>",
-                      "NO2:", round(4.75, 2), "ppm<br>",
-                      "CO:", round(5.71, 2), "ppm<br>",
-                      "SO2:", round(1.20, 2), "ppm<br>",
-                      "PM-10:", round(45.15, 2), "µg/m³<br>",
-                      "PM-2.5:", round(45.86, 2), "µg/m³")
-      )  %>%
-      addCircleMarkers(
-        lng = puntos_O3$lng, lat = puntos_O3$lat,
         color = "green",
-        radius = 0.5,
-        fillOpacity = 0.5,
-        popup = "O3"
-      ) %>%
-      addCircleMarkers(
-        lng = puntos_NO2$lng, lat = puntos_NO2$lat,
-        color = "yellow",
-        radius = 0.5,
-        fillOpacity = 0.05,
-        popup = "NO2"
-      ) %>%
-      addCircleMarkers(
-        lng = puntos_CO$lng, lat = puntos_CO$lat,
-        color = "blue",
-        radius = 0.5,
-        fillOpacity = 0.05,
-        popup = "CO"
-      ) %>%
-      addCircleMarkers(
-        lng = puntos_SO2$lng, lat = puntos_SO2$lat,
-        color = "purple",
-        radius = 0.5,
-        fillOpacity = 0.05,
-        popup = "SO2"
-      ) %>%
-      addCircleMarkers(
-        lng = puntos_PM10$lng, lat = puntos_PM10$lat,
-        color = "orange",
-        radius = 0.5,
-        fillOpacity = 0.05,
-        popup = "PM-10"
-      ) %>%
-      addCircleMarkers(
-        lng = puntos_PM25$lng, lat = puntos_PM25$lat,
-        color = "red",
-        radius = 0.5,
-        fillOpacity = 0.05,
-        popup = "PM-2.5"
+        weight = 2,
+        fillColor = "lightgreen",
+        fillOpacity = 0.4,  # Ajustar la opacidad
+        popup = paste("Área de Bine<br>",
+                      "O3:", round(promedios_contaminantes$O3, 2), "ppm<br>",
+                      "NO2:", round(promedios_contaminantes$NO2, 2), "ppm<br>",
+                      "CO:", round(promedios_contaminantes$CO, 2), "ppm<br>",
+                      "SO2:", round(promedios_contaminantes$SO2, 2), "ppm<br>",
+                      "PM-10:", round(promedios_contaminantes$PM10, 2), "µg/m³<br>",
+                      "PM-2.5:", round(promedios_contaminantes$PM25, 2), "µg/m³")
       )
   })
 }
