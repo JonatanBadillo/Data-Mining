@@ -30,7 +30,8 @@ ui <- fluidPage(
             style = "display: flex; justify-content: space-between;",
             tags$div(
               style = "flex: 1;",
-              tags$p(tags$span(style = "color: lightblue;", "■"), "Área de Bine")
+              tags$p(tags$span(style = "color: lightblue;", "■"), "Centro Histórico de Puebla"),
+              tags$p(tags$span(style = "color: lightgreen;", "■"), "Área de Bine")
             ),
             tags$div(
               style = "flex: 1;",
@@ -123,8 +124,9 @@ server <- function(input, output, session) {
   
   # Renderizar el mapa
   output$map <- renderLeaflet({
-    # Coordenadas del área de Bine
+    # Coordenadas del área de Bine y del Centro Histórico
     bine_center <- c(lng = -98.2070, lat = 19.0400)
+    centro_historico <- c(lng = -98.2063, lat = 19.0413)
     
     # Función para generar puntos aleatorios dentro de la zona de Bine
     generate_random_points <- function(center, n, radius = 0.001) {
@@ -151,7 +153,17 @@ server <- function(input, output, session) {
       setView(lng = bine_center['lng'], lat = bine_center['lat'], zoom = 17) %>%
       # Añadir el mapa de calor primero
       addHeatmap(lng = ~lng, lat = ~lat, intensity = 0.5, blur = 20, max = 0.05, radius = 15, data = puntos_todos) %>%
-      # Añadir los círculos después
+      # Añadir el círculo del Centro Histórico
+      addCircles(
+        lng = centro_historico['lng'], lat = centro_historico['lat'],
+        radius = 500,  # Radio en metros
+        color = "blue",
+        weight = 2,
+        fillColor = "lightblue",
+        fillOpacity = 0.4,  # Ajustar la opacidad
+        popup = "Centro Histórico de Puebla"
+      ) %>%
+      # Añadir el círculo del área de Bine
       addCircles(
         lng = bine_center['lng'], lat = bine_center['lat'],  # Área de Bine
         radius = 300,                    # Radio en metros
